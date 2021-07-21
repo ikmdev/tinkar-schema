@@ -5,7 +5,7 @@
     <RootNamespace>Tinkar.Protobuf.CS</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Description>C# library of Tinkar Protobuf files.</Description>
+    <Description>C# compiled library of Tinkar Protobuf files.</Description>
     <PackageProjectUrl>https://github.com/HL7/tinkar-proto</PackageProjectUrl>
     <RepositoryUrl>https://github.com/HL7/tinkar-proto</RepositoryUrl>
   </PropertyGroup>
