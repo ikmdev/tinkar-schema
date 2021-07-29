@@ -56,3 +56,10 @@ package-lock.json
 
 #VS Code IDE
 .vscode/*
+Java/.classpath
+Java/.project
+Java/.settings/org.eclipse.core.resources.prefs
+.gitignore
+.gitignore
+Java/.settings/*
+Java/target/*
