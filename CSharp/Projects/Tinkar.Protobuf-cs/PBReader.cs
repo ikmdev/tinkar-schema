@@ -10,38 +10,54 @@ namespace Tinkar.ProtoBuf.CS
     /// <summary>
     /// Read protobuf tinkar items from protobuf zip input stream.
     /// </summary>
-    public class PBReader : IDisposable
+    public class PBReader : PBIOBase
     {
-        Stream zipFile;
-        ZipArchive zipArchive;
-        ZipArchiveEntry zipEntry;
+        bool eof = false;
         Stream stream;
 
-        public PBReader(Stream inputStream)
+        public PBReader(Stream inputStream) : base(inputStream)
         {
-            this.zipFile = inputStream;
-            this.zipArchive = new ZipArchive(this.zipFile);
-            this.zipEntry = this.zipArchive.GetEntry("export.pb");
-            this.stream = this.zipEntry.Open();
+            this.stream = this.OpenZipArchiveStream("export.pb");
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (this.zipArchive != null)
             {
                 this.zipArchive.Dispose();
                 this.zipArchive = null;
                 this.zipFile = null;
-                this.zipEntry = null;
                 this.stream = null;
             }
+        }
+
+        public Stream OpenZipArchiveStream(String name)
+        {
+            var zipEntry = this.zipArchive.GetEntry(name);
+            return zipEntry.Open();
         }
 
         /// <summary>
         /// Read single protobuf message.
         /// </summary>
-        public PBTinkarMsg Read() =>
-            PBTinkarMsg.Parser.ParseDelimitedFrom(this.stream);
+        public PBTinkarMsg Read()
+        {
+            if (this.eof == true)
+                return null;
+            byte[] lengthBytes = new byte[4];
+            this.stream.Read(lengthBytes, 0, 4);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(lengthBytes, 0, 4);
+            Int32 itemLength = BitConverter.ToInt32(lengthBytes);
+            if (itemLength == -1)
+            {
+                this.eof = true;
+                return null;
+            }
+            byte[] itemBytes = new byte[itemLength];
+            this.stream.Read(itemBytes, 0, itemLength);
+            return PBTinkarMsg.Parser.ParseFrom(itemBytes);
+        }
     }
 
 }
