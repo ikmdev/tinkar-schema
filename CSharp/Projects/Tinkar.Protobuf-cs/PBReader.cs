@@ -17,6 +17,7 @@ namespace Tinkar.ProtoBuf.CS
 
         public PBReader(Stream inputStream) : base(inputStream)
         {
+            this.zipArchive = new ZipArchive(this.zipFile, ZipArchiveMode.Read);
             this.stream = this.OpenZipArchiveStream("export.pb");
         }
 

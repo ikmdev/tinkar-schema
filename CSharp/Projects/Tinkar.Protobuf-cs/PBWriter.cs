@@ -18,6 +18,7 @@ namespace Tinkar.ProtoBuf.CS
 
         public PBWriter(Stream zipFile) : base(zipFile)
         {
+            this.zipArchive = new ZipArchive(this.zipFile, ZipArchiveMode.Create);
             this.stream = this.CreateZipArchiveStream("export.pb");
             this.itemCount = 0;
         }

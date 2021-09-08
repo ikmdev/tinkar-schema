@@ -27,7 +27,6 @@ namespace Tinkar.ProtoBuf.CS
         protected PBIOBase(Stream zipFile)
         {
             this.zipFile = zipFile;
-            this.zipArchive = new ZipArchive(this.zipFile, ZipArchiveMode.Create);
         }
         public abstract void Dispose();
     }
