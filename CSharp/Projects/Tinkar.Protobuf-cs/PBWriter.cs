@@ -51,7 +51,7 @@ namespace Tinkar.ProtoBuf.CS
 
         Stream CreateZipArchiveStream(String name)
         {
-            var zipEntry = this.zipArchive.CreateEntry(name, CompressionLevel.NoCompression);
+            var zipEntry = this.zipArchive.CreateEntry(name, CompressionLevel.Optimal);
             return zipEntry.Open();
         }
 
