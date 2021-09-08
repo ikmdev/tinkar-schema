@@ -20,7 +20,8 @@ message PBVertexId {
 // A public id is the base unique id for Tinkar concepts, semantics, and other publically
 // identifiable Tinkar items.
 message PBPublicId {
-    // Unique vertex it. This is the 16 byte representation of a GUID.
+    // Unique Public id.
+    // This is one or more 16 byte GUIDs.
     repeated bytes Id = 1 ;
 }
 
@@ -44,7 +45,7 @@ message PBField {
         bool BoolValue = 2;
 
         // Int32 value.
-        int32 IntValue = 3;
+        sint32 IntValue = 3;
 
         // Single precision floating point value.
         float FloatValue = 4;
@@ -101,39 +102,39 @@ message PBField {
 // Integer point on a 2 dimensional plane.
 message PBPlanarPoint {
     // X position of point.
-    int32 X = 1;
+    sint32 X = 1;
     // Y position of point.
-    int32 Y = 2;
+    sint32 Y = 2;
 }
 
 // Spatial point value.
 // Integer point in a 3 dimensional space.
 message PBSpatialPoint {
     // X position of point.
-    int32 X = 1;
+    sint32 X = 1;
     // Y position of point.
-    int32 Y = 2;
+    sint32 Y = 2;
     // Z position of point.
-    int32 Z = 3;
+    sint32 Z = 3;
 }
 
 // Integer to Integer Map.
 // Maps one integer value to another integer value.
 message PBIntToIntMap {
     // Source value.
-    int32 Source = 1;
+    sint32 Source = 1;
     // Target value.
-    int32 Target = 2;
+    sint32 Target = 2;
 }
 
 // Integer to Multiple Integer Map.
 // Maps one integer value to multiple other integer values.
 message PBIntToMultipleIntMap {
     // Source value.
-    int32 Source = 1;
+    sint32 Source = 1;
 
     // Target values.
-    repeated int32 Target = 2;
+    repeated sint32 Target = 2;
 }
 
 // Directed Tree message.
