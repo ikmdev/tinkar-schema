@@ -12,10 +12,25 @@ namespace Tinkar.ProtoBuf.CS
     /// </summary>
     public class PBWriter : PBIOBase
     {
+        /// <summary>
+        /// Current zip entry stream
+        /// </summary>
         Stream stream;
+
+        /// <summary>
+        /// Total number of tinkar items written
+        /// </summary>
         Int64 itemCount;
+
+        /// <summary>
+        /// Temporary memory stream to write items to before writing bytes to zip stream.
+        /// </summary>
         MemoryStream msTemp = new MemoryStream();
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="zipFile">Outputr zip stream</param>
         public PBWriter(Stream zipFile) : base(zipFile)
         {
             this.zipArchive = new ZipArchive(this.zipFile, ZipArchiveMode.Create);
@@ -23,16 +38,20 @@ namespace Tinkar.ProtoBuf.CS
             this.itemCount = 0;
         }
 
+        /// <summary>
+        /// Dispose. Close all streams.
+        /// </summary>
         public override void Dispose()
         {
             if (this.zipArchive == null)
                 return;
 
-            // write terminator to output stream and close.
+            if (this.stream != null)
             {
                 this.WriteLen(-1);
                 this.stream.Close();
                 this.stream.Dispose();
+                this.stream = null;
             }
 
             // Write out Int64 item count to zip entry 'count'.
@@ -46,7 +65,6 @@ namespace Tinkar.ProtoBuf.CS
 
             this.zipArchive.Dispose();
             this.zipArchive = null;
-            this.stream = null;
             this.zipFile = null;
         }
 
@@ -75,6 +93,7 @@ namespace Tinkar.ProtoBuf.CS
             this.msTemp.Position = 0;
             msg.WriteTo(this.msTemp);
             Int32 itemLen = (Int32)this.msTemp.Position;
+
             this.WriteLen(itemLen);
             this.stream.Write(this.msTemp.GetBuffer(), 0, itemLen);
             this.itemCount += 1;
