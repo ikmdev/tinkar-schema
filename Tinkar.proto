@@ -267,6 +267,7 @@ message PBFieldDefinition {
 
     // Purpose of the field.
     PBPublicId Purpose = 3;
+
 }
 
 // Pattern message.
@@ -344,15 +345,9 @@ message PBSemanticVersion {
     // STAMP for this semantic version.
     PBStamp Stamp = 2;
 
-    // ID of Concept that this semantic references.
-    PBPublicId ReferencedComponent = 3;
-
-    // ID of Pattern that defines the fields that this semantic implements.
-    PBPublicId PatternForSemantic = 4;
-
     // Field values for this semantic. Each field defined is defined by
     // a matching entry in the pattern field definition list.
-    repeated PBField FieldValues = 5;
+    repeated PBField FieldValues = 3;
 }
 
 
