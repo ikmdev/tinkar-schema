@@ -57,7 +57,7 @@ message PBField {
         google.protobuf.Timestamp TimeValue = 6;
 
         // Tinkar STAMP value.
-        PBStamp StampValue = 20;
+        PBStampChronology StampValue = 20;
 
         // Tinkar Public id value.
         PBPublicId PublicIdValue = 21;
@@ -208,25 +208,33 @@ message PBVertex {
     repeated Property Properties = 4;
 }
 
-// Stamp message
-message PBStamp {
+// Stamp Chronology message
+// This contains a list of stamp vesions (a chronology)
+message PBStampChronology {
     // Unique public id for this STAMP.
     PBPublicId PublicId = 1;
 
-    // Status of the item this STAMP references.
-    PBConcept Status = 2;
+    // List of concept versions.
+    repeated PBStampVersion StampVersions = 2;
+}
 
-    // Status of the item this STAMP references.
-    PBConcept Author = 3;
+// Stamp Version message
+// This contains the info for a single version of a STAMP, sans the STAMP public id.
+message PBStampVersion {
+	// Status of the item this STAMP references.
+	PBConcept Status = 2;
 
-    // Module of the item this STAMP references.
-    PBConcept Module = 4;
+	// Status of the item this STAMP references.
+	PBConcept Author = 3;
 
-    // Path of the item this STAMP references.
-    PBConcept Path = 5;
+	// Module of the item this STAMP references.
+	PBConcept Module = 4;
 
-    // Creation time of the item this STAMP references.
-    google.protobuf.Timestamp Time = 6;
+	// Path of the item this STAMP references.
+	PBConcept Path = 5;
+
+	// Creation time of the item this STAMP references.
+	google.protobuf.Timestamp Time = 6;
 }
 
 // Concept message.
@@ -252,7 +260,7 @@ message PBConceptVersion {
     PBPublicId PublicId = 1;
 
     // STAMP for this concept version.
-    PBStamp Stamp = 2;
+    PBStampChronology Stamp = 2;
 }
 
 
@@ -295,7 +303,7 @@ message PBPatternVersion {
     PBPublicId PublicId = 1;
 
     // STAMP for this version.
-    PBStamp Stamp = 2;
+    PBStampChronology Stamp = 2;
 
     // Purpose of the Semantic that this pattern references.
     PBPublicId ReferencedComponentPurpose = 3;
@@ -343,7 +351,7 @@ message PBSemanticVersion {
     PBPublicId PublicId = 1;
 
     // STAMP for this semantic version.
-    PBStamp Stamp = 2;
+    PBStampChronology Stamp = 2;
 
     // Field values for this semantic. Each field defined is defined by
     // a matching entry in the pattern field definition list.
