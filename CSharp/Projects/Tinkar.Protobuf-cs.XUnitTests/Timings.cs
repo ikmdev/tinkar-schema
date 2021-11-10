@@ -49,9 +49,11 @@ namespace Tinkar.Protobuf.XUnitTests
             Int32 i = 0;
             PBReader pbReader = new PBReader(input);
             NativeMethods.PreventSleep();
-            while (input.Position < input.Length)
+            while (true)
             {
                 PBTinkarMsg msg = pbReader.Read();
+                if (msg == null)
+                    break;
                 if ((i % BlockSize) == 0)
                 {
                     elapsed = DateTime.Now - current;
@@ -79,9 +81,12 @@ namespace Tinkar.Protobuf.XUnitTests
             Int32 i = 0;
             PBReader pbReader = new PBReader(input);
             NativeMethods.PreventSleep();
-            while (input.Position < input.Length)
+            while (true)
             {
-                msgs[i] = pbReader.Read();
+                PBTinkarMsg msg = pbReader.Read();
+                if (msg == null)
+                    break;
+                msgs[i] = msg;
                 //msgs[i] = null;
                 if ((i % BlockSize) == 0)
                 {
