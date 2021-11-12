@@ -320,12 +320,6 @@ message PBPatternVersion {
 message PBSemantic {
     // Unique Public id of this semantic version.
     PBPublicId PublicId = 1;
-
-    // ID of Concept that this semantic references.
-    PBPublicId ReferencedComponent = 2;
-
-    // ID of Pattern that defines the allowable fields in this semantic.
-    PBPublicId PatternForSemantic = 3;
 }
 
 // Semantic Chronology.
