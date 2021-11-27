@@ -68,9 +68,6 @@ message PBField {
         // Tinkar Public id list value.
         PBPublicIdList PublicIdListValue = 23;
 
-        // Tinkar Public id hash set value.
-        PBPublicIdList PublicIdHashValue = 24;
-
         // Tinkar Directed graph value.
         PBDiGraph DiGraphValue = 30;
 
@@ -85,16 +82,6 @@ message PBField {
 
         // Tinkar Concept value.
         PBConcept ConceptValue = 40;
-        //PBConceptChronology ConceptChronologyValue = 41;
-        //PBConceptVersion ConceptVersionValue = 42;
-
-        //PBSemantic SemanticValue = 43;
-        //PBSemanticChronology SemanticChronologyValue = 44;
-        //PBSemanticVersion SemanticVersionValue = 45;
-
-        //PBPattern PatternValue = 46;
-        //PBPatternChronology PatternChronologyValue = 47;
-        //PBPatternVersion PatternVersionValue = 48;
     };
 }
 
