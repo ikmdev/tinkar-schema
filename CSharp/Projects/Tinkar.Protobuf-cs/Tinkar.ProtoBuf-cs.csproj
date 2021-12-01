@@ -8,7 +8,7 @@
     <Description>C# compiled library of Tinkar Protobuf files.</Description>
     <PackageProjectUrl>https://github.com/HL7/tinkar-proto</PackageProjectUrl>
     <RepositoryUrl>https://github.com/HL7/tinkar-proto</RepositoryUrl>
-    <Version>1.4.0</Version>
+    <Version>1.4.1</Version>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 

@@ -13,7 +13,7 @@ namespace Tinkar.Protobuf.XUnitTests
 {
     public class Timings
     {
-        String ProtobufFile => Path.Combine(FindParentDir("tinkar-proto"),
+        String ProtobufFile => Path.Combine(FindParentDir("Tinkar"),
             "DataFiles",
             "tinkar-solor-us-export.pb.zip");
         
