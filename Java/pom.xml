@@ -16,16 +16,16 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <protoc.jar.maven.plugin.version>3.11.4</protoc.jar.maven.plugin.version>
-        <protobuf.java>3.17.3</protobuf.java>
-        <protoc.bin>/Users/asills/devops/protoc-3.19.4-osx-x86_64/bin</protoc.bin>
-        <protoc.include>/Users/asills/devops/protoc-3.19.4-osx-x86_64/include</protoc.include>
+        <protobuf.java.version>3.17.3</protobuf.java.version>
+        <!--suppress UnresolvedMavenProperty -->
+        <protoc.bin>${env.PROTOC_HOME}/bin</protoc.bin>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>${protobuf.java}</version>
+            <version>${protobuf.java.version}</version>
         </dependency>
     </dependencies>
 
