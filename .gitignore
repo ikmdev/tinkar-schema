@@ -64,3 +64,4 @@ Java/.settings/org.eclipse.core.resources.prefs
 Java/.settings/*
 Java/target/*
 Java/.vscode/*
+Java/src/main/java/*
