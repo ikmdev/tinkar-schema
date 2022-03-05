@@ -6,7 +6,7 @@
 
     <groupId>org.hl7.tinkar</groupId>
     <artifactId>protobuf</artifactId>
-    <version>1.2.2</version>
+    <version>1.4.1</version>
 
     <name>Tinkar Proto: Java</name>
     <url>https://github.com/HL7/tinkar-proto</url>
@@ -15,17 +15,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <protoc.jar.maven.plugin.version>3.11.4</protoc.jar.maven.plugin.version>
-        <protobuf.java.version>3.17.3</protobuf.java.version>
         <!--suppress UnresolvedMavenProperty -->
         <protoc.bin>${env.PROTOC_HOME}/bin</protoc.bin>
+        <protobuf.java.version>3.19.4</protobuf.java.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.google.protobuf</groupId>
+            <groupId>org.hl7.tinkar</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>${protobuf.java.version}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

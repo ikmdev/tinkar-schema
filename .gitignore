@@ -65,3 +65,4 @@ Java/.settings/*
 Java/target/*
 Java/.vscode/*
 Java/src/main/java/*
+java-deps/target/*
