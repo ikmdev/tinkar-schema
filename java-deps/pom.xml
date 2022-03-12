@@ -6,7 +6,7 @@
 
     <groupId>org.hl7.tinkar</groupId>
     <artifactId>protobuf-java</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.1-SNAPSHOT</version>
 
     <name>Tinkar Protobuf Java</name>
     <url>https://github.com/HL7/tinkar-proto</url>

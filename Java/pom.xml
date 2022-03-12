@@ -24,7 +24,7 @@
         <dependency>
             <groupId>org.hl7.tinkar</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>${project.version}</version>
+            <version>${project.version}-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
