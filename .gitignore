@@ -65,4 +65,5 @@ Java/.settings/*
 Java/target/*
 Java/.vscode/*
 Java/src/main/java/*
+!Java/src/main/java/module-info.java
 java-deps/target/*
