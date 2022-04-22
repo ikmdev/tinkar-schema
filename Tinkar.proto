@@ -79,9 +79,6 @@ message PBField {
 
         // Tinkar Vertex value.
         PBVertex VertexValue = 33;
-
-        // Tinkar Concept value.
-        PBConcept ConceptValue = 40;
     };
 }
 
@@ -176,7 +173,7 @@ message PBVertex {
     // Vertex property message
     message Property {
         // Concept identifying this property.
-        PBConcept Concept = 1;
+        PBPublicId PublicId = 1;
 
         // Value of this property.
         PBField Value = 2;
@@ -189,7 +186,7 @@ message PBVertex {
     int32 VertexIndex = 2;
 
     // Meaning of this vertex.
-    PBConcept Meaning = 3;
+    PBPublicId Meaning = 3;
 
     // Properties for this vertex.
     repeated Property Properties = 4;
@@ -209,25 +206,19 @@ message PBStampChronology {
 // This contains the info for a single version of a STAMP, sans the STAMP public id.
 message PBStampVersion {
 	// Status of the item this STAMP references.
-	PBConcept Status = 2;
+	PBPublicId Status = 2;
 
 	// Status of the item this STAMP references.
-	PBConcept Author = 3;
+	PBPublicId Author = 3;
 
 	// Module of the item this STAMP references.
-	PBConcept Module = 4;
+	PBPublicId Module = 4;
 
 	// Path of the item this STAMP references.
-	PBConcept Path = 5;
+	PBPublicId Path = 5;
 
 	// Creation time of the item this STAMP references.
 	google.protobuf.Timestamp Time = 6;
-}
-
-// Concept message.
-message PBConcept {
-    // Unique Public id of this concept.
-    PBPublicId PublicId = 1;
 }
 
 // Concept Chronology message.
@@ -243,9 +234,6 @@ message PBConceptChronology {
 // Concept Version message.
 // This contains a version of a single concept.
 message PBConceptVersion {
-    // Unique Public id of this concept.
-    PBPublicId PublicId = 1;
-
     // STAMP for this concept version.
     PBStampChronology Stamp = 2;
 }
@@ -265,13 +253,6 @@ message PBFieldDefinition {
 
 }
 
-// Pattern message.
-//A pattern describes the 
-message PBPattern {
-    // Unique Public id of this pattern.
-    PBPublicId PublicId = 1;
-}
-
 // Pattern chronology
 // Contains multiple versions of pattern item.
 message PBPatternChronology {
@@ -286,8 +267,6 @@ message PBPatternChronology {
 // Pattern Version
 // Single version of pattern item.
 message PBPatternVersion {
-    // Unique Public id of this pattern version.
-    PBPublicId PublicId = 1;
 
     // STAMP for this version.
     PBStampChronology Stamp = 2;
@@ -300,13 +279,6 @@ message PBPatternVersion {
 
     // Definitions for each field in the Semantic that this pattern references.
     repeated PBFieldDefinition FieldDefinitions = 5;
-}
-
-// Semantic.
-// Contains information that alters or modified the meaning of a concept.
-message PBSemantic {
-    // Unique Public id of this semantic version.
-    PBPublicId PublicId = 1;
 }
 
 // Semantic Chronology.
@@ -328,9 +300,6 @@ message PBSemanticChronology {
 // Semantic Version.
 // Single Sematic versions.
 message PBSemanticVersion {
-    // Unique Public id of this semantic version.
-    PBPublicId PublicId = 1;
-
     // STAMP for this semantic version.
     PBStampChronology Stamp = 2;
 
@@ -352,26 +321,17 @@ message PBTinkarMsg {
         //PBGraph GraphValue = 3;
         //PBVertex VertexValue = 4;
 
-        // Message contains a Concept.    
-        PBConcept ConceptValue = 10;
-
         // Message contains a Concept Chronology.    
         PBConceptChronology ConceptChronologyValue = 11;
 
         // Message contains a Concept Version.    
         PBConceptVersion ConceptVersionValue = 12;
 
-        // Message contains a Semantic.    
-        PBSemantic SemanticValue = 20;
-
         // Message contains a Semantic Chronology.    
         PBSemanticChronology SemanticChronologyValue = 21;
 
         // Message contains a Semantic Version.    
         PBSemanticVersion SemanticVersionValue = 22;
-
-        // Message contains a Pattern.    
-        PBPattern PatternValue = 23;
 
         // Message contains a Pattern Chronology.    
         PBPatternChronology PatternChronologyValue = 24;
