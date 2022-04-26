@@ -79,6 +79,12 @@ message PBField {
 
         // Tinkar Vertex value.
         PBVertex VertexValue = 33;
+
+        // Tinkar Planar Point value
+        PBPlanarPoint PlanarPoint = 40;
+
+        // Tinkar Spatial Point value
+        PBSpatialPoint SpatialPoint = 41;
     };
 }
 
@@ -149,7 +155,7 @@ message PBDiGraph {
     repeated PBVertex VertexMap = 1;
 
     // List of all root vertices.
-    repeated int32 RootSequence = 2;
+    repeated PBVertex RootSequence = 2;
 
     // Maps each vertex to its predecessors.
     repeated PBIntToMultipleIntMap SuccessorMap = 3;
