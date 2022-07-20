@@ -137,7 +137,7 @@ message PBDiTree {
     repeated PBVertex VertexMap = 1;
 
     // Root vertex.
-    PBVertex Root = 2;
+    int32 Root = 2;
 
     // Maps each vertex with a predecessor to its predecessor.
     repeated PBIntToIntMap PredecesorMap = 3;
@@ -155,7 +155,7 @@ message PBDiGraph {
     repeated PBVertex VertexMap = 1;
 
     // List of all root vertices.
-    repeated PBVertex RootSequence = 2;
+    repeated int32 RootSequence = 2;
 
     // Maps each vertex to its predecessors.
     repeated PBIntToMultipleIntMap SuccessorMap = 3;
