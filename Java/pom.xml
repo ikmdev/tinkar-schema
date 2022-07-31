@@ -6,33 +6,33 @@
 
     <groupId>org.hl7.tinkar</groupId>
     <artifactId>protobuf</artifactId>
-    <version>1.4.1</version>
+    <version>1.5.0-SNAPSHOT</version>
 
     <name>Tinkar Proto: Java</name>
     <url>https://github.com/HL7/tinkar-proto</url>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.clean.plugin.version>3.2.0</maven.clean.plugin.version>
+        <maven.resources.plugin.version>3.3.0</maven.resources.plugin.version>
+        <maven.compiler.plugin.version>3.10.1</maven.compiler.plugin.version>
+        <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
+        <maven.jar.plugin.version>3.2.2</maven.jar.plugin.version>
+        <maven.install.plugin.version>3.0.1</maven.install.plugin.version>
+        <maven.deploy.plugin.version>3.0.0</maven.deploy.plugin.version>
+        <maven.site.plugin.version>3.12.0</maven.site.plugin.version>
+        <maven.project.info.reports.plugin.version>3.4.0</maven.project.info.reports.plugin.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <!--suppress UnresolvedMavenProperty -->
-        <protoc.bin>${env.PROTOC_HOME}/bin</protoc.bin>
-<!--        <protobuf.java.version>3.19.4</protobuf.java.version>-->
-        <junit.jupiter.version>5.8.2</junit.jupiter.version>
-        <surefire.plugin.version>3.0.0-M5</surefire.plugin.version>
+        <exec.maven.plugin.version>3.1.0</exec.maven.plugin.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <protoc.bin.directory>${env.PROTOC_HOME}/bin</protoc.bin.directory>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.hl7.tinkar</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>${project.version}-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${junit.jupiter.version}</version>
-            <scope>test</scope>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
@@ -41,7 +41,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>${exec.maven.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>generate-protobuf-sources</id>
@@ -50,7 +50,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${protoc.bin}/protoc</executable>
+                            <executable>${protoc.bin.directory}/protoc</executable>
                             <arguments>
                                 <argument>-I../</argument>
                                 <argument>../Tinkar.proto</argument>
@@ -79,39 +79,39 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>${maven.clean.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>${maven.resources.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.10.0</version>
+                    <version>${maven.compiler.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${surefire.plugin.version}</version>
+                    <version>${maven.surefire.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.2.2</version>
+                    <version>${maven.jar.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>2.5.2</version>
+                    <version>${maven.install.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.8.2</version>
+                    <version>${maven.deploy.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.11.0</version>
+                    <version>${maven.site.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>3.2.2</version>
+                    <version>${maven.project.info.reports.plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
