@@ -25,7 +25,6 @@
         <maven.compiler.target>17</maven.compiler.target>
         <exec.maven.plugin.version>3.1.0</exec.maven.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <protoc.bin.directory>${env.PROTOC_HOME}/bin</protoc.bin.directory>
     </properties>
 
     <dependencies>
@@ -50,7 +49,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${protoc.bin.directory}/protoc</executable>
+                            <executable>${protoc.binary.path}</executable>
                             <arguments>
                                 <argument>-I../</argument>
                                 <argument>../Tinkar.proto</argument>

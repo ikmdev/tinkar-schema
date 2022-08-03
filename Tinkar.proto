@@ -85,6 +85,12 @@ message PBField {
 
         // Tinkar Spatial Point value
         PBSpatialPoint SpatialPoint = 41;
+
+        // Tinkar Int to Int Map
+        PBIntToIntMap PBIntToIntMap = 50;
+
+        // Tinkar Int to Multiple Int Map
+        PBIntToMultipleIntMap PBIntToMultipleIntMap = 51;
     };
 }
 
