@@ -38,37 +38,35 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>${exec.maven.plugin.version}</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
                 <executions>
                     <execution>
                         <id>generate-protobuf-sources</id>
                         <phase>generate-sources</phase>
                         <goals>
-                            <goal>exec</goal>
+                            <goal>run</goal>
                         </goals>
                         <configuration>
-                            <executable>${protoc.binary.path}</executable>
-                            <arguments>
-                                <argument>-I../</argument>
-                                <argument>../Tinkar.proto</argument>
-                                <argument>--java_out=${basedir}/src/main/java</argument>
-                            </arguments>
+                            <target>
+                                <exec executable="${protoc.binary.path}">
+                                    <arg line="-I../"/>
+                                    <arg line="../Tinkar.proto"/>
+                                    <arg line="--java_out=${basedir}/src/main/java"/>
+                                </exec>
+                            </target>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>remove-protobuf-sources</id>
                         <phase>clean</phase>
                         <goals>
-                            <goal>exec</goal>
+                            <goal>run</goal>
                         </goals>
                         <configuration>
-                            <executable>/bin/rm</executable>
-                            <arguments>
-                                <argument>-rf</argument>
-                                <argument>${basedir}/src/main/java/org</argument>
-                            </arguments>
+                            <target>
+                                <delete file="${basedir}/src/main/java/org" />
+                            </target>
                         </configuration>
                     </execution>
                 </executions>
