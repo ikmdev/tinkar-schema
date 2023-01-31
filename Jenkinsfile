@@ -43,6 +43,11 @@ pipeline {
                 script{
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
+                            pwd
+                            ls -al
+                        """
+                        
+                        sh """
                         mvn clean install -s '${MAVEN_SETTINGS}' -f java/pom.xml \
                             --batch-mode \
                             -e \
