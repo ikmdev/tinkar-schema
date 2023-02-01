@@ -55,11 +55,11 @@ pipeline {
                         """
 
                         sh """
-                            RUN cp ./proto/bin/protoc /usr/local/bin
+                            cp ./proto/bin/protoc /usr/local/bin
                         """
 
                         sh """
-                            RUN cp -R ./proto/include/* /usr/local/include
+                            cp -R ./proto/include/* /usr/local/include
                         """
 
                         sh """
