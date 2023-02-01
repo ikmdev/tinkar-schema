@@ -33,6 +33,12 @@ pipeline {
         
         stage('Maven Build') {
             agent {
+
+                dockerfile {
+                    filename 'Dockerfile.ci'
+                }
+
+                /*
                 docker {
                     //image "${GLOBAL_NEXUS_SERVER_URL}/${GLOBAL_NEXUS_REPO_NAME}/java:17.0.2"
                     //image "jaegertracing/protobuf:latest"
@@ -40,6 +46,7 @@ pipeline {
                     //registryUrl 'https://registry.az1'
                     //args '-u root:root'
                 }
+                */
             }
 
             steps {
