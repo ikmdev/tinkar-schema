@@ -44,7 +44,7 @@ pipeline {
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         
                         sh """
-                            mvn clean install --also-make-dependents -s '${MAVEN_SETTINGS}' -f java-deps/pom.xml \
+                            mvn clean install -Dprotoc.binary.path=protoc --also-make-dependents -s '${MAVEN_SETTINGS}' -f java-deps/pom.xml \
                             --batch-mode \
                             -e \
                             -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
