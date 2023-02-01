@@ -34,7 +34,7 @@ pipeline {
         stage('Maven Build') {
             agent {
                 dockerfile {
-                    filename 'Dockerfile.ci'
+                    filename 'Dockerfile'
                 }
                 /*
                 docker {
