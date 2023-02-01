@@ -44,7 +44,7 @@ pipeline {
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         
                         sh """
-                            mvn clean install -Dprotoc.binary.path=protoc --also-make-dependents -s '${MAVEN_SETTINGS}' -f java-deps/pom.xml \
+                            mvn clean install -Dprotoc.binary.path=protoc --also-make-dependents -s '${MAVEN_SETTINGS}' -f Java/pom.xml \
                             --batch-mode \
                             -e \
                             -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
@@ -76,7 +76,7 @@ pipeline {
                     // This expands the evironment variables SONAR_CONFIG_NAME, SONAR_HOST_URL, SONAR_AUTH_TOKEN that can be used by any script.
 
                     sh """
-                        mvn  -f java-deps/pom.xml sonar:sonar -Dsonar.login=${SONAR_AUTH_TOKEN} --batch-mode
+                        mvn  -f Java/pom.xml sonar:sonar -Dsonar.login=${SONAR_AUTH_TOKEN} --batch-mode
                     """
                 }
             }
