@@ -35,7 +35,7 @@ pipeline {
             agent {
 
                 dockerfile {
-                    filename 'Dockerfile.ci'
+                    filename 'Dockerfile'
                 }
 
                 /*
