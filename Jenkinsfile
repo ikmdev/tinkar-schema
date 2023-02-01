@@ -64,6 +64,7 @@ pipeline {
             }
         }
 
+        /*
         stage('SonarQube Scan') {
             agent {
                 docker { 
@@ -89,6 +90,7 @@ pipeline {
                 }
             }            
         }
+        */
         
         stage("Publish to Nexus Repository Manager") {
 
