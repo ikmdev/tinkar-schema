@@ -1,8 +1,8 @@
 ARG BASE_IMAGE_REGISTRY_URL=""
-FROM ${BASE_IMAGE_REGISTRY_URL}alpine:3.15.0
+FROM ${GLOBAL_NEXUS_SERVER_URL}/${GLOBAL_NEXUS_REPO_NAME}/java:17.0.2
 
 ###################################################
 # Run updates and add required packages
 ###################################################
 RUN apk update && \
-    apk add --no-cache openjdk17~=17.0 maven~=3.8 protobuf
+    apk add --no-cache protobuf
