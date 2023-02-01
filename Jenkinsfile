@@ -34,7 +34,8 @@ pipeline {
         stage('Maven Build') {
             agent {
                 docker {
-                    image "${GLOBAL_NEXUS_SERVER_URL}/${GLOBAL_NEXUS_REPO_NAME}/java:17.0.2"
+                    //image "${GLOBAL_NEXUS_SERVER_URL}/${GLOBAL_NEXUS_REPO_NAME}/java:17.0.2"
+                    image: "jaegertracing/protobuf:latest"
                     args '-u root:root'
                 }
             }
