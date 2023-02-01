@@ -33,26 +33,20 @@ pipeline {
         
         stage('Maven Build') {
             agent {
-
-                dockerfile {
-                    filename 'Dockerfile'
-                }
-
-                /*
                 docker {
-                    //image "${GLOBAL_NEXUS_SERVER_URL}/${GLOBAL_NEXUS_REPO_NAME}/java:17.0.2"
-                    //image "jaegertracing/protobuf:latest"
-                    image "znly/protoc"
-                    //registryUrl 'https://registry.az1'
-                    //args '-u root:root'
+                    image "${GLOBAL_NEXUS_SERVER_URL}/${GLOBAL_NEXUS_REPO_NAME}/java:17.0.2"
+                    args '-u root:root'
                 }
-                */
             }
 
             steps {
                 script{
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
-                                                
+
+                        sh """
+                            apk update && apk add --no-cache protobuf
+                        """
+
                         sh """
                             mvn clean install -Dprotoc.binary.path=protoc -s '${MAVEN_SETTINGS}' \
                             --batch-mode \
