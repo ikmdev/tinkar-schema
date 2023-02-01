@@ -117,16 +117,7 @@ pipeline {
                 configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) { 
 
                     sh """
-                        mvn deploy --batch-mode \                        
-                        -e \
-                        -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
-                        -DskipTests \
-                        -DskipITs \
-                        -Dmaven.main.skip \
-                        -Dmaven.test.skip \
-                        -s '${MAVEN_SETTINGS}' \
-                        -P inject-application-properties \
-                        -DrepositoryId='${repositoryId}'
+                        mvn deploy --batch-mode -e -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -DskipTests -DskipITs -Dmaven.main.skip -Dmaven.test.skip -s '${MAVEN_SETTINGS}' -P inject-application-properties -DrepositoryId='${repositoryId}'
                     """              
                 }
             }
