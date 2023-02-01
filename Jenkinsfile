@@ -33,15 +33,17 @@ pipeline {
         
         stage('Maven Build') {
             agent {
+                /*
                 dockerfile {
                     filename 'Dockerfile'
                 }
-                /*
+                */
+                
                 docker {
                     image "${GLOBAL_NEXUS_SERVER_URL}/${GLOBAL_NEXUS_REPO_NAME}/java:17.0.2"
                     args '-u root:root'
                 }
-                */
+                
             }
 
             steps {
@@ -49,7 +51,7 @@ pipeline {
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
 
                         sh """
-                            apk update && apk add --no-cache protobuf
+                            apk update && apk add --no-cache protobuf google.protobuf
                         """
 
                         sh """
