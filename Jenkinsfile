@@ -55,7 +55,7 @@ pipeline {
                         """
 
                         sh """
-                           ls -al
+                           which protoc
                         """
 
                         
