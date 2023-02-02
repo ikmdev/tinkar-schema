@@ -33,11 +33,6 @@ pipeline {
         
         stage('Maven Build') {
             agent {
-                /*
-                dockerfile {
-                    filename 'Dockerfile'
-                }
-                */
                 
                 docker {
                     image "${GLOBAL_NEXUS_SERVER_URL}/${GLOBAL_NEXUS_REPO_NAME}/java:17.0.2"
@@ -50,8 +45,9 @@ pipeline {
                 script{
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
 
+                        // make sure protobuf version matches the one in pom xml protobuf.java.version    
                         sh """
-                            apk update && apk add --no-cache protobuf libprotoc
+                            apk update && apk add --no-cache protobuf=3.21.3
                         """
 
                         sh """
@@ -72,8 +68,7 @@ pipeline {
                 }
             }
         }
-
-        /*
+        
         stage('SonarQube Scan') {
             agent {
                 docker { 
@@ -99,7 +94,6 @@ pipeline {
                 }
             }            
         }
-        */
         
         stage("Publish to Nexus Repository Manager") {
 
