@@ -55,12 +55,10 @@ pipeline {
                         """
 
                         sh """
-                            cp ./proto/bin/protoc /usr/local/bin
+                           ls -al
                         """
 
-                        sh """
-                            cp -R ./proto/include/* /usr/local/include
-                        """
+                        
 
                         sh """
                             mvn clean install -Dprotoc.binary.path=protoc -s '${MAVEN_SETTINGS}' \
