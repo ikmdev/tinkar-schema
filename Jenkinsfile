@@ -47,7 +47,7 @@ pipeline {
 
                         // make sure protobuf version matches the one in pom xml protobuf.java.version    
                         sh """
-                            apk update && apk add --no-cache protobuf=3.21.12
+                            apk update && apk add --no-cache protobuf=3.21.3
                         """
 
                         sh """
