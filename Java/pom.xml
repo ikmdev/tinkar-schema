@@ -31,6 +31,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <exec.maven.plugin.version>3.1.0</exec.maven.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <my.version></my.version>
     </properties>
 
     <dependencies>
@@ -44,6 +45,26 @@
 
     <build>
         <finalName>protobuf</finalName>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-install-plugin</artifactId>
+            <version>2.3.1</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>install-file</goal>
+                    </goals>
+                    <phase>install</phase>
+                    <configuration>
+                        <file>${project.build.finalName}.${project.packaging}</file>
+                        <generatePom>false</generatePom>
+                        <pomFile>pom.xml</pomFile>
+                        <version>${my.version}</version>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+        
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
