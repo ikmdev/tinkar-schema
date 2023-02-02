@@ -55,11 +55,6 @@ pipeline {
                         """
 
                         sh """
-                            apk info google.protobuf.Timestamp
-                        """
-
-
-                        sh """
                             mvn clean install -Dprotoc.binary.path=protoc -s '${MAVEN_SETTINGS}' \
                             --batch-mode \
                             -e \
