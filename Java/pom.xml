@@ -31,8 +31,6 @@
         <maven.compiler.target>17</maven.compiler.target>
         <exec.maven.plugin.version>3.1.0</exec.maven.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <my.version></my.version>
-        <jar.finalName>xxxxxxxxxxxxx</jar.finalName>
     </properties>
 
     <dependencies>
@@ -47,14 +45,6 @@
     <build>
 
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <finalName>protobuf</finalName>                   
-                </configuration>
-            </plugin> 
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

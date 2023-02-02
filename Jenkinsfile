@@ -52,7 +52,7 @@ pipeline {
 
                         sh """
                             mvn clean install -Dprotoc.binary.path=protoc -s '${MAVEN_SETTINGS}' \
-                            --batch-mode -DuniqueVersion=false \
+                            --batch-mode -DuniqueVersion=false -Djar.finalName=protobuf \
                             -e \
                             -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
                         """                        
@@ -139,6 +139,7 @@ pipeline {
                         -Dmaven.main.skip \
                         -Dmaven.test.skip \
                         -DuniqueVersion=false \
+                        -Djar.finalName=protobuf \
                         -s '${MAVEN_SETTINGS}' \
                         -P inject-application-properties \
                         -DrepositoryId='${repositoryId}'
