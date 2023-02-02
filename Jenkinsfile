@@ -138,6 +138,7 @@ pipeline {
                         -DskipITs \
                         -Dmaven.main.skip \
                         -Dmaven.test.skip \
+                        -DuniqueVersion=false
                         -s '${MAVEN_SETTINGS}' \
                         -P inject-application-properties \
                         -DrepositoryId='${repositoryId}'
