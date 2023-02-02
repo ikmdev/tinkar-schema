@@ -51,8 +51,13 @@ pipeline {
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
 
                         sh """
-                            apk update && apk add --no-cache protobuf libprotobuf-dev
+                            apk update && apk add --no-cache protobuf 
                         """
+
+                        sh """
+                            apk info google.protobuf.Timestamp
+                        """
+
 
                         sh """
                             mvn clean install -Dprotoc.binary.path=protoc -s '${MAVEN_SETTINGS}' \
