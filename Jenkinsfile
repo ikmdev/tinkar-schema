@@ -123,9 +123,15 @@ pipeline {
              
                 configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) { 
 
+                    // make sure protobuf version matches the one in pom xml protobuf.java.version    
+                    sh """
+                        apk update && apk add --no-cache protobuf-dev 
+                    """
+
                     sh """
                         mvn deploy \
                         --batch-mode \
+                        -Dprotoc.binary.path=protoc  \
                         -e \
                         -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
                         -DskipTests \
