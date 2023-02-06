@@ -5,4 +5,4 @@ FROM maven:3.8.7-eclipse-temurin-19-focal
 # Run updates and add required packages
 ###################################################
 RUN apt update && \
-    apt install --yes protobuf-dev 
+    apt install --yes protobuf
