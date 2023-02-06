@@ -32,21 +32,21 @@ pipeline {
     stages {
         
         stage('Maven Build') {
-            agent {                
-                docker {
-                    image "maven:3.8.7-eclipse-temurin-19-focal"
-                    args '-u root:root'   
-                }                
-            }
+            agent { dockerfile true }               
+            //     docker {
+            //         image "maven:3.8.7-eclipse-temurin-19-focal"
+            //         args '-u root:root'   
+            //     }                
+            // }
 
             steps {
                 script{
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
 
                         // make sure protobuf version matches the one in pom xml protobuf.java.version    
-                        sh """
-                            apk update && apk add --no-cache protobuf-dev 
-                        """
+                        // sh """
+                        //     apk update && apk add --no-cache protobuf-dev 
+                        // """
 
                         sh """
                             mvn clean install -Dprotoc.binary.path=protoc -s '${MAVEN_SETTINGS}' \
@@ -68,12 +68,12 @@ pipeline {
         }
         
         stage('SonarQube Scan') {
-            agent {                
-                docker {
-                    image "maven:3.8.7-eclipse-temurin-19-focal"
-                    args '-u root:root'   
-                }                
-            }
+            agent { dockerfile true }                
+            //     docker {
+            //         image "maven:3.8.7-eclipse-temurin-19-focal"
+            //         args '-u root:root'   
+            //     }                
+            // }
             
             steps{
                 unstash 'tinkar-origin-test-artifacts'
@@ -95,12 +95,12 @@ pipeline {
         
         stage("Publish to Nexus Repository Manager") {
 
-            agent {                
-                docker {
-                    image "maven:3.8.7-eclipse-temurin-19-focal"
-                    args '-u root:root'   
-                }                
-            }
+            agent { dockerfile true }                
+            //     docker {
+            //         image "maven:3.8.7-eclipse-temurin-19-focal"
+            //         args '-u root:root'   
+            //     }                
+            // }
 
             steps {
 
@@ -122,9 +122,9 @@ pipeline {
                 configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) { 
 
                     // make sure protobuf version matches the one in pom xml protobuf.java.version    
-                    sh """
-                        apk update && apk add --no-cache protobuf-dev 
-                    """
+                    // sh """
+                    //     apk update && apk add --no-cache protobuf-dev 
+                    // """
 
                     sh """
                         mvn deploy \
