@@ -13,7 +13,6 @@
         <module>Java</module>
         <module>java-deps</module>
     </modules>
-
     
     <build>
         <pluginManagement>

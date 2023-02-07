@@ -8,11 +8,11 @@
     <groupId>org.hl7.tinkar</groupId>
     <version>1.5.0</version>
         
-    <parent>
+    <!-- <parent>
         <artifactId>tinkar-proto-parent</artifactId>
         <groupId>org.hl7.tinkar</groupId>
         <version>1.5.0</version>
-    </parent>
+    </parent> -->
     
     <name>Tinkar Proto: Java</name>
     <url>https://github.com/HL7/tinkar-proto</url>
@@ -100,6 +100,7 @@
                     <version>${maven.surefire.plugin.version}</version>
                 </plugin>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${maven.jar.plugin.version}</version>
                 </plugin>
@@ -108,6 +109,7 @@
                     <version>${maven.install.plugin.version}</version>
                 </plugin>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>${maven.deploy.plugin.version}</version>
                 </plugin>
