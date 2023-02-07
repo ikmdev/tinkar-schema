@@ -6,7 +6,7 @@
 
     <artifactId>protobuf</artifactId>
     <groupId>org.hl7.tinkar</groupId>
-    <version>1.5.0</version>
+    <version>1.5.0-SNAPSHOT</version>
         
     <!-- <parent>
         <artifactId>tinkar-proto-parent</artifactId>
