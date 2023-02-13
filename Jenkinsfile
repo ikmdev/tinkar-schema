@@ -45,7 +45,7 @@ pipeline {
 
                         // make sure protobuf version matches the one in pom xml protobuf.java.version    
                         sh """
-                            apt update && apt install --yes protobuf-compiler 
+                            apt update && apt install --yes protobuf-compiler=3.12.4-1ubuntu7
                         """
 
                         sh """

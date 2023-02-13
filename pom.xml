@@ -14,6 +14,11 @@
         <module>java-deps</module>
     </modules>
     
+    <properties>
+        <maven.compiler.source>19</maven.compiler.source>
+        <maven.compiler.target>19</maven.compiler.target>
+    </properties>    
+
     <build>
         <finalName>${project.name}</finalName>
         <pluginManagement>
@@ -58,6 +63,14 @@
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>3.0.0</version>
                 </plugin>
+                <plugin>
+			        <groupId>org.apache.maven.plugins</groupId>
+			        <artifactId>maven-compiler-plugin</artifactId>
+			        <configuration>
+				        <source>${maven.compiler.source}</source>
+				        <target>${maven.compiler.target}</target>
+                    </configuration>
+                </plugin>    
             </plugins>           
         </pluginManagement>
 
