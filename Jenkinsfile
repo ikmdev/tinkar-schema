@@ -44,7 +44,7 @@ pipeline {
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
 
                         sh """
-                            apt-cache policy protobuf-compiler
+                            apt-cache madison protobuf-compiler
                         """
 
                         // make sure protobuf version matches the one in pom xml protobuf.java.version    
