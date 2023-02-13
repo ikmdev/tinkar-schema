@@ -43,6 +43,10 @@ pipeline {
                 script{
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
 
+                        sh """
+                            uname -a
+                        """
+
                         // make sure protobuf version matches the one in pom xml protobuf.java.version    
                         sh """
                             apt update && apt install --yes protobuf-compiler=3.12.4
