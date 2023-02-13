@@ -28,7 +28,7 @@
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <protobuf.java.version>3.12.4</protobuf.java.version>
+        <protobuf.java.version>3.21.12</protobuf.java.version>
     </properties>
 
     <build>
