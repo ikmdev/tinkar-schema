@@ -43,11 +43,8 @@ pipeline {
                 script{
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
 
-                        sh """
-                            apt list -a protobuf-compiler
-                        """
-
-                        // make sure protobuf version matches the one in pom xml protobuf.java.version    
+                        // make sure protobuf version matches the one in pom xml protobuf.java.version
+                        // TODO: install package with a particular version that matches the one in pom xml protobuf.java.version
                         sh """
                             apt update && apt install --yes protobuf-compiler
                         """
