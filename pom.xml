@@ -6,12 +6,14 @@
 
     <groupId>org.hl7.tinkar</groupId>
     <artifactId>tinkar-proto-parent</artifactId>
-    <version>1.5.0-SNAPSHOT</version>
+    <version>1.5.0</version>
     <packaging>pom</packaging>
 
     <modules>
         <module>Java</module>
+        <!-- project below is now part of project Jpms-deps
         <module>java-deps</module>
+        -->
     </modules>
     
     <properties>
