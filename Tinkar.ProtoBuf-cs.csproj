@@ -24,11 +24,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="..\..\..\Tinkar.proto" />
+    <Protobuf Include=".\Tinkar.proto" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\LICENSE">
+    <None Include=".\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
