@@ -59,11 +59,15 @@ package-lock.json
 Java/.classpath
 Java/.project
 Java/.settings/org.eclipse.core.resources.prefs
-.gitignore
-.gitignore
 Java/.settings/*
-Java/target/*
+target/*
 Java/.vscode/*
 Java/src/main/java/*
 !Java/src/main/java/module-info.java
 java-deps/target/*
+
+
+#Intellj Ignored
+*.iml
+Java/*.iml
+.idea/
