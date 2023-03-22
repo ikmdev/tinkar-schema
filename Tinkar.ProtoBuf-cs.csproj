@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Tinkar.Protobuf.CS</RootNamespace>
+    <RootNamespace>Tinkar.Schema.CS</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Description>C# compiled library of Tinkar Protobuf files.</Description>
-    <PackageProjectUrl>https://github.com/HL7/tinkar-proto</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/HL7/tinkar-proto</RepositoryUrl>
+    <Description>C# compiled library of Tinkar Schema Protobuf files.</Description>
+    <PackageProjectUrl>https://github.com/IKM/tinkar-proto</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/IKM/tinkar-proto</RepositoryUrl>
     <Version>1.4.1</Version>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
