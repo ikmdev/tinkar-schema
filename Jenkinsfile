@@ -95,10 +95,10 @@ pipeline {
 
             steps {
                 script {
+                    unstash(name: "java-schema-proto")
                     def pom = readMavenPom file: 'pom.xml'
                     def version = pom.version
                     if (!version.contains("-SNAPSHOT")) {
-                        unstash(name: "java-schema-proto")
                         sh '''
                         mvn clean deploy -s '${MAVEN_SETTINGS}' --batch-mode
                         '''
