@@ -29,13 +29,17 @@ pipeline {
 
         stage("Build ProtoC Image") {
             steps {
-                docker.build("tinkar-schema-protoc:latest", "-f protoc.dockerfile")
+                script {
+                    docker.build("tinkar-schema-protoc:latest", "-f protoc.dockerfile")
+                }
             }
         }
 
         stage("Build CSharp Image") {
             steps {
-                docker.build("tinkar-schema-csharp:latest", "-f csharp.dockerfile")
+                script {
+                    docker.build("tinkar-schema-csharp:latest", "-f csharp.dockerfile")
+                }
             }
         }
 
@@ -69,8 +73,8 @@ pipeline {
                 sh '''
                 protoc -I $BUILDER_PATH $BUILDER_PATH/Tinkar.proto --csharp_out=/home/proto-builder/code/csharp
                 '''
+                stash("csharp-schema-proto", includes: '*')
             }
-            stash("csharp-schema-proto", includes: '*')
         }
 
         // Generate and deploy a jar file
@@ -86,13 +90,15 @@ pipeline {
             }
 
             steps {
-                pom = readMavenPom file: 'pom.xml'
-                def version = pom.version
-                if (!version.contains("-SNAPSHOT")) {
-                    unstash("java-schema-proto")
-                    sh '''
-                    mvn clean deploy -s '${MAVEN_SETTINGS}' --batch-mode
-                    '''
+                script {
+                    def pom = readMavenPom file: 'pom.xml'
+                    def version = pom.version
+                    if (!version.contains("-SNAPSHOT")) {
+                        unstash("java-schema-proto")
+                        sh '''
+                        mvn clean deploy -s '${MAVEN_SETTINGS}' --batch-mode
+                        '''
+                    }
                 }
             }
         }
