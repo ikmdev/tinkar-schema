@@ -73,7 +73,7 @@ pipeline {
                 sh '''
                 protoc -I $BUILDER_PATH $BUILDER_PATH/Tinkar.proto --csharp_out=/home/proto-builder/code/csharp
                 '''
-                stash("csharp-schema-proto", includes: '*')
+                stash(name: "csharp-schema-proto", includes: '*')
             }
         }
 
@@ -94,7 +94,7 @@ pipeline {
                     def pom = readMavenPom file: 'pom.xml'
                     def version = pom.version
                     if (!version.contains("-SNAPSHOT")) {
-                        unstash("java-schema-proto")
+                        unstash(name: "java-schema-proto")
                         sh '''
                         mvn clean deploy -s '${MAVEN_SETTINGS}' --batch-mode
                         '''
@@ -116,7 +116,7 @@ pipeline {
             }
 
             steps {
-                unstash("csharp-schema-proto")
+                unstash(name: "csharp-schema-proto")
                 sh '''
                     /root/.dotnet/dotnet restore
                     /root/.dotnet/dotnet build --no-restore
