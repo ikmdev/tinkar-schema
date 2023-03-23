@@ -28,13 +28,13 @@ pipeline {
     stages {
 
         stage("Build ProtoC Image") {
-            script {
+            steps {
                 docker.build("tinkar-schema-protoc:latest", "-f protoc.dockerfile")
             }
         }
 
         stage("Build CSharp Image") {
-            script {
+            steps {
                 docker.build("tinkar-schema-csharp:latest", "-f csharp.dockerfile")
             }
         }
