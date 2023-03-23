@@ -1,7 +1,6 @@
-@Library("titan-library") _
+#!groovy
 
-//run the build at 03:10 on every day-of-week from Monday through Friday but only on the main branch
-String cron_string = BRANCH_NAME == "main" ? "10 3 * * 1-5" : ""
+@Library("titan-library") _
 
 pipeline {
     agent any
@@ -49,6 +48,7 @@ pipeline {
                 docker {
                     image 'tinkar-schema-protoc:latest'
                     reuseNode true
+                    args '-u root:root'
                 }
             }
             steps {
@@ -67,6 +67,7 @@ pipeline {
                 docker {
                     image 'tinkar-schema-protoc:latest'
                     reuseNode true
+                    args '-u root:root'
                 }
             }
             steps {
@@ -86,6 +87,7 @@ pipeline {
                 docker {
                     image 'maven:3.9.0-amazoncorretto-19'
                     reuseNode true
+                    args '-u root:root'
                 }
             }
 
@@ -112,6 +114,7 @@ pipeline {
                 docker {
                     image 'tinkar-schema-csharp:latest'
                     reuseNode true
+                    args '-u root:root'
                 }
             }
 
