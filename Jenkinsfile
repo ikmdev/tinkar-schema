@@ -53,6 +53,7 @@ pipeline {
             }
             steps {
                 sh '''
+                mkdir -p /home/proto-builder/code/java/src/main/java
                 protoc -I /home/proto-builder/ /home/proto-builder/Tinkar.proto \
                     --java_out=/home/proto-builder/code/java/src/main/java
                 '''
@@ -71,6 +72,7 @@ pipeline {
             }
             steps {
                 sh '''
+                mkdir -p /home/proto-builder/code/csharp
                 protoc -I /home/proto-builder /home/proto-builder/Tinkar.proto \
                     --csharp_out=/home/proto-builder/code/csharp
                 '''
