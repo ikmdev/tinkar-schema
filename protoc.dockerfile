@@ -5,7 +5,7 @@ FROM alpine:3.17.2
 # Make and directories that we might need for creating code
 RUN mkdir -p /home/proto-builder && \
     mkdir protoc && \
-    mkdir -p code/java/src/main/java
+    mkdir -p /home/proto-builder/code/java/src/main/java
 
 ARG BUILDER_PATH=/home/proto-builder
 WORKDIR $BUILDER_PATH
