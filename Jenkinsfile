@@ -98,9 +98,10 @@ pipeline {
                     //def pom = readMavenPom file: 'pom.xml'
                     //def version = pom.version
                     //if (!version.contains("-SNAPSHOT")) {
-                    sh '''
-                    mvn clean deploy -s '${MAVEN_SETTINGS}' --batch-mode
-                    '''
+                    sh 'ls /'
+                    //sh '''
+                    //mvn clean deploy -s '${MAVEN_SETTINGS}' --batch-mode
+                    //'''
                     //}
                 }
             }
