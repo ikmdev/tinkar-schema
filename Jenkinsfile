@@ -71,7 +71,8 @@ pipeline {
             }
             steps {
                 sh '''
-                protoc -I $BUILDER_PATH $BUILDER_PATH/Tinkar.proto --csharp_out=/home/proto-builder/code/csharp
+                protoc -I /home/proto-builder /home/proto-builder/Tinkar.proto \
+                    --csharp_out=/home/proto-builder/code/csharp
                 '''
                 stash(name: "csharp-schema-proto", includes: '*')
             }
