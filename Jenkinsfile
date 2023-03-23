@@ -28,11 +28,15 @@ pipeline {
     stages {
 
         stage("Build ProtoC Image") {
-            docker.build("tinkar-schema-protoc:latest", "-f protoc.dockerfile")
+            script {
+                docker.build("tinkar-schema-protoc:latest", "-f protoc.dockerfile")
+            }
         }
 
         stage("Build CSharp Image") {
-            docker.build("tinkar-schema-csharp:latest", "-f csharp.dockerfile")
+            script {
+                docker.build("tinkar-schema-csharp:latest", "-f csharp.dockerfile")
+            }
         }
 
         // Running protoc to generate Java generated classes.
