@@ -88,7 +88,6 @@ pipeline {
             agent {
                 docker {
                     image 'maven:3.9.0-amazoncorretto-19'
-                    reuseNode true
                     args '-u root:root'
                 }
             }
