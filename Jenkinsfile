@@ -54,8 +54,7 @@ pipeline {
             steps {
                 sh '''
                 protoc -I $BUILDER_PATH /home/proto-builder/Tinkar.proto \
-                    --java_out=/home/proto-builder/code/java/src/main/java \
-                    --proto_path=/usr/local/include/google/protobuf
+                    --java_out=/home/proto-builder/code/java/src/main/java
                 '''
                 stash(name: "java-schema-proto", includes: '*')
             }
