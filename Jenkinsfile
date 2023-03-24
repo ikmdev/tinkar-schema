@@ -82,9 +82,9 @@ pipeline {
 
         // Generate and deploy a jar file
         stage("Deploy Java Code") {
-            when {
-                branch "main"
-            }
+            //when {
+            //    branch "main"
+            //}
             agent {
                 docker {
                     image 'maven:3.8.5-openjdk-17'
@@ -93,7 +93,6 @@ pipeline {
             }
 
             steps {
-                sh 'ls /'
                 configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                     sh "mvn clean deploy -s '${MAVEN_SETTINGS}' --batch-mode"
                 }
