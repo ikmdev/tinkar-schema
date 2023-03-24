@@ -118,7 +118,8 @@ pipeline {
             agent {
                 docker {
                     image 'tinkar-schema-csharp:latest'
-                    args '-u root:root sh'
+                    args '-u root:root'
+                    
                 }
             }
 
