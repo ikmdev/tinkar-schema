@@ -88,7 +88,7 @@ pipeline {
             agent {
                 docker {
                     image 'maven:3.8.7-eclipse-temurin-19-alpine'
-                    args '-u root:root'
+                    args '--privileged'
                 }
             }
 
@@ -118,7 +118,7 @@ pipeline {
             agent {
                 docker {
                     image 'tinkar-schema-csharp:latest'
-                    args '-u root:root --entrypoint=sh'
+                    args '--privileged --entrypoint=sh -it'
                 }
             }
 
