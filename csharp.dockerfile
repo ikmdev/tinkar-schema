@@ -1,9 +1,7 @@
-FROM mono:latest AS nugetBuilder
+FROM mono:latest
 
 # Setting ARG commands
 ARG BUILDER_PATH=/home/proto-builder
-# Copying over the C# generated classes from the first image.
-WORKDIR $BUILDER_PATH/csharp-generated
 
 # Installing NuGet and other required packages
 RUN apt-get update && \
