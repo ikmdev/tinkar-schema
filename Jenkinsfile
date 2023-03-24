@@ -118,7 +118,6 @@ pipeline {
             agent {
                 docker {
                     image 'tinkar-schema-csharp:latest'
-                    reuseNode true
                     args '-u root:root'
                 }
             }
