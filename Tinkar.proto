@@ -1,7 +1,7 @@
 ﻿syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "org.hl7.tinkar.protobuf";
+option java_package = "dev.ikm.tinkar.protobuf";
 option java_outer_classname = "PBTinkar";
 
 option csharp_namespace = "Tinkar.ProtoBuf.CS";
