@@ -1,5 +1,5 @@
-module org.hl7.tinkar.protobuf {
+module dev.ikm.tinkar.protobuf {
     requires java.base;
     requires com.google.protobuf;
-    exports org.hl7.tinkar.protobuf;
+    exports dev.ikm.tinkar.protobuf;
 }
