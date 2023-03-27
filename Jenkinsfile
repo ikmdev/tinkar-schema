@@ -82,9 +82,6 @@ pipeline {
 
         // Generate and deploy a jar file
         stage("Deploy Java Code") {
-            //when {
-            //    branch "main"
-            //}
             agent {
                 docker {
                     image 'maven:3.8.7-eclipse-temurin-19-alpine'
@@ -97,40 +94,30 @@ pipeline {
                 configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                     sh "mvn clean deploy -s '${MAVEN_SETTINGS}' --batch-mode"
                 }
-                //script {
-                    //unstash(name: "java-schema-proto")
-                    //def pom = readMavenPom file: 'pom.xml'
-                    //def version = pom.version
-                    //if (!version.contains("-SNAPSHOT")) {
-                    //sh '''
-                    //mvn clean deploy -s '${MAVEN_SETTINGS}' --batch-mode
-                    //'''
-                    //}
-                //}
             }
         }
 
         // Building the .csproj file using dotnet commands.
-        stage("Deploy C# Code") {
-            when {
-                branch "main"
-            }
-            agent {
-                docker {
-                    image 'tinkar-schema-csharp:latest'
-                    args '-u root:root'
-                    
-                }
-            }
-
-            steps {
-                unstash(name: "csharp-schema-proto")
-                sh '''
-                    /root/.dotnet/dotnet restore
-                    /root/.dotnet/dotnet build --no-restore
-                    /root/.dotnet/dotnet pack --no-restore --no-build -o /sln/artifacts
-                    '''
-            }
-        }
+//         stage("Deploy C# Code") {
+//             when {
+//                 branch "main"
+//             }
+//             agent {
+//                 docker {
+//                     image 'tinkar-schema-csharp:latest'
+//                     args '-u root:root'
+//
+//                 }
+//             }
+//
+//             steps {
+//                 unstash(name: "csharp-schema-proto")
+//                 sh '''
+//                     /root/.dotnet/dotnet restore
+//                     /root/.dotnet/dotnet build --no-restore
+//                     /root/.dotnet/dotnet pack --no-restore --no-build -o /sln/artifacts
+//                     '''
+//             }
+//         }
     }
 }
