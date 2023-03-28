@@ -49,7 +49,7 @@ protoc -I <location of current direct> Tinkar.proto --java_out=<target directory
 An example of running this and generating the files for your local environment would look something like this:
 
 ```shell
-docker run -it -v "$(pwd)/src:/home/proto-builder/code/java/src" protoc sh -c "mkdir -p /home/proto-builder/code/java/src/main/java && protoc -I /home/proto-builder/ Tinkar.proto --java_out=/home/proto-builder/code/java/src/main/java"
+docker run -it -v "$(pwd)/src:/home/proto-builder/src" protoc sh -c "mkdir -p /home/proto-builder/src/main/java && protoc -I /home/proto-builder/ Tinkar.proto --java_out=/home/proto-builder/src/main/java"
 ```
 
 ## Creating a Java Package

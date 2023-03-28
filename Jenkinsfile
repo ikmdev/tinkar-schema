@@ -53,9 +53,9 @@ pipeline {
             }
             steps {
                 sh '''
-                mkdir -p /home/proto-builder/code/java/src/main/java
+                mkdir -p /home/proto-builder/src/main/java
                 protoc -I /home/proto-builder/ /home/proto-builder/Tinkar.proto \
-                    --java_out=/home/proto-builder/code/java/src/main/java
+                    --java_out=/home/proto-builder/src/main/java
                 '''
                 stash(name: "java-schema-proto", includes: '*')
             }

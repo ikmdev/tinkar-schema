@@ -20,12 +20,13 @@
 
     <properties>
         <protobuf.version>3.22.0</protobuf.version>
+        <tinkar-jpms-deps.groupId>dev.ikm.jpms</tinkar-jpms-deps.groupId>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.google.protobuf</groupId>
+                <groupId>${tinkar-jpms-deps.groupId}</groupId>
                 <artifactId>protobuf-java</artifactId>
                 <version>${protobuf.version}</version>
             </dependency>
@@ -34,7 +35,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.google.protobuf</groupId>
+            <groupId>${tinkar-jpms-deps.groupId}</groupId>
             <artifactId>protobuf-java</artifactId>
         </dependency>
     </dependencies>
