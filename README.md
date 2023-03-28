@@ -1,43 +1,118 @@
 # Tinkar Protobuf
 
-This repository contains the Protobuf file for the Tinkar project,
-and the language specific projects to build a language specific artifact (i.e. dll for csharp)
-that can be accessed to read and write Tinkar files.
+This repository contains the Protobuf schema file for the Tinkar project and generates code packages for different
+languages that can be distributed to read and write Tinkar files.
 
-## Using Docker to Generate Java and C# Artifacts:
-To generate Java and C# based objects from the Tinkar.proto file a Docker image will build a JPMS modular jar artifact file and a .nupkg file.
+## PreRequisites
 
-## Build a Docker image:**
+* Java
+* Maven
+* C#
+* NuGet
 
-If you are on a Macbook with a M1 chip run this command instead of the one mentioned in step 1.
+## Using Docker to Generate Java and C# Artifacts
+
+To generate Java and C# based objects from the Tinkar.proto file a Docker image will build a JPMS modular jar artifact
+file and a .nupkg file.
+
+## Creating the Build containers (if applicable)
+
+To build the proto container, which can be used for file generation. This is used for executing protoc commands. 
+
 ```shell
-docker build --platform linux/x86_64 -f csharp.dockerfile .
+docker build -t protoc -f protoc.dockerfile .
 ```
 
-If you are on any other computer run this command instead of the one mentioned in step 1.
+Similarly, the csharp/mono build container has been created for consistency in executing the csharp commands.
+
 ```shell
-docker build -f csharp.dockerfile .
+docker build -t csharp -f csharp.dockerfile .
 ```
 
-**Step 1:** build image by default uses Dockerfile. `-t` will tag it with the naming convention of `<user_name>/<image_name>:<version>`.
+## Notes for if you are using a M1 chip
+
+Docker doesn't know how to identify the specific version of the OS because of the virtualization layer on the
+processor.  To encourage it to execute the right one, add the following to any build command:
+
 ```shell
-docker build . 
+--platform linux/x86_64
 ```
 
-This will generate 3 files (`protobuf-1.5.0-SNAPSHOT.jar`, `protobuf-1.5.0-SNAPSHOT-sources.jar`, and `Tinkar.ProtoBuf-cs.1.4.1.nupkg`) files inside the Docker image in the `./sln/artifacts` directory.
-In the next step when the image is run the jar file is copied to the host systems current directory.
+## Generate a Source files for Java
 
-**Step 2 (Optional):**
-To run your image run the following command. If a M1 Macbook is not being used remove the ``--platform linux/x86_64`` portion.
+If you want to create the java source files, you should something like the following:
+
 ```shell
-docker run -it --platform linux/x86_64 myuser_name/tinkar-protobuf-csharp-java bash
+protoc -I <location of current direct> Tinkar.proto --java_out=<target directory>
 ```
 
-### C-Sharp
-The C-Sharp dll is pushed to nuget and can be found at
+An example of running this and generating the files for your local environment would look something like this:
+
+```shell
+docker run -it -v "$(pwd)/src:/home/proto-builder/code/java/src" protoc sh -c "mkdir -p /home/proto-builder/code/java/src/main/java && protoc -I /home/proto-builder/ Tinkar.proto --java_out=/home/proto-builder/code/java/src/main/java"
+```
+
+## Creating a Java Package
+
+Once you have created the protoc, we can use the following to create a java jar file that will be installed in your 
+local maven repository.
+
+```shell
+mvn clean install
+```
+
+## Using the Java Package
+
+The C-Sharp dll is pushed to Maven Central and can be found at
 
 https://www.nuget.org/packages/Tinkar.ProtoBuf-cs/
 
+To use this dependency in maven, include the following dependency (replacing `${tinkar.version}` with the version that 
+you would prefer to use.
+
+```xml
+<dependency>
+    <groupId>dev.ikm.tinkar</groupId>
+    <artifactId>tinkar-schema</artifactId>
+    <version>${tinkar.version}</version>
+</dependency>
+```
+
+## Generate a Source files for C#
+
+If you want to create the java source files, you should something like the following:
+
+```shell
+protoc -I <location of current direct> Tinkar.proto --csharp_out=<target directory>
+```
+
+An example of running this and generating the files for your local environment would look something like this:
+
+```shell
+docker run -it -v "$(pwd)/code:/home/proto-builder/code" protoc sh -c "mkdir -p /home/proto-builder/code/csharp && protoc -I /home/proto-builder/ Tinkar.proto --csharp_out=/home/proto-builder/code/csharp"
+```
+
+## Creating a C# package
+
+To create the C# package, you will restore the installation, then build everything, then package it, 
+using the following commands:
+
+```shell
+dotnet restore
+dotnet build --no-restore
+dotnet pack --no-restore --no-build -o /sln/artifacts
+```
+
+## Using the Java Package
+
+The C-Sharp dll is pushed to NuGet and can be found at
+
+https://www.nuget.org/packages/Tinkar.Schema/
+
 To install into Visual Studio, type the following into the Nuget console.
 
-Install-Package Tinkar.ProtoBuf-cs
+```shell
+Install-Package Tinkar.Schema
+```
+
+

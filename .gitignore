@@ -1,3 +1,7 @@
+# ignore any source files generated for this project, as this generates code
+src
+code
+
 **/CompiledNugetPackages/*
 # CodeGen temp files.
 #OS junk files
