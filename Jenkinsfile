@@ -93,9 +93,7 @@ pipeline {
             }
 
             steps {
-                dir('src/') {
-                    unstash(name: "java-schema-proto")
-                }
+                unstash(name: "java-schema-proto")
 
                 configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                     sh "ls -R ."
