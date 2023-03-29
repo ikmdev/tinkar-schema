@@ -75,11 +75,11 @@ pipeline {
             }
             steps {
                 sh '''
-                mkdir -p /home/proto-builder/code/csharp
-                protoc -I /home/proto-builder /home/proto-builder/Tinkar.proto \
-                    --csharp_out=/home/proto-builder/code/csharp
+                mkdir -p $(pwd)/src/main/csharp
+                protoc -I $(pwd) $(pwd)/Tinkar.proto \
+                    --csharp_out=$(pwd)/src/main/csharp
                 '''
-                stash(name: "csharp-schema-proto", includes: 'code/csharp/**')
+                stash(name: "csharp-schema-proto", includes: 'src/**')
             }
         }
 
