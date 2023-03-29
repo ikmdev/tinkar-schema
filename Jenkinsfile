@@ -58,7 +58,7 @@ pipeline {
                     --java_out=/home/proto-builder/src/main/java
                 ls -R /home/proto-builder/
                 '''
-                stash(name: "java-schema-proto", includes: '**/*')
+                stash(name: "java-schema-proto", allowEmpty: false, includes: '/home/proto-builder/src/**/*')
             }
         }
 
@@ -77,7 +77,7 @@ pipeline {
                 protoc -I /home/proto-builder /home/proto-builder/Tinkar.proto \
                     --csharp_out=/home/proto-builder/code/csharp
                 '''
-                stash(name: "csharp-schema-proto", includes: '*')
+                stash(name: "csharp-schema-proto", includes: '/home/proto-builder/src/**/*')
             }
         }
 
@@ -91,7 +91,7 @@ pipeline {
             }
 
             steps {
-                unstash(name: "java-schema-proto")
+                unstash(name: "java-schema-proto", )
                 configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                     sh "ls -R ."
                     sh "mvn clean deploy -s '${MAVEN_SETTINGS}' --batch-mode"
