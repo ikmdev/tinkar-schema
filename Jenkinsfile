@@ -58,7 +58,7 @@ pipeline {
                     --java_out=/home/proto-builder/src/main/java
                 ls -R /home/proto-builder/
                 '''
-                stash(name: "java-schema-proto", allowEmpty: false, useDefaultExcludes: false, includes: 'src/**/*')
+                stash(name: "java-schema-proto", allowEmpty: false, useDefaultExcludes: false, includes: '/home/proto-builder/src/**')
             }
         }
 
@@ -77,7 +77,7 @@ pipeline {
                 protoc -I /home/proto-builder /home/proto-builder/Tinkar.proto \
                     --csharp_out=/home/proto-builder/code/csharp
                 '''
-                stash(name: "csharp-schema-proto", includes: '/home/proto-builder/code/**/*')
+                stash(name: "csharp-schema-proto", includes: '/home/proto-builder/code/csharp/**')
             }
         }
 
