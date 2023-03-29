@@ -56,6 +56,8 @@ pipeline {
                 mkdir -p /home/proto-builder/src/main/java
                 protoc -I /home/proto-builder/ /home/proto-builder/Tinkar.proto \
                     --java_out=/home/proto-builder/src/main/java
+                pwd
+                ls -R /home/proto-builder/
                 ls -R src/
                 '''
                 stash(name: "java-schema-proto", allowEmpty: false, useDefaultExcludes: false, includes: 'src/**')
