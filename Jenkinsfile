@@ -91,7 +91,10 @@ pipeline {
             }
 
             steps {
-                unstash(name: "java-schema-proto", )
+                dir('src/') {
+                    unstash(name: "java-schema-proto")
+                }
+                
                 configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                     sh "ls -R ."
                     sh "mvn clean deploy -s '${MAVEN_SETTINGS}' --batch-mode"
