@@ -56,6 +56,7 @@ pipeline {
                 mkdir -p /home/proto-builder/src/main/java
                 protoc -I /home/proto-builder/ /home/proto-builder/Tinkar.proto \
                     --java_out=/home/proto-builder/src/main/java
+                ls -R /home/proto-builder/
                 '''
                 stash(name: "java-schema-proto", includes: '*')
             }
@@ -92,6 +93,7 @@ pipeline {
             steps {
                 unstash(name: "java-schema-proto")
                 configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
+                    sh "ls -R /home/proto-builder/"
                     sh "mvn clean deploy -s '${MAVEN_SETTINGS}' --batch-mode"
                 }
             }
