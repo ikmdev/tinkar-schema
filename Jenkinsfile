@@ -53,9 +53,9 @@ pipeline {
             }
             steps {
                 sh '''
-                mkdir -p /home/proto-builder/src/main/java
-                protoc -I /home/proto-builder/ /home/proto-builder/Tinkar.proto \
-                    --java_out=/home/proto-builder/src/main/java
+                mkdir -p $(pwd)/src/main/java
+                protoc -I $(pwd) $(pwd)/Tinkar.proto \
+                    --java_out=$(pwd)/src/main/java
                 pwd
                 ls -R /home/proto-builder/
                 ls -R src/
