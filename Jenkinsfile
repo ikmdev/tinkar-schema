@@ -58,7 +58,7 @@ pipeline {
                     --java_out=/home/proto-builder/src/main/java
                 ls -R /home/proto-builder/
                 '''
-                stash(name: "java-schema-proto", includes: '/home/proto-builder/**/*')
+                stash(name: "java-schema-proto", includes: '**/*')
             }
         }
 
