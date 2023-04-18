@@ -12,7 +12,7 @@
 
     <groupId>dev.ikm.tinkar</groupId>
     <artifactId>tinkar-schema</artifactId>
-    <version>1.7.0</version>
+    <version>1.7.1</version>
 
     <name>Tinkar Schema: Java</name>
     <url>https://github.com/IKM/tinkar-proto</url>
