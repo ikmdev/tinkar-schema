@@ -39,46 +39,46 @@ message PBField {
     // Field value. This is one of the types defined in the protobuf message.
     oneof Value {
         // String value.
-        string StringValue = 1;
+        string String = 1;
 
         // Boolean value.
-        bool BoolValue = 2;
+        bool Bool = 2;
 
         // Int32 value.
-        sint32 IntValue = 3;
+        sint32 Int = 3;
 
         // Single precision floating point value.
-        float FloatValue = 4;
+        float Float = 4;
 
         // Byte string value.
-        bytes BytesValue = 5;
+        bytes Bytes = 5;
 
         // Time value.
-        google.protobuf.Timestamp TimeValue = 6;
+        google.protobuf.Timestamp Time = 6;
 
         // Tinkar STAMP value.
-        PBStampChronology StampValue = 20;
+        PBStampChronology Stamp = 20;
 
         // Tinkar Public id value.
-        PBPublicId PublicIdValue = 21;
+        PBPublicId PublicId = 21;
 
         // Tinkar Vertex id value.
-        PBVertexId VertexIdValue = 22;
+        PBVertexId VertexId = 22;
 
         // Tinkar Public id list value.
-        PBPublicIdList PublicIdListValue = 23;
+        PBPublicIdList PublicIdList = 23;
 
         // Tinkar Directed graph value.
-        PBDiGraph DiGraphValue = 30;
+        PBDiGraph DiGraph = 30;
 
         // Tinkar Directed tree value.
-        PBDiTree DiTreeValue = 31;
+        PBDiTree DiTree = 31;
 
         // Tinkar Graph value.
-        PBGraph GraphValue = 32;
+        PBGraph Graph = 32;
 
         // Tinkar Vertex value.
-        PBVertex VertexValue = 33;
+        PBVertex Vertex = 33;
 
         // Tinkar Planar Point value
         PBPlanarPoint PlanarPoint = 40;
@@ -188,7 +188,7 @@ message PBVertex {
         PBPublicId PublicId = 1;
 
         // Value of this property.
-        PBField Value = 2;
+        PBField Field = 2;
     }
 
     // Unique id for this vertex.
@@ -315,9 +315,9 @@ message PBSemanticVersion {
     // STAMP for this semantic version.
     PBStampChronology Stamp = 2;
 
-    // Field values for this semantic. Each field defined is defined by
+    // Fields for this semantic. Each field defined is defined by
     // a matching entry in the pattern field definition list.
-    repeated PBField FieldValues = 3;
+    repeated PBField Fields = 3;
 }
 
 
@@ -328,27 +328,17 @@ message PBTinkarMsg {
     // Value of the message. This can be one and only one 
     // of the indicated types as defined in the protobuf description.
     oneof Value {
-        //PBDiGraph DiGraphValue = 1;
-        //PBDiTree DiTreeValue = 2;
-        //PBGraph GraphValue = 3;
-        //PBVertex VertexValue = 4;
 
-        // Message contains a Concept Chronology.    
-        PBConceptChronology ConceptChronologyValue = 11;
+        // Message contains a Concept Chronology.
+        PBConceptChronology ConceptChronology = 10;
 
-        // Message contains a Concept Version.    
-        PBConceptVersion ConceptVersionValue = 12;
+        // Message contains a Semantic Chronology.
+        PBSemanticChronology SemanticChronology = 20;
 
-        // Message contains a Semantic Chronology.    
-        PBSemanticChronology SemanticChronologyValue = 21;
+        // Message contains a Pattern Chronology.
+        PBPatternChronology PatternChronology = 30;
 
-        // Message contains a Semantic Version.    
-        PBSemanticVersion SemanticVersionValue = 22;
-
-        // Message contains a Pattern Chronology.    
-        PBPatternChronology PatternChronologyValue = 24;
-
-        // Message contains a Pattern Version.    
-        PBPatternVersion PatternVersionValue = 25;
+        // Message contains a Stamp Chronology.
+        PBStampChronology StampChronology = 40;
     };
 }
