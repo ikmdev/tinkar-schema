@@ -39,22 +39,22 @@ message Field {
     // Field value. This is one of the types defined in the protobuf message.
     oneof Value {
         // String value.
-        string string = 1;
+        string string_value = 1;
 
         // Boolean value.
-        bool bool = 2;
+        bool boolean_value = 2;
 
         // Int32 value.
-        sint32 int = 3;
+        sint32 int_value = 3;
 
         // Single precision floating point value.
-        float float = 4;
+        float float_value = 4;
 
         // Byte string value.
-        bytes bytes = 5;
+        bytes bytes_value = 5;
 
         // Time value.
-        google.protobuf.Timestamp time = 6;
+        google.protobuf.Timestamp time_value = 6;
 
         // Tinkar STAMP value.
         StampChronology stamp = 20;
