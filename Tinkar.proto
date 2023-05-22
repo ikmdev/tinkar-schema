@@ -13,7 +13,7 @@ package Tinkar.ProtoBuf;
 // Vertex id message.
 message VertexId {
     // Unique vertex it. This is the 16 byte representation of a GUID.
-    bytes Id = 1;
+    bytes id = 1;
 }
 
 // Public id message.
@@ -22,13 +22,13 @@ message VertexId {
 message PublicId {
     // Unique Public id.
     // This is one or more 16 byte GUIDs.
-    repeated bytes Id = 1 ;
+    repeated bytes id = 1 ;
 }
 
 // Public id list message.
 // A list of public ids.
 message PublicIdList {
-  repeated PublicId PublicIds = 1 ;
+  repeated PublicId public_ids = 1 ;
 }
 
 // Field message.
@@ -39,58 +39,58 @@ message Field {
     // Field value. This is one of the types defined in the protobuf message.
     oneof Value {
         // String value.
-        string String = 1;
+        string string = 1;
 
         // Boolean value.
-        bool Bool = 2;
+        bool bool = 2;
 
         // Int32 value.
-        sint32 Int = 3;
+        sint32 int = 3;
 
         // Single precision floating point value.
-        float Float = 4;
+        float float = 4;
 
         // Byte string value.
-        bytes Bytes = 5;
+        bytes bytes = 5;
 
         // Time value.
-        google.protobuf.Timestamp Time = 6;
+        google.protobuf.Timestamp time = 6;
 
         // Tinkar STAMP value.
-        StampChronology Stamp = 20;
+        StampChronology stamp = 20;
 
         // Tinkar Public id value.
-        PublicId PublicId = 21;
+        PublicId public_id = 21;
 
         // Tinkar Vertex id value.
-        VertexId VertexId = 22;
+        VertexId vertex_id = 22;
 
         // Tinkar Public id list value.
-        PublicIdList PublicIdList = 23;
+        PublicIdList public_id_list = 23;
 
         // Tinkar Directed graph value.
-        DiGraph DiGraph = 30;
+        DiGraph di_graph = 30;
 
         // Tinkar Directed tree value.
-        DiTree DiTree = 31;
+        DiTree di_tree = 31;
 
         // Tinkar Graph value.
-        Graph Graph = 32;
+        Graph graph = 32;
 
         // Tinkar Vertex value.
-        Vertex Vertex = 33;
+        Vertex vertex = 33;
 
         // Tinkar Planar Point value
-        PlanarPoint PlanarPoint = 40;
+        PlanarPoint planar_point = 40;
 
         // Tinkar Spatial Point value
-        SpatialPoint SpatialPoint = 41;
+        SpatialPoint spatial_point = 41;
 
         // Tinkar Int to Int Map
-        IntToIntMap IntToIntMap = 50;
+        IntToIntMap int_to_int_map = 50;
 
         // Tinkar Int to Multiple Int Map
-        IntToMultipleIntMap IntToMultipleIntMap = 51;
+        IntToMultipleIntMap int_to_multiple_int_map = 51;
     };
 }
 
@@ -98,39 +98,39 @@ message Field {
 // Integer point on a 2 dimensional plane.
 message PlanarPoint {
     // X position of point.
-    sint32 X = 1;
+    sint32 x = 1;
     // Y position of point.
-    sint32 Y = 2;
+    sint32 y = 2;
 }
 
 // Spatial point value.
 // Integer point in a 3 dimensional space.
 message SpatialPoint {
     // X position of point.
-    sint32 X = 1;
+    sint32 x = 1;
     // Y position of point.
-    sint32 Y = 2;
+    sint32 y = 2;
     // Z position of point.
-    sint32 Z = 3;
+    sint32 z = 3;
 }
 
 // Integer to Integer Map.
 // Maps one integer value to another integer value.
 message IntToIntMap {
     // Source value.
-    sint32 Source = 1;
+    sint32 source = 1;
     // Target value.
-    sint32 Target = 2;
+    sint32 target = 2;
 }
 
 // Integer to Multiple Integer Map.
 // Maps one integer value to multiple other integer values.
 message IntToMultipleIntMap {
     // Source value.
-    sint32 Source = 1;
+    sint32 source = 1;
 
     // Target values.
-    repeated sint32 Target = 2;
+    repeated sint32 target = 2;
 }
 
 // Directed Tree message.
@@ -140,16 +140,16 @@ message IntToMultipleIntMap {
 message DiTree {
     // List of all vertices in this DiTree. Each vertex contains a
     // VertexIndex which must match that vertex's index in this map.
-    repeated Vertex VertexMap = 1;
+    repeated Vertex vertex_map = 1;
 
     // Root vertex.
-    int32 Root = 2;
+    int32 root = 2;
 
     // Maps each vertex with a predecessor to its predecessor.
-    repeated IntToIntMap PredecesorMap = 3;
+    repeated IntToIntMap predecesor_map = 3;
 
     // Maps each vertex with successors to its successors.
-    repeated IntToMultipleIntMap SuccessorMap = 4;
+    repeated IntToMultipleIntMap successor_map = 4;
 }
 
 // Directed Graph message.
@@ -158,26 +158,26 @@ message DiTree {
 message DiGraph {
     // List of all vertices in this DiTree. Each vertex contains a
     // VertexIndex which must match that vertex's index in this map.
-    repeated Vertex VertexMap = 1;
+    repeated Vertex vertex_map = 1;
 
     // List of all root vertices.
-    repeated int32 RootSequence = 2;
+    repeated int32 root_sequence = 2;
 
     // Maps each vertex to its predecessors.
-    repeated IntToMultipleIntMap SuccessorMap = 3;
+    repeated IntToMultipleIntMap successor_map = 3;
 
     // Maps each vertex to its successors.
-    repeated IntToMultipleIntMap PredecesorMap = 4;
+    repeated IntToMultipleIntMap predecesor_map = 4;
 }
 
 // Graph message.
 message Graph {
     // List of all vertices in this graph. Each vertex contains a
     // VertexIndex which must match that vertex's index in this map.
-    repeated Vertex VertexMap = 1;
+    repeated Vertex vertex_map = 1;
 
     // Maps each vertex to its successors.
-    repeated IntToMultipleIntMap SuccessorMap = 2;
+    repeated IntToMultipleIntMap successor_Map = 2;
 }
 
 // Vertex message.
@@ -185,69 +185,69 @@ message Vertex {
     // Vertex property message
     message Property {
         // Concept identifying this property.
-        PublicId PublicId = 1;
+        PublicId public_id = 1;
 
         // Value of this property.
-        Field Field = 2;
+        Field field = 2;
     }
 
     // Unique id for this vertex.
-    VertexId VertexId = 1;
+    VertexId vertex_id = 1;
 
     // Vertex index if containers vertex map.
-    int32 VertexIndex = 2;
+    int32 vertex_index = 2;
 
     // Meaning of this vertex.
-    PublicId Meaning = 3;
+    PublicId meaning = 3;
 
     // Properties for this vertex.
-    repeated Property Properties = 4;
+    repeated Property properties = 4;
 }
 
 // Stamp Chronology message
 // This contains a list of stamp vesions (a chronology)
 message StampChronology {
     // Unique public id for this STAMP.
-    PublicId PublicId = 1;
+    PublicId public_id = 1;
 
     // List of stamp versions.
-    repeated StampVersion Versions = 2;
+    repeated StampVersion versions = 2;
 }
 
 // Stamp Version message
 // This contains the info for a single version of a STAMP, sans the STAMP public id.
 message StampVersion {
 	// Status of the item this STAMP references.
-	PublicId Status = 2;
+	PublicId status = 2;
 
 	// Status of the item this STAMP references.
-	PublicId Author = 3;
+	PublicId author = 3;
 
 	// Module of the item this STAMP references.
-	PublicId Module = 4;
+	PublicId module = 4;
 
 	// Path of the item this STAMP references.
-	PublicId Path = 5;
+	PublicId path = 5;
 
 	// Creation time of the item this STAMP references.
-	google.protobuf.Timestamp Time = 6;
+	google.protobuf.Timestamp time = 6;
 }
 
 // Concept Chronology message.
 // This contains a chronology (multiple versions) of a single concept.
 message ConceptChronology {
     // Unique Public id of this concept.
-    PublicId PublicId = 1;
+    PublicId public_id = 1;
 
     // List of concept versions.
-    repeated ConceptVersion Versions = 2;
+    repeated ConceptVersion versions = 2;
 }
 
 // Concept Version message.
 // This contains a version of a single concept.
 message ConceptVersion {
     // STAMP for this concept version.
-    StampChronology Stamp = 2;
+    StampChronology stamp = 2;
 }
 
 
@@ -255,16 +255,16 @@ message ConceptVersion {
 // Defines the information for a field in a pattern.
 message FieldDefinition {
     // Meaning of the field.    
-    PublicId Meaning = 1;
+    PublicId meaning = 1;
 
     // Data type of the field.
-    PublicId DataType = 2;
+    PublicId data_type = 2;
 
     // Purpose of the field.
-    PublicId Purpose = 3;
+    PublicId purpose = 3;
 
     //Index of a given pattern
-    int32 Index = 4;
+    int32 index = 4;
 
 }
 
@@ -272,10 +272,10 @@ message FieldDefinition {
 // Contains multiple versions of pattern item.
 message PatternChronology {
     // Unique Public id of this pattern chronology.
-    PublicId PublicId = 1;
+    PublicId public_id = 1;
 
     // Versions of pattern.
-    repeated PatternVersion Versions = 2;
+    repeated PatternVersion versions = 2;
 }
 
 
@@ -284,43 +284,43 @@ message PatternChronology {
 message PatternVersion {
 
     // STAMP for this version.
-    StampChronology Stamp = 2;
+    StampChronology stamp = 2;
 
     // Purpose of the Semantic that this pattern references.
-    PublicId ReferencedComponentPurpose = 3;
+    PublicId referenced_component_purpose = 3;
 
     // Meaning of the Semantic that this pattern references.
-    PublicId ReferencedComponentMeaning = 4;
+    PublicId referenced_component_meaning = 4;
 
     // Definitions for each field in the Semantic that this pattern references.
-    repeated FieldDefinition FieldDefinitions = 5;
+    repeated FieldDefinition field_definitions = 5;
 }
 
 // Semantic Chronology.
 // Contains list of Sematic versions.
 message SemanticChronology {
     // Unique Public id of this semantic chronology.
-    PublicId PublicId = 1;
+    PublicId public_id = 1;
 
     // ID of Concept that this semantic references.
-    PublicId ReferencedComponent = 2;
+    PublicId referenced_component = 2;
 
     // ID of Pattern that defines the allowable fields in this semantic.
-    PublicId PatternForSemantic = 3;
+    PublicId pattern_for_semantic = 3;
 
     // List of versions of this semantic.
-    repeated SemanticVersion Versions = 4;
+    repeated SemanticVersion versions = 4;
 }
 
 // Semantic Version.
 // Single Sematic versions.
 message SemanticVersion {
     // STAMP for this semantic version.
-    StampChronology Stamp = 2;
+    StampChronology stamp = 2;
 
     // Fields for this semantic. Each field defined is defined by
     // a matching entry in the pattern field definition list.
-    repeated Field Fields = 3;
+    repeated Field fields = 3;
 }
 
 
@@ -333,15 +333,15 @@ message TinkarMsg {
     oneof Value {
 
         // Message contains a Concept Chronology.
-        ConceptChronology ConceptChronology = 10;
+        ConceptChronology concept_chronology = 10;
 
         // Message contains a Semantic Chronology.
-        SemanticChronology SemanticChronology = 20;
+        SemanticChronology semantic_chronology = 20;
 
         // Message contains a Pattern Chronology.
-        PatternChronology PatternChronology = 30;
+        PatternChronology pattern_chronology = 30;
 
         // Message contains a Stamp Chronology.
-        StampChronology StampChronology = 40;
+        StampChronology stamp_chronology = 40;
     };
 }
