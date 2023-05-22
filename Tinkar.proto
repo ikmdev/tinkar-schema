@@ -57,7 +57,7 @@ message Field {
         google.protobuf.Timestamp time_value = 6;
 
         // Tinkar STAMP value.
-        StampChronology stamp = 20;
+        StampChronology stamp_chronology = 20;
 
         // Tinkar Public id value.
         PublicId public_id = 21;
@@ -247,7 +247,7 @@ message ConceptChronology {
 // This contains a version of a single concept.
 message ConceptVersion {
     // STAMP for this concept version.
-    StampChronology stamp = 2;
+    StampChronology stamp_chronology = 2;
 }
 
 
@@ -284,7 +284,7 @@ message PatternChronology {
 message PatternVersion {
 
     // STAMP for this version.
-    StampChronology stamp = 2;
+    StampChronology stamp_chronology = 2;
 
     // Purpose of the Semantic that this pattern references.
     PublicId referenced_component_purpose = 3;
@@ -316,7 +316,7 @@ message SemanticChronology {
 // Single Sematic versions.
 message SemanticVersion {
     // STAMP for this semantic version.
-    StampChronology stamp = 2;
+    StampChronology stamp_chronology = 2;
 
     // Fields for this semantic. Each field defined is defined by
     // a matching entry in the pattern field definition list.
