@@ -2,7 +2,7 @@
 
 This repository contains the Protobuf schema file for the Tinkar project and generates code packages for different languages that can be distributed to read and write Tinkar files.
 
-## PreRequisites
+## Prerequisites
 
 * Java
 * Maven
@@ -113,5 +113,3 @@ Install-Package Tinkar.Schema
 Technical and non-technical issues can be reported to the [Issue Tracker](https://github.com/ikmdev/tinkar-schema/issues).
 
 Contributions can be submitted via pull requests. Please check the contribution guide for more details.
-
-
