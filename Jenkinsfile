@@ -15,13 +15,15 @@ pipeline {
     }
 
     options {
-
         // Set this to true if you want to clean workspace during the prep stage
         skipDefaultCheckout(false)
 
         // Console debug options
         timestamps()
         ansiColor('xterm')
+
+        // necessary for communicating status to gitlab
+        gitLabConnection('fda-shield-group')
     }
 
     stages {
@@ -84,7 +86,7 @@ pipeline {
         }
 
         stage('SonarQube Scan') {
-            steps{
+            steps {
                 configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                     withSonarQubeEnv(installationName: 'EKS SonarQube', envOnly: true) {
                         // This expands the environment variables SONAR_CONFIG_NAME, SONAR_HOST_URL, SONAR_AUTH_TOKEN that can be used by any script.
@@ -97,14 +99,14 @@ pipeline {
                         """
                     }
                 }
-                script{
+                script {
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
 
                         def pmd = scanForIssues tool: [$class: 'Pmd'], pattern: '**/target/pmd.xml'
                         publishIssues issues: [pmd]
 
                         def spotbugs = scanForIssues tool: [$class: 'SpotBugs'], pattern: '**/target/spotbugsXml.xml'
-                        publishIssues issues:[spotbugs]
+                        publishIssues issues: [spotbugs]
 
                         publishIssues id: 'analysis', name: 'All Issues',
                                 issues: [pmd, spotbugs],
@@ -112,15 +114,9 @@ pipeline {
                     }
                 }
             }
-
-            post {
-                always {
-                    echo "post always SonarQube Scan"
-                }
-            }
         }
 
-        // Generate and deploy a jar file
+            // Generate and deploy a jar file
         stage("Deploy Java Code") {
             agent {
                 docker {
@@ -161,5 +157,65 @@ pipeline {
 //                     '''
 //             }
 //         }
+    }
+
+    post {
+        failure {
+            updateGitlabCommitStatus name: 'build', state: 'failed'
+            emailext(
+
+                    recipientProviders: [requestor(), culprits()],
+                    subject: "Build failed in Jenkins: ${env.JOB_NAME} - #${env.BUILD_NUMBER}",
+                    body: """
+                        Build failed in Jenkins: ${env.JOB_NAME} - #${BUILD_NUMBER}
+
+                        See attached log or URL:
+                        ${env.BUILD_URL}
+
+                    """,
+                    attachLog: true
+            )
+        }
+        aborted {
+            updateGitlabCommitStatus name: 'build', state: 'canceled'
+        }
+        unstable {
+            updateGitlabCommitStatus name: 'build', state: 'failed'
+            emailext(
+                    subject: "Unstable build in Jenkins: ${env.JOB_NAME} - #${env.BUILD_NUMBER}",
+                    body: """
+                        See details at URL:
+                        ${env.BUILD_URL}
+
+                    """,
+                    attachLog: true
+            )
+        }
+        changed {
+            updateGitlabCommitStatus name: 'build', state: 'success'
+            emailext(
+                    recipientProviders: [requestor(), culprits()],
+                    subject: "Jenkins build is back to normal: ${env.JOB_NAME} - #${env.BUILD_NUMBER}",
+                    body: """
+                    Jenkins build is back to normal: ${env.JOB_NAME} - #${env.BUILD_NUMBER}
+
+                    See URL for more information:
+                    ${env.BUILD_URL}
+                    """
+            )
+        }
+        success {
+            updateGitlabCommitStatus name: 'build', state: 'success'
+        }
+        cleanup {
+            // Clean the workspace after build
+            cleanWs(cleanWhenNotBuilt: false,
+                    deleteDirs: true,
+                    disableDeferredWipeout: true,
+                    notFailBuild: true,
+                    patterns: [
+                            [pattern: '.gitignore', type: 'INCLUDE']
+                    ])
+        }
     }
 }
