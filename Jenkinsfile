@@ -11,7 +11,12 @@ pipeline {
         SONARQUBE_URL       = "${GLOBAL_SONARQUBE_URL}"
         SONAR_HOST_URL      = "${GLOBAL_SONARQUBE_URL}"
 
-        BRANCH_NAME         = "${GIT_BRANCH.split("/").size() > 1 ? GIT_BRANCH.split("/")[1] : GIT_BRANCH}"
+        BRANCH_NAME = "${GIT_BRANCH.startsWith('origin/') ? GIT_BRANCH['origin/'.length()..-1] : GIT_BRANCH}"
+    }
+
+    triggers {
+        //cron(cron_string)
+        gitlab(triggerOnPush: true, triggerOnMergeRequest: true, branchFilterType: 'All')
     }
 
     options {
@@ -95,6 +100,7 @@ pipeline {
                                 -Dsonar.qualitygate.wait=true \
                                 -Dsonar.token=${SONAR_AUTH_TOKEN} \
                                 -s '${MAVEN_SETTINGS}' \
+                                -Dmaven.build.cache.enabled=false \
                                 --batch-mode
                         """
                     }
