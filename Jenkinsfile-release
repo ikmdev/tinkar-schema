@@ -96,9 +96,9 @@ pipeline {
             }
             steps {
                 sh '''
-                mkdir -p $(pwd)/src/main/java
+                mkdir -p $(pwd)/src/main/java-generated
                 protoc -I $(pwd) $(pwd)/Tinkar.proto \
-                    --java_out=$(pwd)/src/main/java
+                    --java_out=$(pwd)/src/main/java-generated
                 pwd
                 ls -R /home/proto-builder/
                 ls -R src/
@@ -118,9 +118,9 @@ pipeline {
             }
             steps {
                 sh '''
-                mkdir -p $(pwd)/src/main/csharp
+                mkdir -p $(pwd)/src/main/csharp-generated
                 protoc -I $(pwd) $(pwd)/Tinkar.proto \
-                    --csharp_out=$(pwd)/src/main/csharp
+                    --csharp_out=$(pwd)/src/main/csharp-generated
                 '''
                 stash(name: "csharp-schema-proto", includes: 'src/**')
             }
