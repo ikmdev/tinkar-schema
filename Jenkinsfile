@@ -34,12 +34,15 @@ pipeline {
     stages {
 
         stage("Checkout") {
-            // Clean before build
-            cleanWs()
-            // We need to explicitly checkout from SCM here
-            checkout scm
-            echo "Building ${env.JOB_NAME}..."
+            steps {
+                // Clean before build
+                cleanWs()
+                // We need to explicitly checkout from SCM here
+                checkout scm
+                echo "Building ${env.JOB_NAME}..."
+            }
         }
+
         stage("Build ProtoC Image") {
             steps {
                 script {
