@@ -118,6 +118,7 @@ pipeline {
                             mvn sonar:sonar \
                                 -Dsonar.qualitygate.wait=true \
                                 -Dsonar.token=${SONAR_AUTH_TOKEN} \
+                                -Dsonar.scm.exclusions.disabled=true \
                                 -s '${MAVEN_SETTINGS}' \
                                 -Dmaven.build.cache.enabled=false \
                                 --batch-mode
