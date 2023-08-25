@@ -69,6 +69,63 @@ pipeline {
             }
         }
 
+        stage("Build ProtoC Image") {
+            steps {
+                script {
+                    docker.build("tinkar-schema-protoc:latest", "-f protoc.dockerfile")
+                }
+            }
+        }
+
+        stage("Build CSharp Image") {
+            steps {
+                script {
+                    docker.build("tinkar-schema-csharp:latest", "-f csharp.dockerfile")
+                }
+            }
+        }
+
+        // Running protoc to generate Java generated classes.
+        stage("Build Java Code") {
+            agent {
+                docker {
+                    image 'tinkar-schema-protoc:latest'
+                    reuseNode true
+                    args '-u root:root'
+                }
+            }
+            steps {
+                sh '''
+                mkdir -p $(pwd)/src/main/java
+                protoc -I $(pwd) $(pwd)/Tinkar.proto \
+                    --java_out=$(pwd)/src/main/java
+                pwd
+                ls -R /home/proto-builder/
+                ls -R src/
+                '''
+                stash(name: "java-schema-proto", allowEmpty: false, useDefaultExcludes: false, includes: 'src/**')
+            }
+        }
+
+        // Running protoc to generate C# generated classes.
+        stage("Build CSharp Code") {
+            agent {
+                docker {
+                    image 'tinkar-schema-protoc:latest'
+                    reuseNode true
+                    args '-u root:root'
+                }
+            }
+            steps {
+                sh '''
+                mkdir -p $(pwd)/src/main/csharp
+                protoc -I $(pwd) $(pwd)/Tinkar.proto \
+                    --csharp_out=$(pwd)/src/main/csharp
+                '''
+                stash(name: "csharp-schema-proto", includes: 'src/**')
+            }
+        }
+
         stage ('Test Release Build'){
             tools {
                 jdk 'default'
