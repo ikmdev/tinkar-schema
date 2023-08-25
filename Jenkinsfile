@@ -90,8 +90,27 @@ pipeline {
             }
         }
 
-        stage('SonarQube Scan') {
+        stage('Maven Build') {
             steps {
+                updateGitlabCommitStatus name: 'build', state: 'running'
+                script{
+                    configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
+                        sh """
+                            mvn clean install \
+                                -s '${MAVEN_SETTINGS}' \
+                                --batch-mode \
+                                -e \
+                                -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+                                -Dmaven.build.cache.enabled=false \
+                                -PcodeQuality
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('SonarQube Scan') {
+            steps{
                 configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                     withSonarQubeEnv(installationName: 'EKS SonarQube', envOnly: true) {
                         // This expands the environment variables SONAR_CONFIG_NAME, SONAR_HOST_URL, SONAR_AUTH_TOKEN that can be used by any script.
@@ -105,14 +124,14 @@ pipeline {
                         """
                     }
                 }
-                script {
+                script{
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
 
                         def pmd = scanForIssues tool: [$class: 'Pmd'], pattern: '**/target/pmd.xml'
                         publishIssues issues: [pmd]
 
                         def spotbugs = scanForIssues tool: [$class: 'SpotBugs'], pattern: '**/target/spotbugsXml.xml'
-                        publishIssues issues: [spotbugs]
+                        publishIssues issues:[spotbugs]
 
                         publishIssues id: 'analysis', name: 'All Issues',
                                 issues: [pmd, spotbugs],
@@ -120,49 +139,44 @@ pipeline {
                     }
                 }
             }
-        }
 
-            // Generate and deploy a jar file
-        stage("Deploy Java Code") {
-            agent {
-                docker {
-                    image 'maven:3.8.7-eclipse-temurin-19-alpine'
-                    args '-u root:root'
+            post {
+                always {
+                    echo "post always SonarQube Scan"
                 }
             }
+        }
 
+        stage("Publish to Nexus Repository Manager") {
             steps {
-                unstash(name: "java-schema-proto")
+                script {
+                    pomModel = readMavenPom(file: 'pom.xml')
+                    pomVersion = pomModel.getVersion()
+                    isSnapshot = pomVersion.contains("-SNAPSHOT")
+                    repositoryId = 'maven-releases'
 
-                configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
-                    sh "ls -R ."
-                    sh "mvn clean deploy -s '${MAVEN_SETTINGS}' --batch-mode"
+                    if (isSnapshot) {
+                        repositoryId = 'maven-snapshots'
+                    }
+
+                    configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
+                        sh """
+                            mvn deploy \
+                                --batch-mode \
+                                -e \
+                                -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+                                -Dmaven.build.cache.enabled=false \
+                                -DskipTests \
+                                -DskipITs \
+                                -Dmaven.main.skip \
+                                -Dmaven.test.skip \
+                                -s '${MAVEN_SETTINGS}' \
+                                -DrepositoryId='${repositoryId}'
+                        """
+                    }
                 }
             }
         }
-
-        // Building the .csproj file using dotnet commands.
-//         stage("Deploy C# Code") {
-//             when {
-//                 branch "main"
-//             }
-//             agent {
-//                 docker {
-//                     image 'tinkar-schema-csharp:latest'
-//                     args '-u root:root'
-//
-//                 }
-//             }
-//
-//             steps {
-//                 unstash(name: "csharp-schema-proto")
-//                 sh '''
-//                     /root/.dotnet/dotnet restore
-//                     /root/.dotnet/dotnet build --no-restore
-//                     /root/.dotnet/dotnet pack --no-restore --no-build -o /sln/artifacts
-//                     '''
-//             }
-//         }
     }
 
     post {
@@ -173,12 +187,12 @@ pipeline {
                     recipientProviders: [requestor(), culprits()],
                     subject: "Build failed in Jenkins: ${env.JOB_NAME} - #${env.BUILD_NUMBER}",
                     body: """
-                        Build failed in Jenkins: ${env.JOB_NAME} - #${BUILD_NUMBER}
+                    Build failed in Jenkins: ${env.JOB_NAME} - #${BUILD_NUMBER}
 
-                        See attached log or URL:
-                        ${env.BUILD_URL}
+                    See attached log or URL:
+                    ${env.BUILD_URL}
 
-                    """,
+                """,
                     attachLog: true
             )
         }
@@ -190,10 +204,10 @@ pipeline {
             emailext(
                     subject: "Unstable build in Jenkins: ${env.JOB_NAME} - #${env.BUILD_NUMBER}",
                     body: """
-                        See details at URL:
-                        ${env.BUILD_URL}
+                    See details at URL:
+                    ${env.BUILD_URL}
 
-                    """,
+                """,
                     attachLog: true
             )
         }
@@ -203,11 +217,11 @@ pipeline {
                     recipientProviders: [requestor(), culprits()],
                     subject: "Jenkins build is back to normal: ${env.JOB_NAME} - #${env.BUILD_NUMBER}",
                     body: """
-                    Jenkins build is back to normal: ${env.JOB_NAME} - #${env.BUILD_NUMBER}
+                Jenkins build is back to normal: ${env.JOB_NAME} - #${env.BUILD_NUMBER}
 
-                    See URL for more information:
-                    ${env.BUILD_URL}
-                    """
+                See URL for more information:
+                ${env.BUILD_URL}
+                """
             )
         }
         success {
