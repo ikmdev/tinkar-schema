@@ -96,7 +96,7 @@ pipeline {
                 script{
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
-                            mvn clean install \
+                            mvn install \
                                 -s '${MAVEN_SETTINGS}' \
                                 --batch-mode \
                                 -e \
