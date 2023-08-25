@@ -132,7 +132,7 @@ pipeline {
                                -Dsonar.token=${SONAR_AUTH_TOKEN} \
                                -s '${MAVEN_SETTINGS}' \
                                -Dmaven.build.cache.enabled=false \
-                               -Dsonar.sources=protoc.dockerfile,csharp.dockerfile
+                               -Dsonar.sources=protoc.dockerfile,csharp.dockerfile \
                                --batch-mode
                        """
                    }
