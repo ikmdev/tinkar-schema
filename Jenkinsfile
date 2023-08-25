@@ -6,12 +6,9 @@ pipeline {
     agent any
 
     environment {
-
         SONAR_AUTH_TOKEN    = credentials('sonarqube_pac_token')
         SONARQUBE_URL       = "${GLOBAL_SONARQUBE_URL}"
         SONAR_HOST_URL      = "${GLOBAL_SONARQUBE_URL}"
-
-        BRANCH_NAME = "${GIT_BRANCH.startsWith('origin/') ? GIT_BRANCH['origin/'.length()..-1] : GIT_BRANCH}"
     }
 
     triggers {
