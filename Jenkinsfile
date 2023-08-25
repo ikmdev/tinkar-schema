@@ -6,12 +6,9 @@ pipeline {
     agent any
 
     environment {
-
         SONAR_AUTH_TOKEN    = credentials('sonarqube_pac_token')
         SONARQUBE_URL       = "${GLOBAL_SONARQUBE_URL}"
         SONAR_HOST_URL      = "${GLOBAL_SONARQUBE_URL}"
-
-        BRANCH_NAME = "${GIT_BRANCH.startsWith('origin/') ? GIT_BRANCH['origin/'.length()..-1] : GIT_BRANCH}"
     }
 
     triggers {
@@ -21,7 +18,7 @@ pipeline {
 
     options {
         // Set this to true if you want to clean workspace during the prep stage
-        skipDefaultCheckout(false)
+        skipDefaultCheckout(true)
 
         // Console debug options
         timestamps()
@@ -32,6 +29,16 @@ pipeline {
     }
 
     stages {
+
+        stage("Checkout") {
+            steps {
+                // Clean before build
+                cleanWs()
+                // We need to explicitly checkout from SCM here
+                checkout scm
+                echo "Building ${env.JOB_NAME}..."
+            }
+        }
 
         stage("Build ProtoC Image") {
             steps {
@@ -60,9 +67,9 @@ pipeline {
             }
             steps {
                 sh '''
-                mkdir -p $(pwd)/src/main/java
+                mkdir -p $(pwd)/src/main/java-generated
                 protoc -I $(pwd) $(pwd)/Tinkar.proto \
-                    --java_out=$(pwd)/src/main/java
+                    --java_out=$(pwd)/src/main/java-generated
                 pwd
                 ls -R /home/proto-builder/
                 ls -R src/
@@ -82,9 +89,9 @@ pipeline {
             }
             steps {
                 sh '''
-                mkdir -p $(pwd)/src/main/csharp
+                mkdir -p $(pwd)/src/main/csharp-generated
                 protoc -I $(pwd) $(pwd)/Tinkar.proto \
-                    --csharp_out=$(pwd)/src/main/csharp
+                    --csharp_out=$(pwd)/src/main/csharp-generated
                 '''
                 stash(name: "csharp-schema-proto", includes: 'src/**')
             }
@@ -107,46 +114,51 @@ pipeline {
                     }
                 }
             }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                }
+            }
         }
 
-//        stage('SonarQube Scan') {
-//            steps{
-//                configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
-//                    withSonarQubeEnv(installationName: 'EKS SonarQube', envOnly: true) {
-//                        // This expands the environment variables SONAR_CONFIG_NAME, SONAR_HOST_URL, SONAR_AUTH_TOKEN that can be used by any script.
-//                        sh """
-//                            mvn sonar:sonar \
-//                                -Dsonar.qualitygate.wait=true \
-//                                -Dsonar.token=${SONAR_AUTH_TOKEN} \
-//                                -Dsonar.scm.exclusions.disabled=true \
-//                                -s '${MAVEN_SETTINGS}' \
-//                                -Dmaven.build.cache.enabled=false \
-//                                --batch-mode
-//                        """
-//                    }
-//                }
-//                script{
-//                    configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
-//
-//                        def pmd = scanForIssues tool: [$class: 'Pmd'], pattern: '**/target/pmd.xml'
-//                        publishIssues issues: [pmd]
-//
-//                        def spotbugs = scanForIssues tool: [$class: 'SpotBugs'], pattern: '**/target/spotbugsXml.xml'
-//                        publishIssues issues:[spotbugs]
-//
-//                        publishIssues id: 'analysis', name: 'All Issues',
-//                                issues: [pmd, spotbugs],
-//                                filters: [includePackage('io.jenkins.plugins.analysis.*')]
-//                    }
-//                }
-//            }
-//
-//            post {
-//                always {
-//                    echo "post always SonarQube Scan"
-//                }
-//            }
-//        }
+       stage('SonarQube Scan') {
+           steps{
+               configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
+                   withSonarQubeEnv(installationName: 'EKS SonarQube', envOnly: true) {
+                       // This expands the environment variables SONAR_CONFIG_NAME, SONAR_HOST_URL, SONAR_AUTH_TOKEN that can be used by any script.
+                       sh """
+                           mvn sonar:sonar \
+                               -Dsonar.qualitygate.wait=true \
+                               -Dsonar.token=${SONAR_AUTH_TOKEN} \
+                               -s '${MAVEN_SETTINGS}' \
+                               -Dmaven.build.cache.enabled=false \
+                               -Dsonar.sources=protoc.dockerfile,csharp.dockerfile \
+                               --batch-mode
+                       """
+                   }
+               }
+               script{
+                   configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
+
+                       def pmd = scanForIssues tool: [$class: 'Pmd'], pattern: '**/target/pmd.xml'
+                       publishIssues issues: [pmd]
+
+                       def spotbugs = scanForIssues tool: [$class: 'SpotBugs'], pattern: '**/target/spotbugsXml.xml'
+                       publishIssues issues:[spotbugs]
+
+                       publishIssues id: 'analysis', name: 'All Issues',
+                               issues: [pmd, spotbugs],
+                               filters: [includePackage('io.jenkins.plugins.analysis.*')]
+                   }
+               }
+           }
+
+           post {
+               always {
+                   echo "post always SonarQube Scan"
+               }
+           }
+       }
 
 
         stage("Publish to Nexus Repository Manager") {
@@ -228,16 +240,6 @@ pipeline {
         }
         success {
             updateGitlabCommitStatus name: 'build', state: 'success'
-        }
-        cleanup {
-            // Clean the workspace after build
-            cleanWs(cleanWhenNotBuilt: false,
-                    deleteDirs: true,
-                    disableDeferredWipeout: true,
-                    notFailBuild: true,
-                    patterns: [
-                            [pattern: '.gitignore', type: 'INCLUDE']
-                    ])
         }
     }
 }
