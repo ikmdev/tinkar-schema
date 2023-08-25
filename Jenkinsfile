@@ -114,6 +114,11 @@ pipeline {
                     }
                 }
             }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                }
+            }
         }
 
        stage('SonarQube Scan') {
