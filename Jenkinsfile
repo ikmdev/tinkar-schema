@@ -21,7 +21,7 @@ pipeline {
 
     options {
         // Set this to true if you want to clean workspace during the prep stage
-        skipDefaultCheckout(false)
+        skipDefaultCheckout(true)
 
         // Console debug options
         timestamps()
@@ -33,6 +33,13 @@ pipeline {
 
     stages {
 
+        stage("Checkout") {
+            // Clean before build
+            cleanWs()
+            // We need to explicitly checkout from SCM here
+            checkout scm
+            echo "Building ${env.JOB_NAME}..."
+        }
         stage("Build ProtoC Image") {
             steps {
                 script {
@@ -228,16 +235,6 @@ pipeline {
         }
         success {
             updateGitlabCommitStatus name: 'build', state: 'success'
-        }
-        cleanup {
-            // Clean the workspace after build
-            cleanWs(cleanWhenNotBuilt: false,
-                    deleteDirs: true,
-                    disableDeferredWipeout: true,
-                    notFailBuild: true,
-                    patterns: [
-                            [pattern: '.gitignore', type: 'INCLUDE']
-                    ])
         }
     }
 }
