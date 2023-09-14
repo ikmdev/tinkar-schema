@@ -188,7 +188,8 @@ pipeline {
                                 -Dmaven.main.skip \
                                 -Dmaven.test.skip \
                                 -s '${MAVEN_SETTINGS}' \
-                                -DrepositoryId='${repositoryId}'
+                                -DrepositoryId='${repositoryId}' \
+                                -PsignArtifacts
                         """
                     }
                 }
