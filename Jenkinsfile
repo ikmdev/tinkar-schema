@@ -176,6 +176,7 @@ pipeline {
 
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
+                            gpg --list-secret-keys
                             mvn install \
                                 --batch-mode \
                                 -e \
