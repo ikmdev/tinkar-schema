@@ -165,6 +165,7 @@ pipeline {
             steps {
                 script {
                     pomModel = readMavenPom(file: 'pom.xml')
+                    artifactId = pomModel.getArtifactId()
                     pomVersion = pomModel.getVersion()
                     isSnapshot = pomVersion.contains("-SNAPSHOT")
                     repositoryId = 'maven-releases'
@@ -176,7 +177,7 @@ pipeline {
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
                             gpg --version
-                            mvn deploy \
+                            mvn install \
                                 --batch-mode \
                                 -e \
                                 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
@@ -187,6 +188,7 @@ pipeline {
                                 -Dmaven.test.skip \
                                 -s '${MAVEN_SETTINGS}' \
                                 -DrepositoryId='${repositoryId}'
+                            gpg --sign --default-key support@ikm.dev target/'${artifactId}'-'${pomVersion}'.jar
                         """
                     }
                 }
