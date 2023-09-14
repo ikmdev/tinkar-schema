@@ -177,7 +177,7 @@ pipeline {
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
                             gpg --version
-                            gpg --list-secret-keys --keyid-format=long
+                            gpg --list-secret-keys
                             mvn install \
                                 --batch-mode \
                                 -e \
@@ -189,7 +189,7 @@ pipeline {
                                 -Dmaven.test.skip \
                                 -s '${MAVEN_SETTINGS}' \
                                 -DrepositoryId='${repositoryId}'
-                            gpg --sign --default-key '${env.WORKSPACE}'/target/'${artifactId}'-'${pomVersion}'.jar
+                            gpg --sign '${env.WORKSPACE}'/target/'${artifactId}'-'${pomVersion}'.jar
                         """
                     }
                 }
