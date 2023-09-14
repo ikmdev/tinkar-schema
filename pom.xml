@@ -109,6 +109,8 @@
                         </executions>
                         <configuration>
                             <gpgArguments>
+                                <argument>--pinentry-mode</argument>
+                                <argument>loopback</argument>
                                 <gpgArgument>--pinentry-mode</gpgArgument>
                                 <gpgArgument>loopback</gpgArgument>
                             </gpgArguments>
