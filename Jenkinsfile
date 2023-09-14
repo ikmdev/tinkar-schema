@@ -175,6 +175,7 @@ pipeline {
 
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
+                            gpg --version
                             mvn deploy \
                                 --batch-mode \
                                 -e \
