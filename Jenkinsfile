@@ -176,8 +176,6 @@ pipeline {
 
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
-                            gpg --version --verbose 
-                            gpg --list-secret-keys --verbose 
                             mvn install \
                                 --batch-mode \
                                 -e \
@@ -189,7 +187,6 @@ pipeline {
                                 -Dmaven.test.skip \
                                 -s '${MAVEN_SETTINGS}' \
                                 -DrepositoryId='${repositoryId}'
-                            gpg --detach-sign --verbose '${env.WORKSPACE}'/target/'${artifactId}'-'${pomVersion}'.jar
                         """
                     }
                 }
