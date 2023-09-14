@@ -114,7 +114,6 @@
                                 <gpgArgument>--pinentry-mode</gpgArgument>
                                 <gpgArgument>loopback</gpgArgument>
                             </gpgArguments>
-                            <passphrase>Mechanicsburg_1</passphrase>
                         </configuration>
                     </plugin>
                 </plugins>
