@@ -14,5 +14,4 @@ RUN apk update && \
 
 COPY Tinkar.proto .
 COPY gen-key-script .
-RUN cat gen-key-script | gpg --batch --generate-key
-RUN gpg --list-secret-keys --keyid-format=long --verbose
+RUN --mount=type=secret,id=gpg_password, cat gpg_file.txt | sed 's/gpg_password/'"`cat /run/secrets/gpg_password`"'/g' | gpg --batch --generate-key
