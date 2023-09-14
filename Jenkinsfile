@@ -192,6 +192,7 @@ pipeline {
                                 -s '${MAVEN_SETTINGS}' \
                                 -DrepositoryId='${repositoryId}' \
                                 -Dgpg.passphrase=thephrase \
+                                -Darguments=-Dgpg.passphrase=thephrase \
                                 -PsignArtifacts
                         """
                     }
