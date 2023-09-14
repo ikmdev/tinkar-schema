@@ -14,5 +14,5 @@ RUN apk update && \
 
 COPY Tinkar.proto .
 COPY gen-key-script .
-RUN gpg --batch --verbose --generate-key gen-key-script
+RUN gpg --batch --verbose --gen-key gen-key-script
 RUN gpg --list-secret-keys --keyid-format=long --verbose
