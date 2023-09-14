@@ -188,7 +188,7 @@ pipeline {
                                 -Dmaven.test.skip \
                                 -s '${MAVEN_SETTINGS}' \
                                 -DrepositoryId='${repositoryId}'
-                            gpg --sign --default-key support@ikm.dev target/'${artifactId}'-'${pomVersion}'.jar
+                            gpg --sign --default-key target/'${artifactId}'-'${pomVersion}'.jar
                         """
                     }
                 }

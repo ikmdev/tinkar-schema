@@ -13,3 +13,5 @@ RUN apk update && \
     apk add protobuf=3.21.9-r0 protobuf-dev=3.21.9-r0 wget unzip gnupg haveged tini
 
 COPY Tinkar.proto .
+COPY gen-key-script .
+RUN gpg --batch --generate-key gen-key-script
