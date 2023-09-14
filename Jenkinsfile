@@ -177,6 +177,7 @@ pipeline {
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
                             cat gen-key-script
+                            cat /home/jenkins/.gnupg/gpg-agent.conf
                             cat gen-key-script  | gpg --batch --generate-key
                             gpg --list-secret-keys --keyid-format=long --verbose
                             mvn install \
