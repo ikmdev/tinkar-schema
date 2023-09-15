@@ -10,10 +10,12 @@ WORKDIR $BUILDER_PATH
 
 # Installing protoc using apt-install and generating the correct directories for the stored generated classes.
 RUN apk update && \
-    apk add protobuf=3.21.9-r0 protobuf-dev=3.21.9-r0 wget unzip gnupg pinentry haveged tini
+    apk add protobuf=3.21.9-r0 protobuf-dev=3.21.9-r0 wget unzip
 
-COPY Tinkar.proto .
-COPY gen-key-script .
-RUN cat gen-key-script  | gpg --batch --generate-key
-RUN gpg --list-secret-keys --keyid-format=long --verbose
+#gnupg pinentry haveged tini
+
+#COPY Tinkar.proto .
+#COPY gen-key-script .
+#RUN cat gen-key-script  | gpg --batch --generate-key
+#RUN gpg --list-secret-keys --keyid-format=long --verbose
 

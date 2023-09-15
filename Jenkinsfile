@@ -48,6 +48,14 @@ pipeline {
             }
         }
 
+        stage("Build GPG Image") {
+            steps {
+                script {
+                    docker.build("tinkar-gpg:latest", "-f alpine-gpg.dockerfile")
+                }
+            }
+        }
+
         stage("Build CSharp Image") {
             steps {
                 script {
@@ -160,7 +168,6 @@ pipeline {
            }
        }
 
-
         stage("Publish to Nexus Repository Manager") {
             steps {
                 script {
@@ -191,12 +198,45 @@ pipeline {
                                 -Dmaven.test.skip \
                                 -s '${MAVEN_SETTINGS}' \
                                 '-Dgpg.passphrase=Mechanicsburg_1' \
-                                -DsignArtifacts=true
+                                -DsignArtifacts11=true11
                         """
                     }
                 }
             }
         }
+
+        stage("sign the artifacts") {
+            agent {
+                docker {
+                    image 'tinkar-gpg:latest'
+                    reuseNode false
+                    args '-u root:root'
+                }
+            }
+            steps {
+                script {
+                    pomModel = readMavenPom(file: 'pom.xml')
+                    artifactId = pomModel.getArtifactId()
+                    pomVersion = pomModel.getVersion()
+                    isSnapshot = pomVersion.contains("-SNAPSHOT")
+                    repositoryId = 'maven-releases'
+
+                    if (isSnapshot) {
+                        repositoryId = 'maven-snapshots'
+                    }
+
+                    configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
+                        sh """
+                            echo Hi > hi.txt
+                            ls
+                            gpg --output hi.sig --sign hi.txt
+                            ls   
+                        """
+                    }
+                }
+            }
+        }
+
     }
 
     post {
