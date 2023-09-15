@@ -235,7 +235,7 @@ pipeline {
                             
                             echo Hi > hi.txt
                             ls
-                            gpg --no-tty --yes --batch --verbose --output hi.sig --sign hi.txt
+                            gpg --no-tty --yes --batch --verbose --pinentry-mode loopback --output hi.sig --sign hi.txt
                             ls   
                         """
                     //}
