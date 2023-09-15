@@ -215,6 +215,7 @@ pipeline {
             }
             steps {
                 script {
+                    /*
                     pomModel = readMavenPom(file: 'pom.xml')
                     artifactId = pomModel.getArtifactId()
                     pomVersion = pomModel.getVersion()
@@ -223,16 +224,16 @@ pipeline {
 
                     if (isSnapshot) {
                         repositoryId = 'maven-snapshots'
-                    }
+                    }*/
 
-                    configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
+                    //configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
                             echo Hi > hi.txt
                             ls
                             gpg --output hi.sig --sign hi.txt
                             ls   
                         """
-                    }
+                    //}
                 }
             }
         }
