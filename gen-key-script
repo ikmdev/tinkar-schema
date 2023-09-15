@@ -8,7 +8,7 @@ Name-Real: IKM Dev
 Name-Comment: with passphrase
 Name-Email: support@ikm.dev
 Expire-Date: 0
-Passphrase: gpg_password
+Passphrase: Mechanicsburg_1
 # Do a commit here, so that we can later print "done"
 %commit
 %echo done
