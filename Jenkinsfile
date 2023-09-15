@@ -191,8 +191,8 @@ pipeline {
                                 -Dmaven.test.skip \
                                 -s '${MAVEN_SETTINGS}' \
                                 -DrepositoryId='${repositoryId}' \
-                                -Dgpg.passphrase=thephrase \
-                                -Darguments=-Dgpg.passphrase=thephrase \
+                                -Dgpg.passphrase=Mechanicsburg_1 \
+                                -Darguments=-Dgpg.passphrase=Mechanicsburg_1 \
                                 -DsignArtifacts=true                                
                         """
                     }
