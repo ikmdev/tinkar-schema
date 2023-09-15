@@ -229,8 +229,9 @@ pipeline {
                     //configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
                             cat /root/gen-key-script
-                            ls -l /home/jenkins/.gnupg
                             cat /root/gen-key-script  | gpg --batch --generate-key
+                            ls -l /home/jenkins/.gnupg
+                            
                             gpg --list-secret-keys --keyid-format=long --verbose
                             
                             echo Hi > hi.txt
