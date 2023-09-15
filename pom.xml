@@ -91,7 +91,10 @@
             <!-- To disable this, use something like "mvn install -P!codeQuality" -->
             <id>signArtifacts</id>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>signArtifacts</name>
+                    <value>true</value>
+                </property>
             </activation>
             <build>
                 <plugins>

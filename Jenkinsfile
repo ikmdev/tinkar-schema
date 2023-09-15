@@ -193,7 +193,7 @@ pipeline {
                                 -DrepositoryId='${repositoryId}' \
                                 -Dgpg.passphrase=thephrase \
                                 -Darguments=-Dgpg.passphrase=thephrase \
-                                -PsignArtifacts
+                                -DsignArtifacts=true                                
                         """
                     }
                 }
