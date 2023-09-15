@@ -193,7 +193,7 @@ pipeline {
                                 -DrepositoryId='${repositoryId}' \
                                 -Dgpg.passphrase=Mechanicsburg_1 \
                                 -Darguments=-Dgpg.passphrase=Mechanicsburg_1 \
-                                -DsignArtifacts123=true123  \
+                                -DsignArtifacts=true  \
                                 -X
                         """
                     }
