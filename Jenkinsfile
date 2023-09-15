@@ -190,14 +190,8 @@ pipeline {
                                 -Dmaven.main.skip \
                                 -Dmaven.test.skip \
                                 -s '${MAVEN_SETTINGS}' \
-                                -DrepositoryId='${repositoryId}' \
                                 -Dgpg.passphrase=Mechanicsburg_1 \
-                                -Darguments=-Dgpg.passphrase=Mechanicsburg_1 \
-                                -DsignArtifacts12=true12  
-                                
-                            mvn install --batch-mode -e -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn  -Dmaven.build.cache.enabled=false  -DskipTests  -DskipITs  -Dmaven.main.skip  -Dmaven.test.skip  -s '${MAVEN_SETTINGS}'  -DrepositoryId='${repositoryId}'  -Dgpg.passphrase=Mechanicsburg_1  -Darguments=-Dgpg.passphrase=Mechanicsburg_1  -DsignArtifacts=true  
-    
-                                
+                                -DsignArtifacts=true
                         """
                     }
                 }
