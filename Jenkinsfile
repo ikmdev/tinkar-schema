@@ -183,10 +183,10 @@ pipeline {
 
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
-                            cat gen-key-script
-                            ls -l /home/jenkins/.gnupg
-                            cat gen-key-script  | gpg --batch --generate-key
-                            gpg --list-secret-keys --keyid-format=long --verbose
+                            #cat gen-key-script
+                            #ls -l /home/jenkins/.gnupg
+                            #cat gen-key-script  | gpg --batch --generate-key
+                            #gpg --list-secret-keys --keyid-format=long --verbose
                             mvn install \
                                 --batch-mode \
                                 -e \
@@ -228,6 +228,11 @@ pipeline {
 
                     //configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
+                            cat gen-key-script
+                            ls -l /home/jenkins/.gnupg
+                            cat gen-key-script  | gpg --batch --generate-key
+                            gpg --list-secret-keys --keyid-format=long --verbose
+                            
                             echo Hi > hi.txt
                             ls
                             gpg --output hi.sig --sign hi.txt
