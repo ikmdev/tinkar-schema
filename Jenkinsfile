@@ -230,7 +230,6 @@ pipeline {
                         sh """
                             cat /root/gen-key-script
                             cat /root/gen-key-script  | gpg --batch --generate-key
-                            //ls -l /home/jenkins/.gnupg
                             
                             gpg --list-secret-keys --keyid-format=long --verbose
                             
