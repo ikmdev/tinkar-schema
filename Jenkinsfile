@@ -190,7 +190,7 @@ pipeline {
                                 -Dmaven.main.skip \
                                 -Dmaven.test.skip \
                                 -s '${MAVEN_SETTINGS}' \
-                                -Dgpg.passphrase=Mechanicsburg_1 \
+                                -D'gpg.passphrase'='Mechanicsburg_1' \
                                 -DsignArtifacts=true
                         """
                     }
