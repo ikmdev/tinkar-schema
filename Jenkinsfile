@@ -231,7 +231,7 @@ pipeline {
                     //configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
                             cat /root/gen-key-script /root/gpg_passphrase
-                            sed 's/<GPG_PASSPHRASE>/${GPG_PASSPHRASE}/g' /root/gen-key-script | sed  | gpg --batch --generate-key
+                            sed "s/<GPG_PASSPHRASE>/${GPG_PASSPHRASE}/g" /root/gen-key-script | sed  | gpg --batch --generate-key
                             
                             gpg --list-secret-keys --keyid-format=long --verbose
                             
