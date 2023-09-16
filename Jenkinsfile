@@ -261,7 +261,7 @@ pipeline {
                             echo Hi > hi.txt
                             ls
                             ls target
-                            gpg --yes --verbose --pinentry-mode loopback --output hi.sig --passphrase $GPG_PASSPHRASE --sign hi.txt
+                            gpg --yes --verbose --pinentry-mode loopback  --passphrase $GPG_PASSPHRASE --sign target/*.jar
                             ls   
                         """
                     }
