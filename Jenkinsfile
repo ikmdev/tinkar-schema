@@ -208,7 +208,6 @@ pipeline {
                                 -Dgpg.passphrase="$GPG_PASSPHRASE"  \
                                 -DsignArtifacts1=true1
                             
-                                
                             gpg --yes --verbose --pinentry-mode loopback --output $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar.sig \
                                 --passphrase $GPG_PASSPHRASE --sign $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar
     
@@ -223,7 +222,7 @@ pipeline {
                 docker {
                     image 'tinkar-gpg:latest'
                     reuseNode false
-                    args '-u root:root -v $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar:/tmp'
+                    args '-u root:root'
                 }
             }
             steps {
@@ -242,6 +241,7 @@ pipeline {
                     //configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
                             ls -l
+                            docker cp tinkar-schema-protoc:/target/tinkar-schema-1.14.0-SNAPSHOT.jar /tmp    
                             ls -l /tmp
                             cat /root/gen-key-script /root/gpg_passphrase
                             sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
