@@ -186,9 +186,6 @@ pipeline {
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
 
-                            gpg --yes --no-tty --delete-secret-keys "IKM Dev"
-                            gpg --yes --no-tty --delete-keys "IKM Dev"
-                            
                             ls -l
                             cat gen-key-script gpg_passphrase
                             sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" gen-key-script | gpg --batch --generate-key
