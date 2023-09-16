@@ -191,11 +191,9 @@ pipeline {
                             sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" gen-key-script | gpg --batch --generate-key
                             echo "======= private keys ========"
                             gpg --list-secret-keys --keyid-format=long --verbose
-                            //gpg --yes --batch --pinentry loopback --delete-secret-key 0B1C412FF2CBE084F8BFF36C0F2DE3547A50209A
                             
                             echo "======= public keys ========"                            
                             gpg --list-keys --keyid-format=long --verbose
-                            //gpg --yes --batch --pinentry loopback --delete-key 00ACE017BE807B2BB1B8A1374145A7659BCFC9C5
                             
                             mvn install \
                                 --batch-mode \
