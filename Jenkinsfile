@@ -225,55 +225,60 @@ pipeline {
             steps {
 
                 script {
+                    unstash 'tinkar-jars'
 
-                    pomModel = readMavenPom(file: 'pom.xml')
-                    groupId = pomModel.getGroupId()
-                    artifactId = pomModel.getArtifactId()
-                    pomVersion = pomModel.getVersion()
-                    isSnapshot = pomVersion.contains("-SNAPSHOT")
-                    repositoryId = 'titan-maven-releases'
-                    version = pomVersion
+                    sh """                            
+                        echo "======= private keys gpg image ========"
+                        gpg --list-secret-keys --keyid-format=long --verbose
+                        
+                        echo "======= public keys gpg image  ========"                            
+                        gpg --list-keys --keyid-format=long --verbose
+                        
+                        sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
+                        gpg --list-secret-keys --keyid-format=long --verbose
+                        gpg --yes --verbose --pinentry-mode loopback  --passphrase $GPG_PASSPHRASE --detach-sign target/*.jar
 
-                    if (isSnapshot) {
-                        repositoryId = 'titan-maven-snapshots'
-                        version = pomVersion.substring(0, pomVersion.indexOf("-SNAPSHOT"))
-                    }
+                        stash includes: 'target/*.*', name: 'tinkar-jars-signed'
 
-                    configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
-
-                        unstash 'tinkar-jars'
-
-                        sh """                            
-                            echo "======= private keys gpg image ========"
-                            gpg --list-secret-keys --keyid-format=long --verbose
-                            
-                            echo "======= public keys gpg image  ========"                            
-                            gpg --list-keys --keyid-format=long --verbose
-                            
-                            sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
-                            gpg --list-secret-keys --keyid-format=long --verbose
-                            gpg --yes --verbose --pinentry-mode loopback  --passphrase $GPG_PASSPHRASE --detach-sign target/*.jar
-
-                            mvn deploy:deploy-file \\
-                            --batch-mode \\
-                            -e \\
-                            -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \\
-                            -s '${MAVEN_SETTINGS}' \\
-                            -Dfile=target/${artifactId}-${version}.jar \\
-                            -Durl=https://nexus.build.tinkarbuild.com/repository/maven-releases/ \\
-                            -DgroupId=${groupId} \\
-                            -DartifactId=${artifactId} \\
-                            -Dversion=${version} \\
-                            -Dtype=zip \\
-                            -DrepositoryId='${repositoryId}'
-
-                        """
-
-                    }
+                    """
                 }
             }
         }
 
+        stage("Deploy the signed artifacts to Nexus Repository Manager") {
+            steps {
+                script {
+                    pomModel = readMavenPom(file: 'pom.xml')
+                    artifactId = pomModel.getArtifactId()
+                    pomVersion = pomModel.getVersion()
+                    isSnapshot = pomVersion.contains("-SNAPSHOT")
+                    repositoryId = 'maven-releases'
+
+                    if (isSnapshot) {
+                        repositoryId = 'maven-snapshots'
+                    }
+
+                    unstash 'tinkar-jars-signed'
+
+                    configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
+                        sh """                            
+                            mvn deploy:deploy-file \
+                            --batch-mode \
+                            -e \
+                            -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+                            -s '${MAVEN_SETTINGS}' \
+                            -Dfile=target/${artifactId}-${version}.jar \
+                            -Durl=https://nexus.build.tinkarbuild.com/repository/maven-releases/ \
+                            -DgroupId=${groupId} \
+                            -DartifactId=${artifactId} \
+                            -Dversion=${version} \
+                            -Dtype=jar \
+                            -DrepositoryId='${repositoryId}'
+                        """
+                    }
+                }
+            }
+        }
     }
 
     post {
