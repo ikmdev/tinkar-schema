@@ -1,0 +1,14 @@
+# Example from https://www.gnupg.org/documentation//manuals/gnupg/Unattended-GPG-key-generation.html
+%echo Generating a basic OpenPGP key
+Key-Type: RSA
+Key-Length: 2048
+#Subkey-Type: RSA
+#Subkey-Length: 2048
+Name-Real: IKM Dev
+Name-Comment: with passphrase
+Name-Email: support@ikm.dev
+Expire-Date: 0
+Passphrase: GPG_PASSPHRASE
+# Do a commit here, so that we can later print "done"
+%commit
+%echo done

@@ -9,6 +9,8 @@ pipeline {
         SONAR_AUTH_TOKEN    = credentials('sonarqube_pac_token')
         SONARQUBE_URL       = "${GLOBAL_SONARQUBE_URL}"
         SONAR_HOST_URL      = "${GLOBAL_SONARQUBE_URL}"
+
+        GPG_PASSPHRASE      = credentials('sonarqube_pac_token')
     }
 
     triggers {
@@ -44,6 +46,14 @@ pipeline {
             steps {
                 script {
                     docker.build("tinkar-schema-protoc:latest", "-f protoc.dockerfile")
+                }
+            }
+        }
+
+        stage("Build GPG Image") {
+            steps {
+                script {
+                    docker.build("tinkar-gpg:latest", "-f alpine-gpg.dockerfile")
                 }
             }
         }
@@ -160,11 +170,11 @@ pipeline {
            }
        }
 
-
         stage("Publish to Nexus Repository Manager") {
             steps {
                 script {
                     pomModel = readMavenPom(file: 'pom.xml')
+                    artifactId = pomModel.getArtifactId()
                     pomVersion = pomModel.getVersion()
                     isSnapshot = pomVersion.contains("-SNAPSHOT")
                     repositoryId = 'maven-releases'
@@ -175,7 +185,13 @@ pipeline {
 
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
-                            mvn deploy \
+                            
+                            ls -l
+                            cat gen-key-script gpg_passphrase
+                            sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" gen-key-script | gpg --batch --generate-key
+                            gpg --list-secret-keys --keyid-format=long --verbose
+                            
+                            mvn install \
                                 --batch-mode \
                                 -e \
                                 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
@@ -185,12 +201,56 @@ pipeline {
                                 -Dmaven.main.skip \
                                 -Dmaven.test.skip \
                                 -s '${MAVEN_SETTINGS}' \
-                                -DrepositoryId='${repositoryId}'
+                                -Dgpg.passphrase="$GPG_PASSPHRASE"  \
+                                -DsignArtifacts1=true1
+                                
+                            gpg --yes --verbose --pinentry-mode loopback --output hi.sig --passphrase $GPG_PASSPHRASE --sign $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar
+    
                         """
                     }
                 }
             }
         }
+
+        stage("sign the artifacts") {
+            agent {
+                docker {
+                    image 'tinkar-gpg:latest'
+                    reuseNode false
+                    args '-u root:root'
+                }
+            }
+            steps {
+                script {
+                    /*
+                    pomModel = readMavenPom(file: 'pom.xml')
+                    artifactId = pomModel.getArtifactId()
+                    pomVersion = pomModel.getVersion()
+                    isSnapshot = pomVersion.contains("-SNAPSHOT")
+                    repositoryId = 'maven-releases'
+
+                    if (isSnapshot) {
+                        repositoryId = 'maven-snapshots'
+                    }*/
+
+                    //configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
+                        sh """
+                            ls -l
+                            cat /root/gen-key-script /root/gpg_passphrase
+                            sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
+                            
+                            gpg --list-secret-keys --keyid-format=long --verbose
+                            
+                            echo Hi > hi.txt
+                            ls
+                            gpg --yes --verbose --pinentry-mode loopback --output hi.sig --passphrase $GPG_PASSPHRASE --sign hi.txt
+                            ls   
+                        """
+                    //}
+                }
+            }
+        }
+
     }
 
     post {
