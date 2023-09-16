@@ -208,10 +208,13 @@ pipeline {
                                 -Dgpg.passphrase="$GPG_PASSPHRASE"  \
                                 -DsignArtifacts1=true1
                             
+                             
                             gpg --yes --verbose --pinentry-mode loopback --output $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar.sig \
                                 --passphrase $GPG_PASSPHRASE --sign $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar
     
                         """
+
+                        archiveArtifacts artifacts: 'tinkar-schema-1.14.0-SNAPSHOT.jar', fingerprint: true
                     }
                 }
             }
@@ -226,7 +229,9 @@ pipeline {
                 }
             }
             steps {
+
                 script {
+                    copyArtifacts 'tinkar-schema-1.14.0-SNAPSHOT.jar', fingerprint: true
                     /*
                     pomModel = readMavenPom(file: 'pom.xml')
                     artifactId = pomModel.getArtifactId()
@@ -237,6 +242,7 @@ pipeline {
                     if (isSnapshot) {
                         repositoryId = 'maven-snapshots'
                     }*/
+
 
                     //configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
