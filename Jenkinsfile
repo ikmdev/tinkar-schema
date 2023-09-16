@@ -238,8 +238,6 @@ pipeline {
                         gpg --list-secret-keys --keyid-format=long --verbose
                         
                         gpg --batch --output target/tinkar1.pub.asc --armor --export support@ikm.dev
-                        gpg --batch --output target/ownertrust1.txt --armor --export-ownertrust support@ikm.dev
-                        
                         gpg --yes --verbose --pinentry-mode loopback  --passphrase $GPG_PASSPHRASE --detach-sign target/*.jar                       
                         
                     """
@@ -280,9 +278,9 @@ pipeline {
                             -DartifactId=${artifactId} \
                             -Dversion=${pomVersion} \
                             -Dtype=jar \
-                            -Dfiles=target/${artifactId}-${pomVersion}.jar.gpg,target/${artifactId}-${pomVersion}.jar.sig,target/tinkar.pgp,target/tinkar.pub.asc,target/ownertrust.txt \
-                            -Dtypes=gpg,sig,pgp,asc,txt \
-                            -Dclassifiers=gpg,sig,pgp,pub,ownertrust \
+                            -Dfiles=target/${artifactId}-${pomVersion}.jar.gpg,target/${artifactId}-${pomVersion}.jar.sig,target/tinkar.pgp \
+                            -Dtypes=gpg,sig,pgp,asc \
+                            -Dclassifiers=gpg,sig,pgp,pub \
                             -DrepositoryId='${repositoryId}'
                         """
                     }
