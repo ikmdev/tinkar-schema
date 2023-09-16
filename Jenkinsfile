@@ -84,7 +84,7 @@ pipeline {
                 ls -R /home/proto-builder/
                 ls -R src/
                 '''
-                //stash(name: "java-schema-proto", allowEmpty: false, useDefaultExcludes: false, includes: 'src/**')
+                stash(name: "java-schema-proto", allowEmpty: false, useDefaultExcludes: false, includes: 'src/**')
             }
         }
 
