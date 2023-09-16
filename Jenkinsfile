@@ -186,35 +186,35 @@ pipeline {
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
 
-                            gpg --batch --delete-key 00ACE017BE807B2BB1B8A1374145A7659BCFC9C5
-                            gpg --batch --delete-key 0B1C412FF2CBE084F8BFF36C0F2DE3547A50209A
-                            gpg --batch --delete-key 91020F5A4A6BA038230616AD7A922ACB195EC3B1
-                            gpg --batch --delete-key 792E8E5DDA00C7B795BADE67FB05F644C9B16E34
-                            gpg --batch --delete-key AA69531E7FDFC041FF9C80E791754F312385E64D
-                            gpg --batch --delete-key 67E4C2DF503127A6DD1628825A596D4F42F44685
-                            gpg --batch --delete-key EEDB95950F0C24DA2BB965B617A244AEA3147166
-                            gpg --batch --delete-key C3FE958343E991582CC4F0986B9E15981B49E1F6
-                            gpg --batch --delete-key D25CA71F450858FB105ED75A4EE138EF93AD4463
-                            gpg --batch --delete-key EB405F9E6AE3D717E1C17CA7BD01582F6654FD2A
-                            gpg --batch --delete-key FF250EC2D76061D2544AA5D1EAC9388F80235541
-                            gpg --batch --delete-key D44D989EA06FDB86A85D00E15D4A9ACBB0A71B89
-                            gpg --batch --delete-key 431D0DFF8D01332A4EE99DCAD1A9202D9E0CCA0E
-                            gpg --batch --delete-key D9829D15DB1D8A4CAE1F088D1D517151B6EBD1F8
-                            gpg --batch --delete-key 16AF8A92F2E1B232C2909D5202B48DF147EC9C26
-                            gpg --batch --delete-key D0CA31C065CB0A7A162605B0136EF5EAECB12EB3
-                            gpg --batch --delete-key C1C42DC39AB14556242BB8CA2796D9B7A8F86723
-                            gpg --batch --delete-key 64BA12715D873EC5DDFF1A268BCA01ABC1C8ACDF
-                            gpg --batch --delete-key 22B41789DBD2ED86DF80EF3D85BB308A86BD14B2
-                            gpg --batch --delete-key FCF6521D3FE631299D55ED6FDDB735BA82A81FEB
-                            gpg --batch --delete-key 1E40FDAABDF890AD780821315550B2853CD1D3A9
-                            gpg --batch --delete-key 0589B3B808B8DDE73B8E0F13190CA9C8ED78B543
-                            gpg --batch --delete-key B0015C219F937D4C791FAD27E1A6107ADB3177E1
-                            gpg --batch --delete-key 4669A03F32393F51ADEF9944259A87751CB07B2D
-                            gpg --batch --delete-key 2ADEDAE031735570D056F8C543959BFB9FFD9809
-                            gpg --batch --delete-key 64A10A493E58403CD1C92C4DA0D8964173E71411
-                            gpg --batch --delete-key 4860035FD6BDA1765E0AE9B3C423B305FBFE1A65
-                            gpg --batch --delete-key 9E913156409A929378ED715BE23D5539E6638376
-                            gpg --batch --delete-key 6A56AF12CC867466F1CBC670A79297C53BB61174
+                            gpg --batch --delete-secret-key 00ACE017BE807B2BB1B8A1374145A7659BCFC9C5
+                            gpg --batch --delete-secret-key 0B1C412FF2CBE084F8BFF36C0F2DE3547A50209A
+                            gpg --batch --delete-secret-key 91020F5A4A6BA038230616AD7A922ACB195EC3B1
+                            gpg --batch --delete-secret-key 792E8E5DDA00C7B795BADE67FB05F644C9B16E34
+                            gpg --batch --delete-secret-key AA69531E7FDFC041FF9C80E791754F312385E64D
+                            gpg --batch --delete-secret-key 67E4C2DF503127A6DD1628825A596D4F42F44685
+                            gpg --batch --delete-secret-key EEDB95950F0C24DA2BB965B617A244AEA3147166
+                            gpg --batch --delete-secret-key C3FE958343E991582CC4F0986B9E15981B49E1F6
+                            gpg --batch --delete-secret-key D25CA71F450858FB105ED75A4EE138EF93AD4463
+                            gpg --batch --delete-secret-key EB405F9E6AE3D717E1C17CA7BD01582F6654FD2A
+                            gpg --batch --delete-secret-key FF250EC2D76061D2544AA5D1EAC9388F80235541
+                            gpg --batch --delete-secret-key D44D989EA06FDB86A85D00E15D4A9ACBB0A71B89
+                            gpg --batch --delete-secret-key 431D0DFF8D01332A4EE99DCAD1A9202D9E0CCA0E
+                            gpg --batch --delete-secret-key D9829D15DB1D8A4CAE1F088D1D517151B6EBD1F8
+                            gpg --batch --delete-secret-key 16AF8A92F2E1B232C2909D5202B48DF147EC9C26
+                            gpg --batch --delete-secret-key D0CA31C065CB0A7A162605B0136EF5EAECB12EB3
+                            gpg --batch --delete-secret-key C1C42DC39AB14556242BB8CA2796D9B7A8F86723
+                            gpg --batch --delete-secret-key 64BA12715D873EC5DDFF1A268BCA01ABC1C8ACDF
+                            gpg --batch --delete-secret-key 22B41789DBD2ED86DF80EF3D85BB308A86BD14B2
+                            gpg --batch --delete-secret-key FCF6521D3FE631299D55ED6FDDB735BA82A81FEB
+                            gpg --batch --delete-secret-key 1E40FDAABDF890AD780821315550B2853CD1D3A9
+                            gpg --batch --delete-secret-key 0589B3B808B8DDE73B8E0F13190CA9C8ED78B543
+                            gpg --batch --delete-secret-key B0015C219F937D4C791FAD27E1A6107ADB3177E1
+                            gpg --batch --delete-secret-key 4669A03F32393F51ADEF9944259A87751CB07B2D
+                            gpg --batch --delete-secret-key 2ADEDAE031735570D056F8C543959BFB9FFD9809
+                            gpg --batch --delete-secret-key 64A10A493E58403CD1C92C4DA0D8964173E71411
+                            gpg --batch --delete-secret-key 4860035FD6BDA1765E0AE9B3C423B305FBFE1A65
+                            gpg --batch --delete-secret-key 9E913156409A929378ED715BE23D5539E6638376
+                            gpg --batch --delete-secret-key 6A56AF12CC867466F1CBC670A79297C53BB61174
 
                             ls -l
                             cat gen-key-script gpg_passphrase
