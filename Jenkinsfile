@@ -199,8 +199,11 @@ pipeline {
                                 -Dmaven.main.skip \
                                 -Dmaven.test.skip \
                                 -s '${MAVEN_SETTINGS}' \
-                                '-Dgpg.passphrase=Mechanicsburg_1' \
-                                -DsignArtifacts11=true11
+                                '-Dgpg.passphrase=$GPG_PASSPHRASE  \
+                                -DsignArtifacts1=true1
+                                
+                                stash(name: "tinkar-schema-jars", allowEmpty: false, useDefaultExcludes: false, includes: 'target/*.jar')
+    
                         """
                     }
                 }
@@ -229,7 +232,9 @@ pipeline {
                     }*/
 
                     //configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
+                        unstash(name: "tinkar-schema-jars")
                         sh """
+                            ls -l
                             cat /root/gen-key-script /root/gpg_passphrase
                             sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
                             
