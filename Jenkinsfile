@@ -268,7 +268,7 @@ pipeline {
                             -e \
                             -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
                             -s '${MAVEN_SETTINGS}' \
-                            -Dfile=target/${artifactId}-${version}.jar \
+                            -Dfile=target/${artifactId}-${pomVersion}.jar \
                             -Durl=https://nexus.build.tinkarbuild.com/repository/maven-releases/ \
                             -DgroupId=${groupId} \
                             -DartifactId=${artifactId} \
