@@ -234,7 +234,7 @@ pipeline {
                         echo "======= public keys gpg image  ========"                            
                         gpg --list-keys --keyid-format=long --verbose
                         
-                        sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
+                        #sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
                         gpg --list-secret-keys --keyid-format=long --verbose
                         
                         gpg --no-tty --output target/tinkar.pub.asc --armor --export support@ikm.dev
