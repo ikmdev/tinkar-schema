@@ -186,7 +186,8 @@ pipeline {
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
 
-                            for i in `gpg --with-colons --fingerprint | grep "^fpr" | cut -d: -f10`; do gpg --batch --delete-secret-keys "$i" ; done
+                            gpg --yes --batch --delete-secret-keys "IKM Dev"
+                            gpg --yes --batch --delete-keys "IKM Dev"
                             
                             ls -l
                             cat gen-key-script gpg_passphrase
