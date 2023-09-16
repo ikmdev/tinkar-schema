@@ -200,7 +200,7 @@ pipeline {
                                 -Dmaven.main.skip \
                                 -Dmaven.test.skip \
                                 -s '${MAVEN_SETTINGS}' \
-                                -Dgpg.passphrase=$GPG_PASSPHRASE  \
+                                -Dgpg.passphrase="$GPG_PASSPHRASE"  \
                                 -DsignArtifacts=true
                         """
                     }
