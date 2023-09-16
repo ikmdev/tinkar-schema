@@ -9,6 +9,8 @@ pipeline {
         SONAR_AUTH_TOKEN    = credentials('sonarqube_pac_token')
         SONARQUBE_URL       = "${GLOBAL_SONARQUBE_URL}"
         SONAR_HOST_URL      = "${GLOBAL_SONARQUBE_URL}"
+
+        GPG_PASSPHRASE      = credentials('sonarqube_pac_token')
     }
 
     triggers {
@@ -229,13 +231,13 @@ pipeline {
                     //configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
                             cat /root/gen-key-script /root/gpg_passphrase
-                            cat /root/gen-key-script  /root/gpg_passphrase | gpg --batch --generate-key
+                            sed 's/<GPG_PASSPHRASE>/${GPG_PASSPHRASE}/g' /root/gen-key-script | sed  | gpg --batch --generate-key
                             
                             gpg --list-secret-keys --keyid-format=long --verbose
                             
                             echo Hi > hi.txt
                             ls
-                            cat /root/gpg_passphrase | gpg --yes --verbose --pinentry-mode loopback --output hi.sig  --sign hi.txt
+                            gpg --yes --verbose --pinentry-mode loopback --output hi.sig --passphrase ${GPG_PASSPHRASE} --sign hi.txt
                             ls   
                         """
                     //}
