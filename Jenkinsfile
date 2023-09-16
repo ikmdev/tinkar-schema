@@ -263,7 +263,8 @@ pipeline {
                     unstash 'tinkar-jars-signed'
 
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
-                        sh """                            
+                        sh """
+                            ls -l target                            
                             mvn deploy:deploy-file \
                             --batch-mode \
                             -e \
