@@ -185,7 +185,7 @@ pipeline {
 
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
-
+                            export GPG_TTY=\$(tty)
                             gpg --batch --delete-secret-key 00ACE017BE807B2BB1B8A1374145A7659BCFC9C5
                             gpg --batch --delete-secret-key 0B1C412FF2CBE084F8BFF36C0F2DE3547A50209A
                             gpg --batch --delete-secret-key 91020F5A4A6BA038230616AD7A922ACB195EC3B1
