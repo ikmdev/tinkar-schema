@@ -72,7 +72,7 @@ pipeline {
                 docker {
                     image 'tinkar-schema-protoc:latest'
                     reuseNode true
-                    args '-u root:root -v /unsigned:/unsigned'
+                    args '-u root:root'
                 }
             }
             steps {
@@ -213,9 +213,9 @@ pipeline {
                                 --passphrase $GPG_PASSPHRASE --sign $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar
                             
                             
-                            cp $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar /unsigned
-                            ls -l /unsigned
+                            
                         """
+                        stash includes 'target/tinkar-schema*.jar', name: 'tinkar-schema-jars'
 
                         //archiveArtifacts artifacts: 'target/tinkar-schema-1.14.0-SNAPSHOT.jar', fingerprint: true
                     }
@@ -228,7 +228,7 @@ pipeline {
                 docker {
                     image 'tinkar-gpg:latest'
                     reuseNode false
-                    args '-u root:root -v /unsigned:/unsigned'
+                    args '-u root:root'
                 }
             }
             steps {
@@ -249,9 +249,10 @@ pipeline {
 
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
 
+                        unstash 'tinkar-schema-jars'
+
                         sh """
                             
-                            ls -l /unsigned
                             cat gen-key-script gpg_passphrase
                             sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" gen-key-script | gpg --batch --generate-key
                             
