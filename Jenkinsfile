@@ -212,6 +212,7 @@ pipeline {
                             gpg --yes --verbose --pinentry-mode loopback --output $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar.sig \
                                 --passphrase $GPG_PASSPHRASE --sign $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar
                             
+                            ls -l /tmp
                             cp $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar /tmp
                             
                         """
