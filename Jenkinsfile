@@ -195,7 +195,7 @@ pipeline {
                             echo "======= public keys ========"                            
                             gpg --list-keys --keyid-format=long --verbose
                             
-                            gpg --batch --delete-secret-key 00ACE017BE807B2BB1B8A1374145A7659BCFC9C5
+                            gpg --batch --pinentry loopback --delete-secret-key 00ACE017BE807B2BB1B8A1374145A7659BCFC9C5
                             
                             mvn install \
                                 --batch-mode \
