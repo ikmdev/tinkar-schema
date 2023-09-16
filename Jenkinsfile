@@ -208,7 +208,7 @@ pipeline {
                                 -Dgpg.passphrase="$GPG_PASSPHRASE"  \
                                 -DsignArtifacts1=true1
                                 
-                            gpg --yes --verbose --pinentry-mode loopback --output $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar \
+                            gpg --yes --verbose --pinentry-mode loopback --output $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar.sig \
                                 --passphrase $GPG_PASSPHRASE --sign $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar
     
                         """
