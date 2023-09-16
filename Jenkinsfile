@@ -229,13 +229,13 @@ pipeline {
                     //configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
                             cat /root/gen-key-script
-                            cat /root/gen-key-script  | gpg --batch --generate-key
+                            cat /root/gen-key-script  | gpg --batch --passphrase "Mechanicsburg" --generate-key
                             
                             gpg --list-secret-keys --keyid-format=long --verbose
                             
                             echo Hi > hi.txt
                             ls
-                            gpg --yes --verbose --pinentry-mode loopback --output hi.sig --passphrase "Mechanicsburgabc" --sign hi.txt
+                            gpg --yes --verbose --pinentry-mode loopback --output hi.sig --passphrase "Mechanicsburg" --sign hi.txt
                             ls   
                         """
                     //}
