@@ -260,6 +260,7 @@ pipeline {
                             
                             echo Hi > hi.txt
                             ls
+                            ls target
                             gpg --yes --verbose --pinentry-mode loopback --output hi.sig --passphrase $GPG_PASSPHRASE --sign hi.txt
                             ls   
                         """
