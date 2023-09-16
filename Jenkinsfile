@@ -227,7 +227,7 @@ pipeline {
                 docker {
                     image 'tinkar-gpg:latest'
                     reuseNode false
-                    args '-u root:root'
+                    args '-u root:root -v /tmp:/tmp'
                 }
             }
             steps {
@@ -250,7 +250,6 @@ pipeline {
 
                         sh """
                             ls -l
-                            docker cp tinkar-schema-protoc:/target/tinkar-schema-1.14.0-SNAPSHOT.jar /tmp    
                             ls -l /tmp
                             cat /root/gen-key-script /root/gpg_passphrase
                             sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
