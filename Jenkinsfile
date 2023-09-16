@@ -235,7 +235,7 @@ pipeline {
                             
                             echo Hi > hi.txt
                             ls
-                            gpg --yes --verbose --pinentry-mode loopback --output hi.sig --passphrase abc --sign hi.txt
+                            gpg --yes --verbose --pinentry-mode loopback --output hi.sig --passphrase "abc" --sign hi.txt
                             ls   
                         """
                     //}
