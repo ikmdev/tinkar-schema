@@ -72,7 +72,7 @@ pipeline {
                 docker {
                     image 'tinkar-schema-protoc:latest'
                     reuseNode true
-                    args '-u root:root'
+                    args '-u root:root -v /tmp:/tmp'
                 }
             }
             steps {
@@ -211,10 +211,12 @@ pipeline {
                              
                             gpg --yes --verbose --pinentry-mode loopback --output $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar.sig \
                                 --passphrase $GPG_PASSPHRASE --sign $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar
-    
+                            
+                            cp $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar /tmp
+                            
                         """
 
-                        archiveArtifacts artifacts: 'target/tinkar-schema-1.14.0-SNAPSHOT.jar', fingerprint: true
+                        //archiveArtifacts artifacts: 'target/tinkar-schema-1.14.0-SNAPSHOT.jar', fingerprint: true
                     }
                 }
             }
@@ -231,7 +233,7 @@ pipeline {
             steps {
 
                 script {
-                    copyArtifacts 'tinkar-schema-1.14.0-SNAPSHOT.jar', fingerprint: true
+
                     /*
                     pomModel = readMavenPom(file: 'pom.xml')
                     artifactId = pomModel.getArtifactId()
@@ -244,7 +246,8 @@ pipeline {
                     }*/
 
 
-                    //configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
+                    configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
+
                         sh """
                             ls -l
                             docker cp tinkar-schema-protoc:/target/tinkar-schema-1.14.0-SNAPSHOT.jar /tmp    
@@ -259,7 +262,7 @@ pipeline {
                             gpg --yes --verbose --pinentry-mode loopback --output hi.sig --passphrase $GPG_PASSPHRASE --sign hi.txt
                             ls   
                         """
-                    //}
+                    }
                 }
             }
         }
