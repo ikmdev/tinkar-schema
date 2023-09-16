@@ -84,7 +84,7 @@ pipeline {
                 ls -R /home/proto-builder/
                 ls -R src/
                 '''
-                stash(name: "java-schema-proto", allowEmpty: false, useDefaultExcludes: false, includes: 'src/**')
+                //stash(name: "java-schema-proto", allowEmpty: false, useDefaultExcludes: false, includes: 'src/**')
             }
         }
 
@@ -202,7 +202,7 @@ pipeline {
                                 '-Dgpg.passphrase=$GPG_PASSPHRASE  \
                                 -DsignArtifacts1=true1
                                 
-                                stash(name: "tinkar-schema-jars", allowEmpty: false, useDefaultExcludes: false, includes: 'target/*.jar')
+                               // stash(name: "tinkar-schema-jars", allowEmpty: false, useDefaultExcludes: false, includes: 'target/*.jar')
     
                         """
                     }
@@ -232,7 +232,7 @@ pipeline {
                     }*/
 
                     //configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
-                        unstash(name: "tinkar-schema-jars")
+                    //    unstash(name: "tinkar-schema-jars")
                         sh """
                             ls -l
                             cat /root/gen-key-script /root/gpg_passphrase
