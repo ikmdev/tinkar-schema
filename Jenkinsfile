@@ -187,8 +187,6 @@ pipeline {
                         sh """
                             
                             
-                            cat gen-key-script gpg_passphrase
-                            sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" gen-key-script | gpg --batch --generate-key
                             echo "======= private keys ========"
                             gpg --list-secret-keys --keyid-format=long --verbose
                             
@@ -207,17 +205,10 @@ pipeline {
                                 -s '${MAVEN_SETTINGS}' \
                                 -Dgpg.passphrase="$GPG_PASSPHRASE"  \
                                 -DsignArtifacts1=true1
-                            
-                             
-                            gpg --yes --verbose --pinentry-mode loopback --output $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar.sig \
-                                --passphrase $GPG_PASSPHRASE --sign $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar
-                            
-                            
-                            
                         """
+
                         stash includes: 'target/tinkar-schema*.jar', name: 'tinkar-schema-jars'
 
-                        //archiveArtifacts artifacts: 'target/tinkar-schema-1.14.0-SNAPSHOT.jar', fingerprint: true
                     }
                 }
             }
@@ -235,35 +226,24 @@ pipeline {
 
                 script {
 
-                    /*
-                    pomModel = readMavenPom(file: 'pom.xml')
-                    artifactId = pomModel.getArtifactId()
-                    pomVersion = pomModel.getVersion()
-                    isSnapshot = pomVersion.contains("-SNAPSHOT")
-                    repositoryId = 'maven-releases'
-
-                    if (isSnapshot) {
-                        repositoryId = 'maven-snapshots'
-                    }*/
-
-
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
 
                         unstash 'tinkar-schema-jars'
 
                         sh """
                             
-                            cat /root/gen-key-script /root/gpg_passphrase
-                            sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
-                            
+                            echo "======= private keys gpg image ========"
                             gpg --list-secret-keys --keyid-format=long --verbose
                             
-                            echo Hi > hi.txt
-                            ls
-                            ls target
+                            echo "======= public keys gpg image  ========"                            
+                            gpg --list-keys --keyid-format=long --verbose
+                            
+                            sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
+                            gpg --list-secret-keys --keyid-format=long --verbose
                             gpg --yes --verbose --pinentry-mode loopback  --passphrase $GPG_PASSPHRASE --sign target/*.jar
-                            ls   
+
                         """
+
                     }
                 }
             }
