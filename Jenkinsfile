@@ -272,7 +272,7 @@ pipeline {
                             -Durl=https://nexus.build.tinkarbuild.com/repository/maven-releases/ \
                             -DgroupId=${groupId} \
                             -DartifactId=${artifactId} \
-                            -Dversion=${version} \
+                            -Dversion=${pomVersion} \
                             -Dtype=jar \
                             -DrepositoryId='${repositoryId}'
                         """
