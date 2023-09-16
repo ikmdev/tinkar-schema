@@ -271,11 +271,14 @@ pipeline {
                             -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
                             -s '${MAVEN_SETTINGS}' \
                             -Dfile=target/${artifactId}-${pomVersion}.jar \
+                            -Dfiles=target/${artifactId}-${pomVersion}.jar.gpg \
                             -Durl=https://nexus.build.tinkarbuild.com/repository/maven-snapshots/  \
                             -DgroupId=${groupId} \
                             -DartifactId=${artifactId} \
                             -Dversion=${pomVersion} \
                             -Dtype=jar \
+                            -Dtypes=gpg \
+                            -Dclassifiers=signed \
                             -DrepositoryId='${repositoryId}'
                         """
                     }
