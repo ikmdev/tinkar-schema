@@ -215,7 +215,7 @@ pipeline {
                             
                             
                         """
-                        stash includes 'target/tinkar-schema*.jar', name: 'tinkar-schema-jars'
+                        stash includes: 'target/tinkar-schema*.jar', name: 'tinkar-schema-jars'
 
                         //archiveArtifacts artifacts: 'target/tinkar-schema-1.14.0-SNAPSHOT.jar', fingerprint: true
                     }
