@@ -237,8 +237,9 @@ pipeline {
                         sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
                         gpg --list-secret-keys --keyid-format=long --verbose
                         gpg --yes --verbose --pinentry-mode loopback  --passphrase $GPG_PASSPHRASE --detach-sign target/*.jar
-
-                        stash includes: 'target/*.*', name: 'tinkar-jars-signed'
+                        
+                        ls -l target
+                        stash includes: 'target/*', name: 'tinkar-jars-signed'
 
                     """
                 }
