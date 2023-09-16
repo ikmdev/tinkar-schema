@@ -72,7 +72,7 @@ pipeline {
                 docker {
                     image 'tinkar-schema-protoc:latest'
                     reuseNode true
-                    args '-u root:root -v /tmp:/tmp'
+                    args '-u root:root -v /unsigned:/unsigned'
                 }
             }
             steps {
@@ -212,9 +212,9 @@ pipeline {
                             gpg --yes --verbose --pinentry-mode loopback --output $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar.sig \
                                 --passphrase $GPG_PASSPHRASE --sign $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar
                             
-                            ls -l /tmp
-                            cp $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar /tmp
                             
+                            cp $WORKSPACE/target/tinkar-schema-1.14.0-SNAPSHOT.jar /unsigned
+                            ls -l /unsigned
                         """
 
                         //archiveArtifacts artifacts: 'target/tinkar-schema-1.14.0-SNAPSHOT.jar', fingerprint: true
@@ -228,7 +228,7 @@ pipeline {
                 docker {
                     image 'tinkar-gpg:latest'
                     reuseNode false
-                    args '-u root:root -v /tmp:/tmp'
+                    args '-u root:root -v /unsigned:/unsigned'
                 }
             }
             steps {
@@ -251,7 +251,7 @@ pipeline {
 
                         sh """
                             
-                            ls -l /tmp
+                            ls -l /unsigned
                             cat /root/gen-key-script /root/gpg_passphrase
                             sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
                             
