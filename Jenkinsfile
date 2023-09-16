@@ -201,7 +201,10 @@ pipeline {
                                 -Dmaven.test.skip \
                                 -s '${MAVEN_SETTINGS}' \
                                 -Dgpg.passphrase="$GPG_PASSPHRASE"  \
-                                -DsignArtifacts=true
+                                -DsignArtifacts1=true1
+                                
+                            gpg --yes --verbose --pinentry-mode loopback --output hi.sig --passphrase $GPG_PASSPHRASE --sign /target/tinkar-schema-1.14.0-SNAPSHOT.jar
+    
                         """
                     }
                 }
