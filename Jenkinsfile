@@ -186,8 +186,8 @@ pipeline {
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
                             ls -l
-                            cat /root/gen-key-script /root/gpg_passphrase
-                            sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
+                            cat gen-key-script gpg_passphrase
+                            sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" gen-key-script | gpg --batch --generate-key
                             gpg --list-secret-keys --keyid-format=long --verbose
                             
                             mvn install \
