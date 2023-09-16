@@ -193,7 +193,7 @@ pipeline {
                             echo "======= public keys ========"                            
                             gpg --list-keys --keyid-format=long --verbose
                             
-                            mvn install \
+                            mvn deploy \
                                 --batch-mode \
                                 -e \
                                 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
@@ -207,7 +207,7 @@ pipeline {
                                 -DsignArtifacts1=true1
                         """
 
-                        stash includes: 'target/tinkar-schema*.jar', name: 'tinkar-schema-jars'
+                        stash includes: 'target/*.jar', name: 'tinkar-jars'
 
                     }
                 }
@@ -226,12 +226,24 @@ pipeline {
 
                 script {
 
+                    pomModel = readMavenPom(file: 'pom.xml')
+                    groupId = pomModel.getGroupId()
+                    artifactId = pomModel.getArtifactId()
+                    pomVersion = pomModel.getVersion()
+                    isSnapshot = pomVersion.contains("-SNAPSHOT")
+                    repositoryId = 'titan-maven-releases'
+                    version = pomVersion
+
+                    if (isSnapshot) {
+                        repositoryId = 'titan-maven-snapshots'
+                        version = pomVersion.substring(0, pomVersion.indexOf("-SNAPSHOT"))
+                    }
+
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
 
-                        unstash 'tinkar-schema-jars'
+                        unstash 'tinkar-jars'
 
-                        sh """
-                            
+                        sh """                            
                             echo "======= private keys gpg image ========"
                             gpg --list-secret-keys --keyid-format=long --verbose
                             
@@ -240,7 +252,20 @@ pipeline {
                             
                             sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
                             gpg --list-secret-keys --keyid-format=long --verbose
-                            gpg --yes --verbose --pinentry-mode loopback  --passphrase $GPG_PASSPHRASE --sign target/*.jar
+                            gpg --yes --verbose --pinentry-mode loopback  --passphrase $GPG_PASSPHRASE --detach-sign target/*.jar
+
+                            mvn deploy:deploy-file \\
+                            --batch-mode \\
+                            -e \\
+                            -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \\
+                            -s '${MAVEN_SETTINGS}' \\
+                            -Dfile=target/${artifactId}-${version}.jar \\
+                            -Durl=https://nexus.build.tinkarbuild.com/repository/maven-releases/ \\
+                            -DgroupId=${groupId} \\
+                            -DartifactId=${artifactId} \\
+                            -Dversion=${version} \\
+                            -Dtype=zip \\
+                            -DrepositoryId='${repositoryId}'
 
                         """
 
