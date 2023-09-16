@@ -276,9 +276,9 @@ pipeline {
                             -DartifactId=${artifactId} \
                             -Dversion=${pomVersion} \
                             -Dtype=jar \
-                            -Dfiles=target/${artifactId}-${pomVersion}.jar.gpg \
-                            -Dtypes=gpg \
-                            -Dclassifiers=signed \
+                            -Dfiles=target/${artifactId}-${pomVersion}.jar.gpg,target/${artifactId}-${pomVersion}.jar.sig \
+                            -Dtypes=gpg,sig \
+                            -Dclassifiers=gpg,sig \
                             -DrepositoryId='${repositoryId}'
                         """
                     }
