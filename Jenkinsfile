@@ -250,6 +250,7 @@ pipeline {
             steps {
                 script {
                     pomModel = readMavenPom(file: 'pom.xml')
+                    groupId = pomModel.getGroupId()
                     artifactId = pomModel.getArtifactId()
                     pomVersion = pomModel.getVersion()
                     isSnapshot = pomVersion.contains("-SNAPSHOT")
