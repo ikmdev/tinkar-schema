@@ -278,9 +278,9 @@ pipeline {
                             -DartifactId=${artifactId} \
                             -Dversion=${pomVersion} \
                             -Dtype=jar \
-                            -Dfiles=target/${artifactId}-${pomVersion}.jar.gpg,target/${artifactId}-${pomVersion}.jar.sig,target/tinkar.pgp,target/tinkar3-pub.asc \
-                            -Dtypes=gpg,sig,pgp,asc \
-                            -Dclassifiers=gpg,sig,pgp,asc \
+                            -Dfiles=target/${artifactId}-${pomVersion}.jar.gpg,target/${artifactId}-${pomVersion}.jar.sig,target/tinkar3-pub.asc \
+                            -Dtypes=gpg,sig,asc \
+                            -Dclassifiers=gpg,sig,asc \
                             -DrepositoryId='${repositoryId}'
                         """
                     }
