@@ -236,7 +236,7 @@ pipeline {
                         gpg --list-secret-keys --keyid-format=long --verbose
                         
                         gpg --yes --verbose --pinentry-mode loopback  --passphrase $GPG_PASSPHRASE --detach-sign target/*.jar                       
-                        gpg --batch --output target/alice.gpg  --armor --export support@ikm.dev
+                        gpg --batch --output target/bob.gpg  --armor --export support@ikm.dev
                         
                     """
 
@@ -276,7 +276,7 @@ pipeline {
                             -DartifactId=${artifactId} \
                             -Dversion=${pomVersion} \
                             -Dtype=jar \
-                            -Dfiles=target/${artifactId}-${pomVersion}.jar.gpg,target/${artifactId}-${pomVersion}.jar.sig,target/tinkar-pub.pgp,target/alice.gpg \
+                            -Dfiles=target/${artifactId}-${pomVersion}.jar.gpg,target/${artifactId}-${pomVersion}.jar.sig,target/tinkar-pub.pgp,target/bob.gpg \
                             -Dtypes=gpg,sig,pgp,gpg \
                             -Dclassifiers=gpg,sig,pgp,gpg \
                             -DrepositoryId='${repositoryId}'
