@@ -45,7 +45,7 @@ pipeline {
         stage("Build ProtoC Image") {
             steps {
                 script {
-                    docker.build("tinkar-schema-protoc:latest", "-f protoc.dockerfile")
+                    docker.build("tinkar-schema-protoc:latest", "-f protoc.dockerfile --no-cache")
                 }
             }
         }
