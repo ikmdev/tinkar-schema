@@ -186,7 +186,6 @@ pipeline {
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                         sh """
                             
-                            
                             echo "======= private keys ========"
                             gpg --list-secret-keys --keyid-format=long --verbose
                             
@@ -206,7 +205,6 @@ pipeline {
                                 -Dgpg.passphrase="$GPG_PASSPHRASE"  \
                                 -DsignArtifacts1=true1
                         """
-
                         stash includes: 'target/*.jar', name: 'tinkar-jars'
 
                     }
