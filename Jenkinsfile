@@ -237,7 +237,7 @@ pipeline {
                         sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
                         gpg --list-secret-keys --keyid-format=long --verbose
                         
-                        gpg --batch --output target/tinkar6-pub.asc --armor --export support@ikm.dev
+                        #gpg --batch --output target/tinkar6-pub.asc --armor --export support@ikm.dev
                         gpg --yes --verbose --pinentry-mode loopback  --passphrase $GPG_PASSPHRASE --detach-sign target/*.jar                       
                         
                     """
