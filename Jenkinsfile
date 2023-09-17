@@ -278,9 +278,9 @@ pipeline {
                             -DartifactId=${artifactId} \
                             -Dversion=${pomVersion} \
                             -Dtype=jar \
-                            -Dfiles=target/${artifactId}-${pomVersion}.jar.gpg,target/${artifactId}-${pomVersion}.jar.sig,target/tinkar6-pub.asc \
-                            -Dtypes=gpg,sig,asc \
-                            -Dclassifiers=gpg,sig,pub \
+                            -Dfiles=target/${artifactId}-${pomVersion}.jar.gpg,target/${artifactId}-${pomVersion}.jar.sig \
+                            -Dtypes=gpg,sig \
+                            -Dclassifiers=gpg,sig \
                             -DrepositoryId='${repositoryId}'
                         """
                     }
