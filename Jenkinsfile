@@ -193,7 +193,7 @@ pipeline {
                             echo "======= public keys ========"                            
                             gpg --list-keys --keyid-format=long --verbose
                             
-                            mvn deploy \
+                            mvn verify \
                                 --batch-mode \
                                 -e \
                                 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
