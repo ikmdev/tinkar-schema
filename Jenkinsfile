@@ -237,7 +237,7 @@ pipeline {
                         sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
                         gpg --list-secret-keys --keyid-format=long --verbose
                         
-                        gpg --batch --output target/tinkar4-pub.asc --armor --export support@ikm.dev
+                        gpg --batch --output target/tinkar5-pub.asc --armor --export support@ikm.dev
                         gpg --yes --verbose --pinentry-mode loopback  --passphrase $GPG_PASSPHRASE --detach-sign target/*.jar                       
                         
                     """
@@ -278,9 +278,9 @@ pipeline {
                             -DartifactId=${artifactId} \
                             -Dversion=${pomVersion} \
                             -Dtype=jar \
-                            -Dfiles=target/${artifactId}-${pomVersion}.jar.gpg,target/${artifactId}-${pomVersion}.jar.sig,target/tinkar4-pub.asc \
+                            -Dfiles=target/${artifactId}-${pomVersion}.jar.gpg,target/${artifactId}-${pomVersion}.jar.sig,target/tinkar5.asc \
                             -Dtypes=gpg,sig,asc \
-                            -Dclassifiers=gpg,sig,asc \
+                            -Dclassifiers=gpg,sig,pub \
                             -DrepositoryId='${repositoryId}'
                         """
                     }
