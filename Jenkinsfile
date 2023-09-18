@@ -10,7 +10,7 @@ pipeline {
         SONARQUBE_URL       = "${GLOBAL_SONARQUBE_URL}"
         SONAR_HOST_URL      = "${GLOBAL_SONARQUBE_URL}"
 
-        GPG_PASSPHRASE      = credentials('sonarqube_pac_token')
+        GPG_PASSPHRASE      = credentials('gpg_passphrase')
     }
 
     triggers {
