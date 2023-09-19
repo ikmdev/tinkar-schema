@@ -235,8 +235,12 @@ pipeline {
                         echo "======= public keys gpg image  ========"                            
                         gpg --list-keys --keyid-format=long --verbose
                         
-                        gpg --yes --verbose --pinentry-mode loopback  --passphrase $GPG_PASSPHRASE --detach-sign target/*.jar                       
-                        gpg --batch --output target/bob1.gpg  --armor --export support@ikm.dev
+                        rm  target/ikm_pub.gpg  
+                        rm  target/ikm_priv.gpg                    
+                        gpg --batch --output target/ikm_pub.gpg  --armor --export support@ikm.dev
+                        gpg --batch --output target/ikm_pub.gpg  --armor --export support@ikm.dev
+                        
+                        gpg --yes --verbose --pinentry-mode loopback  --passphrase $GPG_PASSPHRASE --detach-sign target/*.jar
                         
                     """
 
