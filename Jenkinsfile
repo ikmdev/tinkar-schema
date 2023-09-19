@@ -235,8 +235,8 @@ pipeline {
                         echo "======= public keys gpg image  ========"                            
                         gpg --list-keys --keyid-format=long --verbose
                         
-                        rm --force target/ikm_pub.gpg  
-                        rm --force target/ikm_priv.gpg                    
+                        rm -f target/ikm_pub.gpg 2>/dev/null  
+                        rm -f target/ikm_priv.gpg 2>/dev/null                   
                         gpg --batch --output target/ikm_pub.gpg  --armor --export support@ikm.dev
                         gpg --batch --output target/ikm_pub.gpg  --armor --export support@ikm.dev
                         
