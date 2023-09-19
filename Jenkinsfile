@@ -226,14 +226,14 @@ pipeline {
                     unstash 'tinkar-jars'
 
                     sh """                            
-                        echo "======= private keys gpg image ========"
+                        
+                        sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
+                        
+                        echo "======= private keys gpg image ========"                        
                         gpg --list-secret-keys --keyid-format=long --verbose
                         
                         echo "======= public keys gpg image  ========"                            
                         gpg --list-keys --keyid-format=long --verbose
-                        
-                        sed "s/GPG_PASSPHRASE/$GPG_PASSPHRASE/g" /root/gen-key-script | gpg --batch --generate-key
-                        gpg --list-secret-keys --keyid-format=long --verbose
                         
                         gpg --yes --verbose --pinentry-mode loopback  --passphrase $GPG_PASSPHRASE --detach-sign target/*.jar                       
                         gpg --batch --output target/bob1.gpg  --armor --export support@ikm.dev
