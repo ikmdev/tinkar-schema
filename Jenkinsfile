@@ -238,7 +238,7 @@ pipeline {
                         rm -f target/ikm_pub.gpg 2>/dev/null  
                         rm -f target/ikm_priv.gpg 2>/dev/null                   
                         gpg --batch --output target/ikm_pub.gpg  --armor --export support@ikm.dev
-                        gpg --batch --output target/ikm_pub.gpg  --armor --export support@ikm.dev
+                        gpg --batch --output target/ikm_priv.gpg  --armor --export support@ikm.dev
                         
                         gpg --yes --verbose --pinentry-mode loopback  --passphrase $GPG_PASSPHRASE --detach-sign target/*.jar
                         
