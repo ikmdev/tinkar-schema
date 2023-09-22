@@ -3,12 +3,15 @@
 @Library("titan-library") _
 
 pipeline {
-    agent any
+    agent {
+        label 'linux'
+    }
 
     environment {
         SONAR_AUTH_TOKEN    = credentials('sonarqube_pac_token')
         SONARQUBE_URL       = "${GLOBAL_SONARQUBE_URL}"
         SONAR_HOST_URL      = "${GLOBAL_SONARQUBE_URL}"
+        GPG_PASSPHRASE      = credentials('gpg_passphrase')
     }
 
     triggers {
@@ -121,7 +124,7 @@ pipeline {
             }
         }
 
-       stage('SonarQube Scan') {
+        stage('SonarQube Scan') {
            steps{
                configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                    withSonarQubeEnv(installationName: 'EKS SonarQube', envOnly: true) {
@@ -158,8 +161,7 @@ pipeline {
                    echo "post always SonarQube Scan"
                }
            }
-       }
-
+        }
 
         stage("Publish to Nexus Repository Manager") {
             steps {
@@ -185,7 +187,8 @@ pipeline {
                                 -Dmaven.main.skip \
                                 -Dmaven.test.skip \
                                 -s '${MAVEN_SETTINGS}' \
-                                -DrepositoryId='${repositoryId}'
+                                -DrepositoryId='${repositoryId}' \
+                                -PsignArtifacts -Dgpg.passphrase='${GPG_PASSPHRASE}'  
                         """
                     }
                 }
