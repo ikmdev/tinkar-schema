@@ -3,8 +3,13 @@
 @Library("titan-library") _
 
 pipeline {
-    agent {
-        label 'linux'
+
+    agent any
+
+    tools {
+        jdk "java-21"
+        maven 'default'
+        git 'git'
     }
 
     environment {
