@@ -2,353 +2,352 @@
 
 option java_multiple_files = true;
 option java_package = "dev.ikm.tinkar.schema";
-option java_outer_classname = "PBTinkar";
+option java_outer_classname = "TinkarSchema";
 
-option csharp_namespace = "Tinkar.ProtoBuf.CS";
+option csharp_namespace = "Dev.IKM.Tinkar.Schema";
 
 import "google/protobuf/timestamp.proto";
 
-package Tinkar.ProtoBuf;
+package dev.ikm.tinkar.schema;
 
-// Vertex id message.
-message PBVertexId {
-    // Unique vertex it. This is the 16 byte representation of a GUID.
-    bytes Id = 1;
+// Vertex UUID message.
+message VertexUUID {
+    // Unique vertex UUID.
+    bytes uuid = 1;
 }
 
 // Public id message.
-// A public id is the base unique id for Tinkar concepts, semantics, and other publically
+// A public id is the base unique id for Tinkar concepts, semantics, and other publicly
 // identifiable Tinkar items.
-message PBPublicId {
+message PublicId {
     // Unique Public id.
-    // This is one or more 16 byte GUIDs.
-    repeated bytes Id = 1 ;
+    repeated bytes uuids = 1 ;
 }
 
 // Public id list message.
 // A list of public ids.
-message PBPublicIdList {
-  repeated PBPublicId PublicIds = 1 ;
+message PublicIdList {
+  repeated PublicId public_ids = 1 ;
 }
 
 // Field message.
 // Fields are used in Vertex and SemanticVersion objects to store
 // that can have varying types.
 // Each message contains one field item and the data type of that field item.
-message PBField {
+message Field {
     // Field value. This is one of the types defined in the protobuf message.
+
     oneof Value {
         // String value.
-        string StringValue = 1;
+        string string_value = 1;
 
         // Boolean value.
-        bool BoolValue = 2;
+        bool boolean_value = 2;
 
         // Int32 value.
-        sint32 IntValue = 3;
+        sint32 int_value = 3;
 
         // Single precision floating point value.
-        float FloatValue = 4;
+        float float_value = 4;
 
         // Byte string value.
-        bytes BytesValue = 5;
+        bytes bytes_value = 5;
 
         // Time value.
-        google.protobuf.Timestamp TimeValue = 6;
-
-        // Tinkar STAMP value.
-        PBStampChronology StampValue = 20;
+        google.protobuf.Timestamp time_value = 6;
 
         // Tinkar Public id value.
-        PBPublicId PublicIdValue = 21;
+        PublicId public_id = 21;
 
-        // Tinkar Vertex id value.
-        PBVertexId VertexIdValue = 22;
+        // Tinkar Vertex uuid value.
+        VertexUUID vertex_uuid = 22;
 
         // Tinkar Public id list value.
-        PBPublicIdList PublicIdListValue = 23;
+        PublicIdList public_ids = 23;
 
         // Tinkar Directed graph value.
-        PBDiGraph DiGraphValue = 30;
+        DiGraph di_graph = 30;
 
         // Tinkar Directed tree value.
-        PBDiTree DiTreeValue = 31;
+        DiTree di_tree = 31;
 
         // Tinkar Graph value.
-        PBGraph GraphValue = 32;
+        Graph graph = 32;
 
         // Tinkar Vertex value.
-        PBVertex VertexValue = 33;
+        Vertex vertex = 33;
 
         // Tinkar Planar Point value
-        PBPlanarPoint PlanarPoint = 40;
+        PlanarPoint planar_point = 40;
 
         // Tinkar Spatial Point value
-        PBSpatialPoint SpatialPoint = 41;
+        SpatialPoint spatial_point = 41;
 
         // Tinkar Int to Int Map
-        PBIntToIntMap PBIntToIntMap = 50;
+        IntToIntMap int_to_int_map = 50;
 
         // Tinkar Int to Multiple Int Map
-        PBIntToMultipleIntMap PBIntToMultipleIntMap = 51;
+        IntToMultipleIntMap int_to_multiple_int_map = 51;
+
+        // TODO: Consider future use of a Tinkar Object array.
     };
 }
 
 // Planar point value.
-// Integer point on a 2 dimensional plane.
-message PBPlanarPoint {
+// Float point on a 2 dimensional plane.
+message PlanarPoint {
     // X position of point.
-    sint32 X = 1;
+    float x = 1;
     // Y position of point.
-    sint32 Y = 2;
+    float y = 2;
 }
 
 // Spatial point value.
-// Integer point in a 3 dimensional space.
-message PBSpatialPoint {
+// Float point in a 3 dimensional space.
+message SpatialPoint {
     // X position of point.
-    sint32 X = 1;
+    float x = 1;
     // Y position of point.
-    sint32 Y = 2;
+    float y = 2;
     // Z position of point.
-    sint32 Z = 3;
+    float z = 3;
 }
 
 // Integer to Integer Map.
 // Maps one integer value to another integer value.
-message PBIntToIntMap {
+message IntToIntMap {
     // Source value.
-    sint32 Source = 1;
+    int32 source = 1;
     // Target value.
-    sint32 Target = 2;
+    int32 target = 2;
 }
 
 // Integer to Multiple Integer Map.
 // Maps one integer value to multiple other integer values.
-message PBIntToMultipleIntMap {
+message IntToMultipleIntMap {
     // Source value.
-    sint32 Source = 1;
+    int32 source = 1;
 
     // Target values.
-    repeated sint32 Target = 2;
+    repeated int32 targets = 2;
 }
 
 // Directed Tree message.
 // A directed tree is a tree with a single root. Each vertex in the Tree
 // except the root contains a single predecessor, and may contain zero to many
 // successors.
-message PBDiTree {
+message DiTree {
     // List of all vertices in this DiTree. Each vertex contains a
     // VertexIndex which must match that vertex's index in this map.
-    repeated PBVertex VertexMap = 1;
+    repeated Vertex vertices = 1;
 
     // Root vertex.
-    int32 Root = 2;
+    int32 root = 2;
 
     // Maps each vertex with a predecessor to its predecessor.
-    repeated PBIntToIntMap PredecesorMap = 3;
+    repeated IntToIntMap predecessor_map = 3;
 
     // Maps each vertex with successors to its successors.
-    repeated PBIntToMultipleIntMap SuccessorMap = 4;
+    repeated IntToMultipleIntMap successor_map = 4;
 }
 
 // Directed Graph message.
 // A directed graph is a graph with a multiple roots. Each vertex in the graph
 // may contain zero to many successors and predecessors.
-message PBDiGraph {
+message DiGraph {
     // List of all vertices in this DiTree. Each vertex contains a
     // VertexIndex which must match that vertex's index in this map.
-    repeated PBVertex VertexMap = 1;
+    repeated Vertex vertices = 1;
 
     // List of all root vertices.
-    repeated int32 RootSequence = 2;
+    repeated int32 roots = 2;
 
     // Maps each vertex to its predecessors.
-    repeated PBIntToMultipleIntMap SuccessorMap = 3;
+    repeated IntToMultipleIntMap successor_map = 3;
 
     // Maps each vertex to its successors.
-    repeated PBIntToMultipleIntMap PredecesorMap = 4;
+    repeated IntToMultipleIntMap predecessor_map = 4;
 }
 
 // Graph message.
-message PBGraph {
+message Graph {
     // List of all vertices in this graph. Each vertex contains a
     // VertexIndex which must match that vertex's index in this map.
-    repeated PBVertex VertexMap = 1;
+    repeated Vertex vertices = 1;
 
     // Maps each vertex to its successors.
-    repeated PBIntToMultipleIntMap SuccessorMap = 2;
+    repeated IntToMultipleIntMap successor_map = 2;
+
+    // List of all root vertices.
+    repeated int32 roots = 3;
 }
 
 // Vertex message.
-message PBVertex {
+message Vertex {
     // Vertex property message
     message Property {
         // Concept identifying this property.
-        PBPublicId PublicId = 1;
+        PublicId public_id = 1;
 
         // Value of this property.
-        PBField Value = 2;
+        Field field = 2;
     }
 
-    // Unique id for this vertex.
-    PBVertexId VertexId = 1;
+    // Unique uuid for this vertex.
+    VertexUUID vertex_uuid = 1;
 
     // Vertex index if containers vertex map.
-    int32 VertexIndex = 2;
+    int32 index = 2;
 
     // Meaning of this vertex.
-    PBPublicId Meaning = 3;
+    PublicId meaning_public_id = 3;
 
     // Properties for this vertex.
-    repeated Property Properties = 4;
+    repeated Property properties = 4;
 }
 
 // Stamp Chronology message
-// This contains a list of stamp vesions (a chronology)
-message PBStampChronology {
+// This contains a list of stamp versions (a chronology)
+message StampChronology {
     // Unique public id for this STAMP.
-    PBPublicId PublicId = 1;
+    PublicId public_id = 1;
 
-    // List of concept versions.
-    repeated PBStampVersion StampVersions = 2;
+    // The stamp version.
+    StampVersion first_stamp_version = 2;
+
+    // Second stamp version.
+    optional StampVersion second_stamp_version = 3;
 }
 
 // Stamp Version message
 // This contains the info for a single version of a STAMP, sans the STAMP public id.
-message PBStampVersion {
+message StampVersion {
 	// Status of the item this STAMP references.
-	PBPublicId Status = 2;
+	PublicId status_public_id = 1;
 
 	// Status of the item this STAMP references.
-	PBPublicId Author = 3;
+	PublicId author_public_id = 2;
 
 	// Module of the item this STAMP references.
-	PBPublicId Module = 4;
+	PublicId module_public_id = 3;
 
 	// Path of the item this STAMP references.
-	PBPublicId Path = 5;
+	PublicId path_public_id = 4;
 
 	// Creation time of the item this STAMP references.
-	google.protobuf.Timestamp Time = 6;
+	google.protobuf.Timestamp time = 5;
 }
 
 // Concept Chronology message.
 // This contains a chronology (multiple versions) of a single concept.
-message PBConceptChronology {
+message ConceptChronology {
     // Unique Public id of this concept.
-    PBPublicId PublicId = 1;
+    PublicId public_id = 1;
 
     // List of concept versions.
-    repeated PBConceptVersion ConceptVersions = 2;
+    repeated ConceptVersion concept_versions = 2;
 }
 
 // Concept Version message.
 // This contains a version of a single concept.
-message PBConceptVersion {
-    // STAMP for this concept version.
-    PBStampChronology Stamp = 2;
+message ConceptVersion {
+    // STAMP chronology public ID for this version.
+    PublicId stamp_chronology_public_id = 1;
 }
 
 
 // Field definition message.
 // Defines the information for a field in a pattern.
-message PBFieldDefinition {
+message FieldDefinition {
     // Meaning of the field.    
-    PBPublicId Meaning = 1;
+    PublicId meaning_public_id = 1;
 
     // Data type of the field.
-    PBPublicId DataType = 2;
+    PublicId data_type_public_id = 2;
 
     // Purpose of the field.
-    PBPublicId Purpose = 3;
+    PublicId purpose_public_id = 3;
 
+    //Index of a given pattern.
+    int32 index = 4;
 }
 
 // Pattern chronology
 // Contains multiple versions of pattern item.
-message PBPatternChronology {
+message PatternChronology {
     // Unique Public id of this pattern chronology.
-    PBPublicId PublicId = 1;
+    PublicId public_id = 1;
 
     // Versions of pattern.
-    repeated PBPatternVersion Versions = 2;
+    repeated PatternVersion pattern_versions = 2;
 }
 
 
 // Pattern Version
 // Single version of pattern item.
-message PBPatternVersion {
+message PatternVersion {
 
-    // STAMP for this version.
-    PBStampChronology Stamp = 2;
+    // STAMP chronology public ID for this version.
+    PublicId stamp_chronology_public_id = 1;
 
     // Purpose of the Semantic that this pattern references.
-    PBPublicId ReferencedComponentPurpose = 3;
+    PublicId referenced_component_purpose_public_id = 2;
 
     // Meaning of the Semantic that this pattern references.
-    PBPublicId ReferencedComponentMeaning = 4;
+    PublicId referenced_component_meaning_public_id = 3;
 
     // Definitions for each field in the Semantic that this pattern references.
-    repeated PBFieldDefinition FieldDefinitions = 5;
+    repeated FieldDefinition field_definitions = 4;
 }
 
 // Semantic Chronology.
-// Contains list of Sematic versions.
-message PBSemanticChronology {
+// Contains list of Semantic versions.
+message SemanticChronology {
     // Unique Public id of this semantic chronology.
-    PBPublicId PublicId = 1;
+    PublicId public_id = 1;
 
     // ID of Concept that this semantic references.
-    PBPublicId ReferencedComponent = 2;
+    PublicId referenced_component_public_id = 2;
 
     // ID of Pattern that defines the allowable fields in this semantic.
-    PBPublicId PatternForSemantic = 3;
+    PublicId pattern_for_semantic_public_id = 3;
 
     // List of versions of this semantic.
-    repeated PBSemanticVersion Versions = 4;
+    repeated SemanticVersion semantic_versions = 4;
 }
 
 // Semantic Version.
-// Single Sematic versions.
-message PBSemanticVersion {
-    // STAMP for this semantic version.
-    PBStampChronology Stamp = 2;
+// Single Semantic versions.
+message SemanticVersion {
+    // STAMP chronology public ID for this version.
+    PublicId stamp_chronology_public_id = 1;
 
-    // Field values for this semantic. Each field defined is defined by
+    // Fields for this semantic. Each field defined is defined by
     // a matching entry in the pattern field definition list.
-    repeated PBField FieldValues = 3;
+    repeated Field fields = 2;
 }
 
 
-// Tinkar Message. This is a wrapper around the Tinkar messages that may be seialized out to a persistent
+// Tinkar Message. This is a wrapper around the Tinkar messages that may be serialized out to a persistent
 // storage. This wrapper allows any of the indicated message types to be stored and when deserialized the type
 // of the message can be determined.
-message PBTinkarMsg {
+message TinkarMsg {
     // Value of the message. This can be one and only one 
     // of the indicated types as defined in the protobuf description.
     oneof Value {
-        //PBDiGraph DiGraphValue = 1;
-        //PBDiTree DiTreeValue = 2;
-        //PBGraph GraphValue = 3;
-        //PBVertex VertexValue = 4;
+        // Re-evaluate to see if one-of value can be changed, to help with change-sets and represent more of a "commit-style"
+        // One STAMP_chronology, One or more of the other types of chronologies (concept, pattern, or semantic)
 
-        // Message contains a Concept Chronology.    
-        PBConceptChronology ConceptChronologyValue = 11;
+        // Message contains a Concept Chronology.
+        ConceptChronology concept_chronology = 10;
 
-        // Message contains a Concept Version.    
-        PBConceptVersion ConceptVersionValue = 12;
+        // Message contains a Semantic Chronology.
+        SemanticChronology semantic_chronology = 20;
 
-        // Message contains a Semantic Chronology.    
-        PBSemanticChronology SemanticChronologyValue = 21;
+        // Message contains a Pattern Chronology.
+        PatternChronology pattern_chronology = 30;
 
-        // Message contains a Semantic Version.    
-        PBSemanticVersion SemanticVersionValue = 22;
-
-        // Message contains a Pattern Chronology.    
-        PBPatternChronology PatternChronologyValue = 24;
-
-        // Message contains a Pattern Version.    
-        PBPatternVersion PatternVersionValue = 25;
+        // Message contains a Stamp Chronology.
+        StampChronology stamp_chronology = 40;
     };
 }
