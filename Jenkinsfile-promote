@@ -1,3 +1,4 @@
+#!groovy
 @Library("titan-library") _
 
 def getTagList(String repoUrl) {
@@ -37,6 +38,8 @@ pipeline {
         GITHUB_RELEASE_API  = "https://api.github.com/repos/${GITHUB_OWNER}/${REPO_NAME}/releases"
         GITHUB_UPLOAD_API   = "https://uploads.github.com/repos/${GITHUB_OWNER}/${REPO_NAME}/releases"
         GITHUB_CREDS_ID     = 'github-promote-pat'
+
+        GPG_PASSPHRASE      = credentials('gpg_passphrase')
     }
 
     options {
@@ -281,5 +284,33 @@ pipeline {
                 }
             }
         }
+
+        stage('Promote Release Assets from Nexus to OSSRH') {
+            steps {
+                script {
+
+                    repositoryId = 'maven-releases'
+
+                    configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
+
+                        sh """
+                            mvn deploy \
+                                --batch-mode \
+                                -e -X \
+                                -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+                                -DskipTests \
+                                -DskipITs \
+                                -Dmaven.main.skip \
+                                -Dmaven.test.skip \
+                                -s '${MAVEN_SETTINGS}' \
+                                -DrepositoryId='${repositoryId}' \
+                                -PstageOSSRH -Dgpg.passphrase='${GPG_PASSPHRASE}'
+                        """
+                    }
+
+                }
+            }
+        }
+
     }
 }
