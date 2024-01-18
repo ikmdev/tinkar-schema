@@ -204,7 +204,7 @@ pipeline {
             steps {
                 script {
 
-                    repositoryId = 'maven-snapshots'
+                    repositoryId = 'maven-releases'
 
                     configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
 
