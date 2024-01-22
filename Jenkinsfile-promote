@@ -284,33 +284,5 @@ pipeline {
                 }
             }
         }
-
-        stage('Promote Release Assets from Nexus to OSSRH') {
-            steps {
-                script {
-
-                    repositoryId = 'maven-releases'
-
-                    configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
-
-                        sh """
-                            mvn deploy \
-                                --batch-mode \
-                                -e -X \
-                                -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
-                                -DskipTests \
-                                -DskipITs \
-                                -Dmaven.main.skip \
-                                -Dmaven.test.skip \
-                                -s '${MAVEN_SETTINGS}' \
-                                -DrepositoryId='${repositoryId}' \
-                                -PstageOSSRH -Dgpg.passphrase='${GPG_PASSPHRASE}'
-                        """
-                    }
-
-                }
-            }
-        }
-
     }
 }
