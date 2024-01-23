@@ -7,7 +7,7 @@
     <parent>
         <groupId>dev.ikm.build</groupId>
         <artifactId>java-parent</artifactId>
-        <version>1.38.0</version>
+        <version>1.39.0</version>
         <relativePath />
     </parent>
 
@@ -72,43 +72,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- start testing ossrh -->
-            <!-- Generate Java Doc jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <doclint>none</doclint>
-                    <source>${java.version}</source>
-                    <release>${java.version}</release>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>jar</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Source Files -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- end testing ossrh -->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
