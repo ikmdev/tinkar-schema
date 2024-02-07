@@ -6,14 +6,12 @@ option java_outer_classname = "TinkarSchema";
 
 option csharp_namespace = "Dev.IKM.Tinkar.Schema";
 
-import "google/protobuf/timestamp.proto";
-
 package dev.ikm.tinkar.schema;
 
 // Vertex UUID message.
 message VertexUUID {
     // Unique vertex UUID.
-    bytes uuid = 1;
+    string uuid = 1;
 }
 
 // Public id message.
@@ -21,7 +19,7 @@ message VertexUUID {
 // identifiable Tinkar items.
 message PublicId {
     // Unique Public id.
-    repeated bytes uuids = 1 ;
+    repeated string uuids = 1 ;
 }
 
 // Public id list message.
@@ -54,7 +52,7 @@ message Field {
         bytes bytes_value = 5;
 
         // Time value.
-        google.protobuf.Timestamp time_value = 6;
+        uint64 time_value = 6;
 
         // Tinkar Public id value.
         PublicId public_id = 21;
@@ -222,20 +220,20 @@ message StampChronology {
 // Stamp Version message
 // This contains the info for a single version of a STAMP, sans the STAMP public id.
 message StampVersion {
-	// Status of the item this STAMP references.
-	PublicId status_public_id = 1;
+    // Status of the item this STAMP references.
+    PublicId status_public_id = 1;
 
-	// Status of the item this STAMP references.
-	PublicId author_public_id = 2;
+    // Status of the item this STAMP references.
+    PublicId author_public_id = 2;
 
-	// Module of the item this STAMP references.
-	PublicId module_public_id = 3;
+    // Module of the item this STAMP references.
+    PublicId module_public_id = 3;
 
-	// Path of the item this STAMP references.
-	PublicId path_public_id = 4;
+    // Path of the item this STAMP references.
+    PublicId path_public_id = 4;
 
-	// Creation time of the item this STAMP references.
-	google.protobuf.Timestamp time = 5;
+    // Creation time of the item this STAMP references.
+    uint64 time = 5;
 }
 
 // Concept Chronology message.
