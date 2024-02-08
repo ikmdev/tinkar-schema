@@ -52,7 +52,7 @@ message Field {
         bytes bytes_value = 5;
 
         // Time value.
-        uint64 time_value = 6;
+        int64 time_value = 6;
 
         // Tinkar Public id value.
         PublicId public_id = 21;
@@ -170,7 +170,7 @@ message DiGraph {
 // Graph message.
 message Graph {
     // List of all vertices in this graph. Each vertex contains a
-    // VertexIndex which must match that vertex's index in this map.
+    // VertexIndex which must match that vertex's index in this map
     repeated Vertex vertices = 1;
 
     // Maps each vertex to its successors.
@@ -233,7 +233,7 @@ message StampVersion {
     PublicId path_public_id = 4;
 
     // Creation time of the item this STAMP references.
-    uint64 time = 5;
+    int64 time = 5;
 }
 
 // Concept Chronology message.
