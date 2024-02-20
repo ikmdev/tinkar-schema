@@ -115,4 +115,8 @@ To install into Visual Studio, type the following into the Nuget console.
 Install-Package Tinkar.Schema
 ```
 
+## Issues and Contributions
 
+Technical and non-technical issues can be reported to the Issue Tracker (LINK TO ISSUE TRACKER ONCE PUT IN REPO).
+
+Contributions can be submitted via pull requests. Please check the [contribution guide](doc/how-to-contribute.md) for more details.
