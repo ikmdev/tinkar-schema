@@ -13,10 +13,11 @@ pipeline {
     }
 
     environment {
-        SONAR_AUTH_TOKEN    = credentials('sonarqube_pac_token')
-        SONARQUBE_URL       = "${GLOBAL_SONARQUBE_URL}"
-        SONAR_HOST_URL      = "${GLOBAL_SONARQUBE_URL}"
+        SONAR_AUTH_TOKEN    = credentials('sonarcloud_token')
+        SONARQUBE_URL       = "${GLOBAL_SONARCLOUD_URL}"
+        SONAR_HOST_URL      = "${GLOBAL_SONARCLOUD_URL}"
         GPG_PASSPHRASE      = credentials('gpg_passphrase')
+        SONAR_ORG = "fda-shield"
     }
 
     triggers {
@@ -132,7 +133,7 @@ pipeline {
         stage('SonarQube Scan') {
            steps{
                configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
-                   withSonarQubeEnv(installationName: 'EKS SonarQube', envOnly: true) {
+                   withSonarQubeEnv(installationName: 'SonarCloud', envOnly: true) {
                        // This expands the environment variables SONAR_CONFIG_NAME, SONAR_HOST_URL, SONAR_AUTH_TOKEN that can be used by any script.
                        sh """
                            mvn sonar:sonar \
@@ -141,6 +142,8 @@ pipeline {
                                -s '${MAVEN_SETTINGS}' \
                                -Dmaven.build.cache.enabled=false \
                                -Dsonar.sources=protoc.dockerfile,csharp.dockerfile \
+                               -Dsonar.host.url=${SONAR_HOST_URL} \
+                               -Dsonar.organization=${SONAR_ORG} \
                                --batch-mode
                        """
                    }

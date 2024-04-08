@@ -22,8 +22,18 @@
         <protobuf.version>3.22.0</protobuf.version>
         <tinkar-jpms-deps.groupId>dev.ikm.jpms</tinkar-jpms-deps.groupId>
         <maven.build-helper-plugin.version>3.4.0</maven.build-helper-plugin.version>
-        <src.dir>src/main/java-generated/</src.dir>
-    </properties>
+        <src.dir>src/main/java-generated/</src.dir>		
+		
+		<sonar.skip>false</sonar.skip>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+        <sonar.language>java</sonar.language>
+        <sonar.host.url>https://sonarcloud.io/</sonar.host.url>
+        <sonar.token>425c1feadbdba33bbe563c3b50fa2c7b819ffaf0</sonar.token> <!--9bf6a80bdb77ad4dd9427f7db4d4318b8d89d264 -->
+        <sonar.organization>fda-shield</sonar.organization>
+        <maven.sonarqube.version>3.9.1.2184</maven.sonarqube.version>	
+	</properties>
+
 
     <dependencyManagement>
         <dependencies>
