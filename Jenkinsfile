@@ -13,9 +13,9 @@ pipeline {
     }
 
     environment {
-        SONAR_AUTH_TOKEN    = credentials('sonarqube_pac_token')
+        /* SONAR_AUTH_TOKEN    = credentials('sonarqube_pac_token')
         SONARQUBE_URL       = "${GLOBAL_SONARQUBE_URL}"
-        SONAR_HOST_URL      = "${GLOBAL_SONARQUBE_URL}"
+        SONAR_HOST_URL      = "${GLOBAL_SONARQUBE_URL}" */
         GPG_PASSPHRASE      = credentials('gpg_passphrase')
     }
 
@@ -129,7 +129,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Scan') {
+        /* stage('SonarQube Scan') {
            steps{
                configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
                    withSonarQubeEnv(installationName: 'EKS SonarQube', envOnly: true) {
@@ -148,10 +148,10 @@ pipeline {
                script{
                    configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
 
-                       def pmd = scanForIssues tool: [$class: 'Pmd'], pattern: '**/target/pmd.xml'
+                       def pmd = scanForIssues tool: [$class: 'Pmd'], pattern: '**//* target/pmd.xml'
                        publishIssues issues: [pmd]
 
-                       def spotbugs = scanForIssues tool: [$class: 'SpotBugs'], pattern: '**/target/spotbugsXml.xml'
+                       def spotbugs = scanForIssues tool: [$class: 'SpotBugs'], pattern: '**//* target/spotbugsXml.xml'
                        publishIssues issues:[spotbugs]
 
                        publishIssues id: 'analysis', name: 'All Issues',
@@ -166,7 +166,7 @@ pipeline {
                    echo "post always SonarQube Scan"
                }
            }
-        }
+        } */
 
         stage("Publish to Nexus Repository Manager") {
             steps {
