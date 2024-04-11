@@ -106,6 +106,9 @@ pipeline {
         }
 
         stage('Maven Build') {
+            when {
+                expression { return BRANCH_NAME == "main"}
+            }
             steps {
                 updateGitlabCommitStatus name: 'build', state: 'running'
                 script{
@@ -117,6 +120,34 @@ pipeline {
                                 -e \
                                 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
                                 -Dmaven.build.cache.enabled=false \
+                                -PcodeQuality
+                        """
+                    }
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                }
+            }
+        }
+
+        stage('Maven Build -- Feature Branch') {
+            when {
+                expression { return BRANCH_NAME != "main"}
+            }
+            steps {
+                updateGitlabCommitStatus name: 'build', state: 'running'
+                script{
+                    configFileProvider([configFile(fileId: 'settings.xml', variable: 'MAVEN_SETTINGS')]) {
+                        sh """
+                            mvn clean install \
+                                -s '${MAVEN_SETTINGS}' \
+                                --batch-mode \
+                                -e \
+                                -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+                                -Dmaven.build.cache.enabled=false \
+                                -Denforcer.skip=true \
                                 -PcodeQuality
                         """
                     }
