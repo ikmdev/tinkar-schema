@@ -22,6 +22,7 @@
         <protobuf.version>3.22.0</protobuf.version>
         <tinkar-jpms-deps.groupId>dev.ikm.jpms</tinkar-jpms-deps.groupId>
         <maven.build-helper-plugin.version>3.4.0</maven.build-helper-plugin.version>
+        <slf4j-simple.version>2.0.13</slf4j-simple.version>
         <src.dir>src/main/java-generated/</src.dir>
     </properties>
 
@@ -32,6 +33,14 @@
                 <artifactId>protobuf-java</artifactId>
                 <version>${protobuf.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>${slf4j-simple.version}</version>
+                <scope>test</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -39,6 +48,12 @@
         <dependency>
             <groupId>${tinkar-jpms-deps.groupId}</groupId>
             <artifactId>protobuf-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
