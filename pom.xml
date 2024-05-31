@@ -19,7 +19,7 @@
     <url>https://github.com/IKM/tinkar-proto</url>
 
     <properties>
-        <protobuf.version>3.22.0</protobuf.version>
+        <protobuf.version>3.22.0-r4</protobuf.version>
         <tinkar-jpms-deps.groupId>dev.ikm.jpms</tinkar-jpms-deps.groupId>
         <maven.build-helper-plugin.version>3.4.0</maven.build-helper-plugin.version>
         <slf4j.version>2.0.13</slf4j.version>
