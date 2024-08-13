@@ -31,15 +31,26 @@ jobs:
           context: .
           file: protoc.dockerfile
           tags: tinkar-schema-protoc:latest
+          #outputs: type=docker,dest=/tmp/protocimage.tar
 
-      - name: Build C# Docker container
+      - name: Build C sharp Docker container
         uses: docker/build-push-action@v6
         with:
           push: false
           context: .
           file: csharp.dockerfile
           tags: tinkar-schema-csharp:latest
+          #outputs: type=docker,dest=/tmp/csharpimage.tar
 
+      - name: test run in container
+        run: |
+          docker run --rm tinkar-schema-protoc:latest << EOR 
+            mkdir -p $(pwd)/src/main/java-generated
+            protoc -I $(pwd) $(pwd)/Tinkar.proto  --java_out=$(pwd)/src/main/java-generated
+            pwd
+            ls -R /home/proto-builder/
+            ls -R src/
+          EOF
       
   # container-test-job:
   #     container:
