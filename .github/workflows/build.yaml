@@ -34,14 +34,14 @@ jobs:
           tags: tinkar-schema-protoc:latest
           #outputs: type=docker,dest=/tmp/protocimage.tar
 
-      - name: Build C sharp Docker container
-        uses: docker/build-push-action@v6
-        with:
-          push: false
-          context: .
-          file: csharp.dockerfile
-          tags: tinkar-schema-csharp:latest
-          #outputs: type=docker,dest=/tmp/csharpimage.tar
+      # - name: Build C sharp Docker container
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     push: false
+      #     context: .
+      #     file: csharp.dockerfile
+      #     tags: tinkar-schema-csharp:latest
+      #     #outputs: type=docker,dest=/tmp/csharpimage.tar
 
       - name: make directory for protoc generated code
         run: |
