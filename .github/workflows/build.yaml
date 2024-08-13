@@ -45,7 +45,7 @@ jobs:
 
       - name: Generate Java Code
         run: |
-          docker run -v src/main/java-generated:/home/proto-builder/src/main/java-generated --rm tinkar-schema-protoc:latest
+          docker run -v ./src/main/java-generated:/home/proto-builder/src/main/java-generated --rm tinkar-schema-protoc:latest
       
       - name: list java code
         run: |
