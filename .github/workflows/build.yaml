@@ -57,17 +57,20 @@ jobs:
 
       - name: test run in container
         run: |
-          docker run -v ./src/main/java-generated:/home/src/main/java-generated --rm tinkar-schema-protoc:latest << EOF 
+          docker run -v src/main/java-generated:/home/src/main/java-generated --rm tinkar-schema-protoc:latest << EOF 
             mkdir -p /home/src/main/java-generated
             protoc -I /home/ /home/Tinkar.proto  --java_out=/home/src/main/java-generated
             pwd
             ls -R /home/proto-builder/
             ls -R /home/out/src/
-          EOF
+          EOF 2>&1
+          
+      - name: list java code
+        run: |
+          ls src/main/java-generated
 
       - name: build java code
         run: |
-          ls src/main/java-generated
           ./mvnw clean install \
               --batch-mode \
               -e \
