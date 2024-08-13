@@ -45,11 +45,11 @@ jobs:
 
       - name: Generate Java Code
         run: |
-          docker run -v ${HOME}/src:/home/proto-builder/src --rm tinkar-schema-protoc:latest
+          docker run -v src/main/java-generated:/home/proto-builder/src/main/java-generated --rm tinkar-schema-protoc:latest
       
       - name: list java code
         run: |
-          ls ${HOME}/src
+          ls src/main/java-generated
 
       - name: build java code
         run: |

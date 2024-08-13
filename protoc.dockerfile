@@ -3,9 +3,8 @@
 FROM alpine:3.17.2
 
 # Make and directories that we might need for creating code
-RUN mkdir -p /home/proto-builder/src
-
-VOLUME /home/proto-builder
+RUN mkdir -p /home/proto-builder/src/main/java-generated
+VOLUME /home/proto-builder/src/main/java-generated
 
 ARG BUILDER_PATH=/home/proto-builder
 WORKDIR $BUILDER_PATH
