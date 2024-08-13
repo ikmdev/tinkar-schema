@@ -57,16 +57,16 @@ jobs:
 
       - name: test run in container
         run: |
-          docker run -v src/main/java/dev/ikm/tinkar/schema:/home/src/main/java/dev/ikm/tinkar/schema/ --rm tinkar-schema-protoc:latest << EOF 
-            mkdir -p /home/src/main/java/dev/ikm/tinkar/schema/
-            protoc -I /home/ /home/Tinkar.proto  --java_out=/home/src/main/java/dev/ikm/tinkar/schema/
+          docker run -v $HOME/src/main/java/dev/ikm/tinkar/schema:$HOME/src/main/java/dev/ikm/tinkar/schema/ --rm tinkar-schema-protoc:latest << EOF 
+            mkdir -p $HOME/src/main/java/dev/ikm/tinkar/schema/
+            protoc -I $HOME $HOME/Tinkar.proto  --java_out=$HOME/src/main/java/dev/ikm/tinkar/schema/
             pwd
-            ls -R /home/src/main/java/dev/ikm/tinkar/schema/
+            ls -R $HOME/src/main/java/dev/ikm/tinkar/schema/
           EOF 2>&1
           
       - name: list java code
         run: |
-          ls src/main/java/dev/ikm/tinkar/schema/
+          ls $HOME/src/main/java/dev/ikm/tinkar/schema/
 
       - name: build java code
         run: |
