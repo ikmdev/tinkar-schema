@@ -5,6 +5,8 @@ FROM alpine:3.17.2
 # Make and directories that we might need for creating code
 RUN mkdir -p /home/proto-builder
 
+VOLUME /home/proto-builder
+
 ARG BUILDER_PATH=/home/proto-builder
 WORKDIR $BUILDER_PATH
 

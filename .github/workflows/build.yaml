@@ -51,9 +51,9 @@ jobs:
         run: |
           mkdir -p ${HOME}/src/main/csharp/dev/ikm/tinkar/schema/
 
-      - name: test run in container
+      - name: Generate Java Code
         run: |
-          docker run -v ${HOME}/src/main/java/dev/ikm/tinkar/schema:/home/proto-builder/src/main/java/dev/ikm/tinkar/schema/ --rm tinkar-schema-protoc:latest
+          docker run -v ${HOME}/proto-builder:/home/proto-builder --rm tinkar-schema-protoc:latest
       
       - name: list java code
         run: |
