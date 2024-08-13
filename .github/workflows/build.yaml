@@ -45,11 +45,11 @@ jobs:
 
       - name: make directory for protoc generated code
         run: |
-          mkdir -p ${HOME}/src/main/java/dev/ikm/tinkar/schema/
+          mkdir -p ${HOME}/proto-builder
 
-      - name: make directory for csharp generated code
-        run: |
-          mkdir -p ${HOME}/src/main/csharp/dev/ikm/tinkar/schema/
+      # - name: make directory for csharp generated code
+      #   run: |
+      #     mkdir -p ${HOME}/proto-builder
 
       - name: Generate Java Code
         run: |

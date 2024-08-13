@@ -18,3 +18,5 @@ WORKDIR /sln
 COPY Tinkar.ProtoBuf-cs.csproj  /sln
 COPY Tinkar.proto /sln
 COPY LICENSE /sln
+
+CMD ["csharp-generate.sh"]
