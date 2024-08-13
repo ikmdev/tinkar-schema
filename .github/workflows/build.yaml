@@ -28,15 +28,18 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: false
-          context: protoc.dockerfile
+          context: .
+          file: protoc.dockerfile
           tags: tinkar-schema-protoc:latest
 
       - name: Build C# Docker container
         uses: docker/build-push-action@v6
         with:
           push: false
-          context: protoc.dockerfile
+          context: .
+          file: csharp.dockerfile
           tags: tinkar-schema-csharp:latest
+
       
   # container-test-job:
   #     container:
