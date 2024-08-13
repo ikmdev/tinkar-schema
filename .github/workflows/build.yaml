@@ -15,9 +15,10 @@ jobs:
     runs-on: ubuntu-24.04
     if: github.repository_owner == 'ikmdev'
     steps:
-     
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v3
+      - uses: actions/setup-java@v4
+        with:
+            java-version: '21'
+            distribution: 'adopt'
 
       - name: Checkout Code
         uses: actions/checkout@v2
