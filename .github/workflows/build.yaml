@@ -46,14 +46,22 @@ jobs:
         run: |
           docker image ls
       
+      - name: make directory for protoc generated code
+        run: |
+          mkdir -p src/main/protoc-generated
+
+      - name: make directory for csharp generated code
+        run: |
+          mkdir -p src/main/csharp-generated
+
       - name: test run in container
         run: |
-          docker run --rm tinkar-schema-protoc:latest << EOF 
-            mkdir -p $(pwd)/src/main/java-generated
-            protoc -I $(pwd) $(pwd)/Tinkar.proto  --java_out=$(pwd)/src/main/java-generated
+          docker run -v ./src/main/java-generated:/home/src/main/java-generated --rm tinkar-schema-protoc:latest << EOF 
+            mkdir -p /home/src/main/java-generated
+            protoc -I /home/ /home/Tinkar.proto  --java_out=/home/src/main/java-generated
             pwd
             ls -R /home/proto-builder/
-            ls -R src/
+            ls -R /home/out/src/
           EOF
       
   # container-test-job:
