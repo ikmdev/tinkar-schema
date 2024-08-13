@@ -29,14 +29,14 @@ jobs:
         with:
           push: false
           context: protoc.dockerfile
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/tinkar-schema-protoc:latest
+          tags: tinkar-schema-protoc:latest
 
       - name: Build C# Docker container
         uses: docker/build-push-action@v6
         with:
           push: false
           context: protoc.dockerfile
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/tinkar-schema-csharp:latest
+          tags: tinkar-schema-csharp:latest
       
   # container-test-job:
   #     container:
