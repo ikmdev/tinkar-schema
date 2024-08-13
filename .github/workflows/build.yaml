@@ -43,21 +43,13 @@ jobs:
       #     tags: tinkar-schema-csharp:latest
       #     #outputs: type=docker,dest=/tmp/csharpimage.tar
 
-      - name: make directory for protoc generated code
-        run: |
-          mkdir -p ${HOME}/proto-builder
-
-      # - name: make directory for csharp generated code
-      #   run: |
-      #     mkdir -p ${HOME}/proto-builder
-
       - name: Generate Java Code
         run: |
-          docker run -v ${HOME}/proto-builder:/home/proto-builder --rm tinkar-schema-protoc:latest
+          docker run -v ${HOME}/src:/home/proto-builder/src --rm tinkar-schema-protoc:latest
       
       - name: list java code
         run: |
-          ls ${HOME}/src/main/java/dev/ikm/tinkar/schema/
+          ls src/main/java-generated/
 
       - name: build java code
         run: |

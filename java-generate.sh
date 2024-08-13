@@ -1,5 +1,4 @@
-mkdir -p $(pwd)/src/main/java-generated
-protoc -I $(pwd) $(pwd)/Tinkar.proto --java_out=$(pwd)/src/main/java-generated
+mkdir -p /home/proto-builder/src/main/java-generated
+protoc -I /home/proto-builder/ /home/proto-builder/Tinkar.proto --java_out=/home/proto-builder/src/main/java-generated
 pwd
-ls -R /home/proto-builder/
-ls -R src/
+ls -R src/main/java-generated
