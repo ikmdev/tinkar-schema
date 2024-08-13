@@ -63,14 +63,13 @@ jobs:
             ls -R /home/proto-builder/
             ls -R /home/out/src/
           EOF
-      
-  # container-test-job:
-  #     container:
-  #     image: node:18
-  #     env:
-  #       NODE_ENV: development
-  #     ports:
-  #       - 80
-  #     volumes:
-  #       - my_docker_volume:/volume_mount
-  #     options: --cpus 1
+
+      - name: build java code
+        run: |
+          ls src/main/protoc-generated
+          ./mvnw clean install \
+              --batch-mode \
+              -e \
+              -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+              -Dmaven.build.cache.enabled=false \
+              -PcodeQuality
