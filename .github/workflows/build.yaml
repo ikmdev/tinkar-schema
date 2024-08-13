@@ -62,7 +62,7 @@ jobs:
             protoc -I $HOME $HOME/Tinkar.proto  --java_out=$HOME/src/main/java/dev/ikm/tinkar/schema/
             pwd
             ls -R $HOME/src/main/java/dev/ikm/tinkar/schema/
-          EOF 2>&1
+          EOF
           
       - name: list java code
         run: |
