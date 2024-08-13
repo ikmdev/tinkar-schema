@@ -44,6 +44,10 @@ jobs:
 
       - name: test run in container
         run: |
+          docker ls
+      
+      - name: test run in container
+        run: |
           docker run --rm tinkar-schema-protoc:latest << EOR 
             mkdir -p $(pwd)/src/main/java-generated
             protoc -I $(pwd) $(pwd)/Tinkar.proto  --java_out=$(pwd)/src/main/java-generated
