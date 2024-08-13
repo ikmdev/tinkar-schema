@@ -17,4 +17,4 @@ RUN apk update && \
 COPY Tinkar.proto .
 COPY java-generate.sh .
 
-CMD ["java-generate.sh"]
+CMD ["sh", "./java-generate.sh"]
