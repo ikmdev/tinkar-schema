@@ -20,13 +20,13 @@ file and a .nupkg file.
 To build the proto container, which can be used for file generation. This is used for executing protoc commands. 
 
 ```shell
-docker build -t protoc -f protoc.dockerfile .
+docker build -t tinkar-schema-protoc:latest -f protoc.dockerfile .
 ```
 
 Similarly, the csharp/mono build container has been created for consistency in executing the csharp commands.
 
 ```shell
-docker build -t csharp -f csharp.dockerfile .
+docker build -t tinkar-schema-csharp:latest -f csharp.dockerfile .
 ```
 
 ## Notes for if you are using a M1 chip

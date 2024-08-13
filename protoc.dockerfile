@@ -13,3 +13,6 @@ RUN apk update && \
     apk add protobuf=3.21.9-r0 protobuf-dev=3.21.9-r0 wget unzip
 
 COPY Tinkar.proto .
+COPY java-generate.sh .
+
+CMD ["sh", "java-generate.sh"]
