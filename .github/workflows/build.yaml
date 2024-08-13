@@ -43,10 +43,6 @@ jobs:
           tags: tinkar-schema-csharp:latest
           #outputs: type=docker,dest=/tmp/csharpimage.tar
 
-      - name: test run in container
-        run: |
-          docker image ls
-      
       - name: make directory for protoc generated code
         run: |
           mkdir -p src/main/java/generated
@@ -62,7 +58,8 @@ jobs:
             protoc -I $HOME $HOME/Tinkar.proto  --java_out=$HOME/src/main/java/dev/ikm/tinkar/schema/
             pwd
             ls -R $HOME/src/main/java/dev/ikm/tinkar/schema/
-          EOF)
+          EOF
+          )
           docker wait $CID
           docker logs $CID
           
