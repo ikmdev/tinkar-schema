@@ -66,7 +66,7 @@ jobs:
 
       - name: build java code
         run: |
-          ls src/main/protoc-generated
+          ls src/main/java-generated
           ./mvnw clean install \
               --batch-mode \
               -e \
