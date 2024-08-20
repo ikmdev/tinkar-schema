@@ -3,6 +3,9 @@
 This repository contains the Protobuf schema file for the Tinkar project and generates code packages for different
 languages that can be distributed to read and write Tinkar files.
 
+### Team Ownership - Product Owner
+Data Team
+
 ## PreRequisites
 
 * Java
