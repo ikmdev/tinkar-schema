@@ -15,8 +15,6 @@ jobs:
     name: Release
     runs-on: ubuntu-24.04
     if: github.repository_owner == 'ikmdev'
-    outputs:
-      RELEASE_VERSION: ${{steps.release_code.outputs.release_version}}
     steps:
       - name: Verify Branch
         if: env.BRANCH_NAME != env.TRUNK_BRANCH_NAME
@@ -34,74 +32,3 @@ jobs:
           ossrh_token: ${{secrets.OSSRH_TOKEN_PASS}}
           gpg_key: ${{secrets.GPG_KEY}}
           gpg_passphrase: ${{secrets.GPG_PASSPHRASE}}
-
-  publish_to_ossrh:
-    name: Release
-    runs-on: ubuntu-24.04
-    needs: release
-    steps:
-      - name: Checkout Code Repository
-        uses: actions/checkout@v4
-        with:
-          ref: ${{needs.release.outputs.RELEASE_VERSION}}
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-            distribution: 'zulu'
-            java-version: '21'
-            server-id: ossrh
-            server-username: MAVEN_USERNAME
-            server-password: MAVEN_CENTRAL_TOKEN
-            gpg-private-key: ${{secrets.GPG_KEY}}
-            gpg-passphrase: MAVEN_GPG_PASSPHRASE
-    
-      - name: Build Protoc Docker container
-        uses: docker/build-push-action@v6
-        with:
-          push: false
-          context: .
-          file: protoc.dockerfile
-          tags: tinkar-schema-protoc:latest
-    
-    
-      - name: Generate Java Code
-        shell: bash
-        run: |
-          sudo docker run -v ./src/main/java-generated:/home/proto-builder/src/main/java-generated --rm tinkar-schema-protoc:latest
-          
-      - name: list java code
-        shell: bash
-        run: |
-            ls src/main/java-generated
-    
-      - name: Maven Build
-        shell: bash
-        run: |
-           ./mvnw clean install -U \
-            --batch-mode \
-            -e \
-            -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
-            -Dmaven.build.cache.enabled=false \
-            -PcodeQuality
-    
-      - name: Publish To OSSRH (Maven Central Staging)
-        shell: bash
-        run: |
-              ./mvnw deploy -U\
-                  --batch-mode \
-                  -e \
-                  -U \
-                  -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
-                  -DskipTests \
-                  -DskipITs \
-                  -Dmaven.main.skip \
-                  -Dmaven.test.skip \
-                  -DrepositoryId=ossrh \
-                  -DrepositoryIdOSSRH='true' \
-                  -PstageOSSRH \
-                  -Dmaven.build.cache.enabled=false
-        env:
-          MAVEN_USERNAME: ${{secrets.OSSRH_TOKEN_USER}}
-          MAVEN_CENTRAL_TOKEN: ${{secrets.OSSRH_TOKEN_PASS}}
-          MAVEN_GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
