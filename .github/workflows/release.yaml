@@ -22,19 +22,8 @@ jobs:
           echo "ERROR: Attempting to release from branch ${{env.BRANCH_NAME}}. Release from ${{env.TRUNK_BRANCH_NAME}} branch only"
           exit 1
 
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Build Protoc Docker container
-        uses: docker/build-push-action@v6
-        with:
-          push: false
-          context: .
-          file: protoc.dockerfile
-          tags: tinkar-schema-protoc:latest
-
       - name: Release IKMDEV Code
-        uses: ikmdev/maven-release-action@main
+        uses: ikmdev/maven-release-action@tinkar-schema
         with:
           ikmdevops_pat: ${{secrets.IKMDEVOPS_PAT_TOKEN}}
           github_token: ${{secrets.GITHUB_TOKEN}}
