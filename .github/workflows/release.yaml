@@ -22,6 +22,9 @@ jobs:
           echo "ERROR: Attempting to release from branch ${{env.BRANCH_NAME}}. Release from ${{env.TRUNK_BRANCH_NAME}} branch only"
           exit 1
 
+      - name: Checkout Code
+        uses: actions/checkout@v5
+
       - name: Build Protoc Docker container
         uses: docker/build-push-action@v6
         with:
