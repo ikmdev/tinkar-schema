@@ -21,8 +21,7 @@ jobs:
 
       - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref }}
+       
       
       - name: Build Protoc Docker container
         uses: docker/build-push-action@v6
