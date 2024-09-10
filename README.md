@@ -119,7 +119,6 @@ Install-Package Tinkar.Schema
 ```
 
 ## Issues and Contributions
-
-Technical and non-technical issues can be reported to the Issue Tracker (LINK TO ISSUE TRACKER ONCE PUT IN REPO).
+Technical and non-technical issues can be reported to the [Issue Tracker](https://github.com/ikmdev/tinkar-schema/issues).
 
 Contributions can be submitted via pull requests. Please check the [contribution guide](doc/how-to-contribute.md) for more details.
