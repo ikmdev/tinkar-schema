@@ -59,6 +59,19 @@ jobs:
               -Dmaven.build.cache.enabled=false \
               -PcodeQuality
 
+      - name: SonarCloud Build and analyze
+        env:
+              SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+              SONAR_HOST_URL: ${{ 'https://sonarcloud.io/' }}
+              SONAR_ORGANIZATION: ${{ github.repository_owner }}  
+        run: mvn verify sonar:sonar 
+              -Dsonar.organization=${{ github.repository_owner }}
+              -Dsonar.sources=src/main/java 
+              -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }} 
+              -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml 
+              -Dsonar.junit.reportPath=target/surefire-reports/*HelloTest*.xml 
+              -Dsonar.java.binaries=target/classes 
+              -Dsonar.tests=${{ '' }}
 
   publish_to_ossrh:
     name: Publish To Maven Central (OSSRH)
@@ -109,22 +122,8 @@ jobs:
             -e \
             -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
             -Dmaven.build.cache.enabled=false \
-            -PcodeQuality
-         
-      - name: SonarCloud Build and analyze
-        env:
-              SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-              SONAR_HOST_URL: ${{ 'https://sonarcloud.io/' }}
-              SONAR_ORGANIZATION: ${{ github.repository_owner }}  
-        run: mvn verify sonar:sonar 
-              -Dsonar.organization=${{ github.repository_owner }}
-              -Dsonar.sources=src/main/java 
-              -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }} 
-              -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml 
-              -Dsonar.junit.reportPath=target/surefire-reports/*HelloTest*.xml 
-              -Dsonar.java.binaries=target/classes 
-              -Dsonar.tests=${{ '' }}          
-    
+            -PcodeQuality          
+            
       - name: Publish To OSSRH (Maven Central Staging)
         shell: bash
         run: |
