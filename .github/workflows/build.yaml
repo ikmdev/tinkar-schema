@@ -60,6 +60,7 @@ jobs:
               -PcodeQuality
 
       - name: SonarCloud Build and analyze
+        if: github.repository_owner == 'ikmdev'
         env:
               SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
               SONAR_HOST_URL: ${{ 'https://sonarcloud.io/' }}
@@ -68,8 +69,7 @@ jobs:
               -Dsonar.organization=${{ github.repository_owner }}
               -Dsonar.sources=src/main/java-generated
               -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }} 
-              -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml 
-              -Dsonar.junit.reportPath=target/surefire-reports/*HelloTest*.xml 
+              -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml  
               -Dsonar.java.binaries=target/classes 
               -Dsonar.tests=${{ '' }}
 
