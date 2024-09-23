@@ -58,7 +58,7 @@ jobs:
               -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
               -Dmaven.build.cache.enabled=false \
               -PcodeQuality
-
+       
       - name: SonarCloud Build and analyze
         env:
               SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
