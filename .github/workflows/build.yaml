@@ -60,7 +60,7 @@ jobs:
               -PcodeQuality
 
       - name: SonarCloud Build and analyze
-        if: github.repository_owner == 'ikmdev'
+        if: github.repository_owner == 'ikmdev' && github.event_name != 'pull_request'
         env:
               SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
               SONAR_HOST_URL: ${{ 'https://sonarcloud.io/' }}
