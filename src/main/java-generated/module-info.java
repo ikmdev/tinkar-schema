@@ -15,6 +15,6 @@
  */
 module dev.ikm.tinkar.schema {
     requires java.base;
-    requires com.google.protobuf;
+    requires dev.ikm.jpms.protobuf;
     exports dev.ikm.tinkar.schema;
 }
