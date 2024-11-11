@@ -24,7 +24,7 @@ jobs:
 
       - name: Release IKMDEV Code
         id: release_code
-        uses: ikmdev/maven-release-action@tinkar-schema
+        uses: ikmdev/maven-release-action@main
         with:
           ikmdevops_pat: ${{secrets.IKMDEVOPS_PAT_TOKEN}}
           github_token: ${{secrets.GITHUB_TOKEN}}
