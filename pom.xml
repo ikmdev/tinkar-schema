@@ -7,7 +7,7 @@
     <parent>
         <groupId>dev.ikm.build</groupId>
         <artifactId>java-parent</artifactId>
-        <version>1.55.0</version>
+        <version>1.58.0-AR-299_Versions-SNAPSHOT</version>
         <relativePath />
     </parent>
 
@@ -21,8 +21,8 @@
     <properties>
         <protobuf.version>3.22.0-r7</protobuf.version>
         <tinkar-jpms-deps.groupId>dev.ikm.jpms</tinkar-jpms-deps.groupId>
-        <maven.build-helper-plugin.version>3.4.0</maven.build-helper-plugin.version>
-        <slf4j.version>2.0.13</slf4j.version>
+        <maven.build-helper-plugin.version>3.6.0</maven.build-helper-plugin.version>
+        <slf4j.version>2.0.16</slf4j.version>
         <src.dir>src/main/java-generated/</src.dir>
     </properties>
 
