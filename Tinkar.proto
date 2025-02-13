@@ -88,7 +88,7 @@ message Field {
         IntToMultipleIntMap int_to_multiple_int_map = 51;
 
         // BigDecimal value
-        BigDecimal decimal_value = 60;
+        BigDecimal big_decimal = 60;
 
         // TODO: Consider future use of a Tinkar Object array.
     };
@@ -137,7 +137,7 @@ message IntToMultipleIntMap {
 message BigDecimal {
     uint32 scale = 1;
     uint32 precision = 2;
-    bytes value = 3;
+    string value = 3;
 }
 
 // Directed Tree message.
