@@ -59,7 +59,7 @@ jobs:
             ls src/main/java-generated
 
       - name: Shared Release Action
-        uses: ikmdev/maven-semver-release-action@v1.0.0
+        uses: ikmdev/maven-semver-release-action@v2
         with:
           version_type: ${{ github.event.inputs.version_type }}
           github_token: ${{secrets.GITHUB_TOKEN}}
