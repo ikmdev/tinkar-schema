@@ -13,7 +13,7 @@
 
     <groupId>dev.ikm.tinkar</groupId>
     <artifactId>tinkar-schema</artifactId>
-    <version>1.39.0-SNAPSHOT</version>
+    <version>1.39.0-IKDT-977-Support-For-Long-Type-SNAPSHOT</version>
 
     <name>Tinkar Schema: Java</name>
     <url>https://github.com/IKM/tinkar-proto</url>
