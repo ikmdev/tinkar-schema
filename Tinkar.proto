@@ -90,6 +90,8 @@ message Field {
         // BigDecimal value
         BigDecimal big_decimal = 60;
 
+        // Long value
+        Long long = 61;
         // TODO: Consider future use of a Tinkar Object array.
     };
 }
@@ -140,6 +142,10 @@ message BigDecimal {
     string value = 3;
 }
 
+// Long
+message Long {
+    int64 value = 1;
+}
 // Directed Tree message.
 // A directed tree is a tree with a single root. Each vertex in the Tree
 // except the root contains a single predecessor, and may contain zero to many
