@@ -28,6 +28,12 @@ message PublicIdList {
   repeated PublicId public_ids = 1 ;
 }
 
+// Public id set message.
+// A set of public ids.
+message PublicIdSet {
+  repeated PublicId public_ids = 1 ;
+}
+
 // Field message.
 // Fields are used in Vertex and SemanticVersion objects to store
 // that can have varying types.
@@ -62,6 +68,9 @@ message Field {
 
         // Tinkar Public id list value.
         PublicIdList public_ids = 23;
+
+        // Tinkar Public id set value.
+        PublicIdSet public_idset = 24;
 
         // Tinkar Directed graph value.
         DiGraph di_graph = 30;
