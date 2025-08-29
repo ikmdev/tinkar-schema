@@ -17,8 +17,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Pull Request Version Validation
-        if: github.event_name == 'pull_request'
-        uses: ikmdev/maven-pull-request-version-validation-action@v2
+        uses: ikmdev/maven-pull-request-version-validation-action@v2.1.0
         
   build-job:
     name: Build Job
@@ -29,7 +28,7 @@ jobs:
         
       - uses: actions/setup-java@v4
         with:
-            java-version: '23'
+            java-version: '24'
             distribution: 'zulu'
         
       - name: Build Protoc Docker container
@@ -49,7 +48,7 @@ jobs:
           ls src/main/java-generated
 
       - name: Build IKMDEV Code
-        uses: ikmdev/maven-clean-install-build-action@v3
+        uses: ikmdev/maven-clean-install-build-action@v3.5.0
         with:
           branch_name: ${{env.BRANCH_NAME}}
           skip_setup: yes
