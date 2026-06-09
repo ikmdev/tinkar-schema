@@ -78,6 +78,15 @@
             </plugins>
         </pluginManagement>
 
+        <resources>
+            <resource>
+                <directory>${project.basedir}</directory>
+                <includes>
+                    <include>Tinkar.proto</include>
+                </includes>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
