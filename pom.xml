@@ -22,6 +22,8 @@
         <tinkar-jpms-deps.groupId>dev.ikm.jpms</tinkar-jpms-deps.groupId>
         <maven.build-helper-plugin.version>3.6.0</maven.build-helper-plugin.version>
         <slf4j.version>2.0.17</slf4j.version>
+        <protobuf-maven-plugin.version>5.1.4</protobuf-maven-plugin.version>
+        <protoc.version>4.30.2</protoc.version>
         <src.dir>src/main/java-generated/</src.dir>
     </properties>
 
@@ -78,15 +80,6 @@
             </plugins>
         </pluginManagement>
 
-        <resources>
-            <resource>
-                <directory>${project.basedir}</directory>
-                <includes>
-                    <include>Tinkar.proto</include>
-                </includes>
-            </resource>
-        </resources>
-
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -103,6 +96,27 @@
                                 <source>${src.dir}</source>
                             </sources>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>io.github.ascopes</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>${protobuf-maven-plugin.version}</version>
+                <configuration>
+                    <protoc kind="binary-maven">
+                        <version>${protoc.version}</version>
+                    </protoc>
+                    <sourceDirectories>
+                        <sourceDirectory>${project.basedir}/proto</sourceDirectory>
+                    </sourceDirectories>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
