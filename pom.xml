@@ -5,9 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>dev.ikm.build</groupId>
-        <artifactId>java-parent</artifactId>
-        <version>1.64.0</version>
+        <groupId>network.ike.platform</groupId>
+        <artifactId>ike-parent</artifactId>
+        <version>106</version>
+        <relativePath/>
     </parent>
 
     <groupId>dev.ikm.tinkar</groupId>
@@ -16,6 +17,16 @@
 
     <name>Tinkar Schema: Java</name>
     <url>https://github.com/IKM/tinkar-proto</url>
+
+    <distributionManagement>
+        <!-- Explicit <site> URL — see ike-parent/CLAUDE.md
+             ("Inheriting projects MUST declare their own
+             <distributionManagement><site>") and ike-issues#380/#383. -->
+        <site>
+            <id>ike-site</id>
+            <url>https://ike.network/${project.artifactId}/</url>
+        </site>
+    </distributionManagement>
 
     <properties>
         <protobuf.version>4.30.2-r2</protobuf.version>
