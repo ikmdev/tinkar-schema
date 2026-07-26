@@ -101,8 +101,19 @@ message Field {
 
         // Long value
         Long long = 61;
-        // TODO: Consider future use of a Tinkar Object array.
+
+        // Object array value: an ordered, possibly heterogeneous list of field
+        // values (Tinkar's OBJECT_ARRAY field data type). Fulfills the object
+        // array TODO (IKE-Network/ike-issues#885).
+        FieldArray object_array = 62;
     };
+}
+
+// Object array value.
+// Carries the elements of an object-array field, each element an ordinary Field.
+message FieldArray {
+    // The array's elements, in order.
+    repeated Field values = 1;
 }
 
 // Planar point value.
