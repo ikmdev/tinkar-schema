@@ -81,6 +81,20 @@
     </dependencies>
 
     <build>
+        <resources>
+            <!-- Default resource root, kept explicit because declaring <resources> replaces it. -->
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <!-- Schemas compiled by downstream projects rather than here; see
+                 proto-downstream/README.md for why. Published under proto/ so
+                 consumers unpack a namespaced path. -->
+            <resource>
+                <directory>proto-downstream</directory>
+                <targetPath>proto</targetPath>
+            </resource>
+        </resources>
+
         <pluginManagement>
             <plugins>
                 <plugin>
