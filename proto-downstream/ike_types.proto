@@ -1,7 +1,12 @@
-// DEPRECATED: This service is maintained for backward compatibility only.
-// New clients should use:
-//   - ike_graph_rag.proto (Tier 1: IkeGraphRAG service)
-//   - ike_knowledge_graph.proto (Tier 2: IkeKnowledgeGraph service)
+// Shared message contracts for the IKE tiered services.
+//
+// Extracted from tinkar_search.proto so the messages outlive the deprecated
+// TinkarSearchService that used to define them: ike_graph_rag.proto and
+// ike_knowledge_graph.proto both reuse them, so deleting that service must not
+// take its message contracts with it.
+//
+// The package and java_package are deliberately unchanged from tinkar_search.proto,
+// so every generated class keeps its fully qualified name and no Java import moves.
 
 syntax = "proto3";
 
@@ -11,7 +16,7 @@ import "Tinkar.proto";
 
 option java_multiple_files = true;
 option java_package = "dev.ikm.tinkar.service.proto";
-option java_outer_classname = "TinkarSearchProto";
+option java_outer_classname = "IkeTypesProto";
 
 // Search query request
 message TinkarSearchQueryRequest {
@@ -386,36 +391,4 @@ message TinkarConceptEntityResponse {
   repeated dev.ikm.tinkar.schema.TinkarMsg entities = 3;
   // Unix epoch milliseconds when this response was generated.
   int64 created_at = 4;
-}
-
-// gRPC service definition
-service TinkarSearchService {
-  rpc Search(TinkarSearchQueryRequest) returns (TinkarSearchQueryResponse);
-  rpc ConceptSearch(TinkarConceptSearchRequest) returns (TinkarSearchQueryResponse);
-  rpc ConceptSearchWithSort(TinkarConceptSearchWithSortRequest) returns (TinkarConceptSearchWithSortResponse);
-  rpc GetEntity(TinkarConceptIdRequest) returns (TinkarSearchQueryResponse);
-  rpc GetChildConcepts(TinkarConceptIdRequest) returns (TinkarSearchQueryResponse);
-  rpc GetDescendantConcepts(TinkarConceptIdRequest) returns (TinkarSearchQueryResponse);
-  rpc GetLIDRRecordConceptsFromTestKit(TinkarConceptIdRequest) returns (TinkarSearchQueryResponse);
-  rpc GetResultConformanceConceptsFromLIDRRecord(TinkarConceptIdRequest) returns (TinkarSearchQueryResponse);
-  rpc GetAllowedResultConceptsFromResultConformance(TinkarConceptIdRequest) returns (TinkarSearchQueryResponse);
-  rpc RebuildSearchIndex(TinkarRebuildIndexRequest) returns (TinkarRebuildIndexResponse);
-  rpc InspectConcept(TinkarConceptIdRequest) returns (TinkarConceptSemanticsResponse);
-  /*
-   * Returns the field values, pattern name, and STAMP info for a single semantic instance,
-   * fetched by the semantic's own public ID (e.g. a Test Performed record, a comment, an
-   * identifier) — as opposed to InspectConcept, which lists all semantics attached to a
-   * concept but cannot be addressed by a semantic's own ID.
-   */
-  rpc GetSemanticInfo(TinkarConceptIdRequest) returns (TinkarSemanticInfoResponse);
-  /*
-   * Returns the full entity graph for a concept (concept + semantics + patterns + stamps)
-   * so the caller can load them into a local entity store and display the concept detail view.
-   */
-  rpc LoadConceptEntityGraph(TinkarConceptIdRequest) returns (TinkarConceptEntityResponse);
-  /*
-   * Returns a single entity (plus its version stamps) for the given public ID.
-   * Used by GrpcPrimitiveDataService as a fallback when an entity is not in the local cache.
-   */
-  rpc GetEntityByPublicId(TinkarConceptIdRequest) returns (TinkarConceptEntityResponse);
 }
