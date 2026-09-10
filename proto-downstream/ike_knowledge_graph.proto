@@ -195,6 +195,51 @@ message SemanticsWithCoordinateRequest {
   string language_coordinate_id = 4;    // UUID returned by SaveLanguageCoordinate
 }
 
+/*
+ * Entities authored by a client, to be committed to the server's store as one
+ * transaction.
+ *
+ * Entities carry PublicIds, not NIDs: a NID is assigned per store, so the
+ * client's are meaningless here. The server resolves each PublicId against its
+ * own store, assigning new NIDs for entities it has not seen.
+ */
+message CommitEntitiesRequest {
+  /*
+   * The complete set of entities in one client-side transaction — concept,
+   * its semantics, and the stamps they reference. Order is not significant;
+   * the server resolves references after all entities are loaded.
+   */
+  repeated dev.ikm.tinkar.schema.TinkarMsg entities = 1;
+
+  /*
+   * Names the server-side transaction, for audit. The client's own transaction
+   * name, or empty to let the server pick one.
+   */
+  string transaction_name = 2;
+}
+
+// Outcome of a CommitEntities call.
+message CommitEntitiesResponse {
+  /*
+   * Whether the commit succeeded. The server decodes every entity before
+   * storing any, so a malformed request fails with the store untouched. A
+   * failure after decoding may have stored some entities — the store has no
+   * rollback — so treat false as "resend", not as "nothing happened".
+   */
+  bool success = 1;
+  // Error message if the commit failed.
+  string error_message = 2;
+  // How many entities were written.
+  int32 entities_committed = 3;
+  /*
+   * Server-assigned commit time, in Unix epoch milliseconds. The client
+   * advances its view to this to see the committed state.
+   */
+  int64 commit_time = 4;
+  // Unix epoch milliseconds when this response was generated.
+  int64 created_at = 5;
+}
+
 service IkeKnowledgeGraph {
   // Get all semantics attached to a concept (patterns, fields, STAMP info) — human-readable inspection
   rpc InspectConcept(KnowledgeGraphConceptRequest) returns (TinkarConceptSemanticsResponse);
@@ -251,5 +296,18 @@ service IkeKnowledgeGraph {
    * addressed by a semantic's own ID. Mirrors REST GET /api/ike/knowledgegraph/semantics.
    */
   rpc GetSemanticInfo(KnowledgeGraphConceptRequest) returns (TinkarSemanticInfoResponse);
+
+  /*
+   * Commits client-authored entities to the server's store as one transaction.
+   *
+   * The write counterpart to GetEntityByPublicId / LoadConceptEntityGraph: a
+   * client whose store is remote has nowhere durable to put an edit, so it
+   * sends the entities its own transaction produced and the server commits
+   * them together.
+   *
+   * Unary rather than streaming because a transaction is a single atomic unit
+   * — there is no partial result worth reporting before it completes.
+   */
+  rpc CommitEntities(CommitEntitiesRequest) returns (CommitEntitiesResponse);
 
 }
