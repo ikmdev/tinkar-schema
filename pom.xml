@@ -18,6 +18,13 @@
     <name>Tinkar Schema: Java</name>
     <url>https://github.com/IKM/tinkar-proto</url>
 
+    <scm>
+        <connection>scm:git:https://github.com/ikmdev/tinkar-schema.git</connection>
+        <developerConnection>scm:git:git@github.com:ikmdev/tinkar-schema.git</developerConnection>
+        <url>https://github.com/ikmdev/tinkar-schema</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <distributionManagement>
         <!-- Explicit <site> URL — see ike-parent/CLAUDE.md
              ("Inheriting projects MUST declare their own
