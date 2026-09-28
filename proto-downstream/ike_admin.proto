@@ -177,18 +177,55 @@ message RunReasonerResult {
   string stamp_coordinate_text = 12;
   string logic_coordinate_text = 13;
   string edit_coordinate_text = 14;
+
+  /*
+   * True when the run was stopped by CancelReasoner before it wrote anything.
+   * success is false and error_message empty: not a success, but not a
+   * failure either. A cancel that arrives once writing has begun lets the
+   * write finish, and the run reports success.
+   */
+  bool cancelled = 15;
 }
 
 /*
- * One message in the RunReasoner stream: a phase as it completes, then exactly
- * one result. A failure arrives as a result with success=false rather than as a
- * stream error, so the caller reads the reason from the same place either way.
+ * First event on every RunReasoner and WatchReasoner stream: which run the
+ * caller is now watching.
+ *
+ * A run belongs to the server, not to the call that started it, so a caller
+ * may join one already in progress, or one that has already ended. This says
+ * which, so the client can say "reconnected to a run started at ..." rather
+ * than implying it just started one.
+ */
+message ReasonerRunInfo {
+  // When the run started, in epoch milliseconds.
+  int64 started_at = 1;
+  // True if this call started the run; false if it joined one running or finished.
+  bool started = 2;
+}
+
+/*
+ * One message in a RunReasoner or WatchReasoner stream: first the run, then
+ * each phase as it completes (replayed from the start when joining a run
+ * already under way), then exactly one result. A failure arrives as a result
+ * with success=false rather than as a stream error, so the caller reads the
+ * reason from the same place either way.
  */
 message RunReasonerEvent {
   oneof event {
     ReasonerPhase phase = 1;
     RunReasonerResult result = 2;
+    ReasonerRunInfo run = 3;
   }
+}
+
+message WatchReasonerRequest {
+}
+
+message CancelReasonerRequest {
+}
+
+// Empty: the call succeeding is the answer. See CancelReasoner.
+message CancelReasonerResponse {
 }
 
 // ── Service ─────────────────────────────────────────────────────────
@@ -208,6 +245,28 @@ service IkeAdmin {
    * pipeline itself is a single stateful run on one ReasonerService instance,
    * so it is NOT exposed as one RPC per phase — that would require the server
    * to hold a reasoner session between calls.
+   *
+   * The run belongs to the server, not to this call. If a run is already
+   * going, the call joins it instead of starting a second. Ending the call —
+   * cancelling it, a dropped connection, closing the client — only stops
+   * watching; the classification carries on. Stop it with CancelReasoner.
    */
   rpc RunReasoner(RunReasonerRequest) returns (stream RunReasonerEvent);
+
+  /*
+   * Joins the running classification, or replays the most recent one if it
+   * has finished, as the same stream RunReasoner returns. Never starts a run.
+   * For getting back to a run after the client was closed.
+   *
+   * Fails with NOT_FOUND if there has been no run since the server started.
+   */
+  rpc WatchReasoner(WatchReasonerRequest) returns (stream RunReasonerEvent);
+
+  /*
+   * Asks the running classification to stop, and returns at once. Everyone
+   * watching the run gets a result with cancelled=true once it has stopped.
+   *
+   * Fails with FAILED_PRECONDITION if no classification is running.
+   */
+  rpc CancelReasoner(CancelReasonerRequest) returns (CancelReasonerResponse);
 }
