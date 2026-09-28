@@ -7,7 +7,7 @@
     <parent>
         <groupId>network.ike.platform</groupId>
         <artifactId>ike-parent</artifactId>
-        <version>178</version>
+        <version>186</version>
         <relativePath/>
     </parent>
 
@@ -43,6 +43,7 @@
         <protobuf-maven-plugin.version>5.1.4</protobuf-maven-plugin.version>
         <protoc.version>4.30.2</protoc.version>
         <src.dir>src/main/java-generated/</src.dir>
+        <java.version>27</java.version>
     </properties>
 
     <dependencyManagement>
