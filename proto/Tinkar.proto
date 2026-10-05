@@ -377,6 +377,25 @@ message SemanticVersion {
 }
 
 
+// One pattern's members, as listed in a changeset's identity index.
+//
+// The identity index is an optional zip entry, META-INF/identities.pb, holding these messages
+// length-delimited. Together they name the pattern of every component the changeset carries, so a
+// store whose nids encode the pattern can assign every nid before reading a single record — and
+// import in one pass, forward references included. A changeset without the entry is still valid;
+// the importer then finds the patterns by reading the records twice.
+//
+// Readers must skip zip entries under META-INF/ other than those they understand. Readers written
+// before the index existed treat every entry but META-INF/MANIFEST.MF as records, so a changeset
+// carrying the index cannot be read by them.
+message PatternMembers {
+    // The pattern the components below are elements of.
+    PublicId pattern_public_id = 1;
+
+    // Components of that pattern. A pattern's members may be split across several messages.
+    repeated PublicId component_public_ids = 2;
+}
+
 // Tinkar Message. This is a wrapper around the Tinkar messages that may be serialized out to a persistent
 // storage. This wrapper allows any of the indicated message types to be stored and when deserialized the type
 // of the message can be determined.
