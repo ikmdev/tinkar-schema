@@ -251,6 +251,11 @@ message StampChronology {
 
     // Second stamp version.
     optional StampVersion second_stamp_version = 3;
+
+    // Pattern this STAMP is an element of. Absent means the well-known default
+    // stamp pattern (backward compatible with changesets written before this field
+    // existed).
+    optional PublicId pattern_for_stamp_public_id = 4;
 }
 
 // Stamp Version message
@@ -280,6 +285,11 @@ message ConceptChronology {
 
     // List of concept versions.
     repeated ConceptVersion concept_versions = 2;
+
+    // Pattern this concept is an element of. Absent means the well-known default
+    // concept pattern (backward compatible with changesets written before this field
+    // existed).
+    optional PublicId pattern_for_concept_public_id = 3;
 }
 
 // Concept Version message.
@@ -314,6 +324,11 @@ message PatternChronology {
 
     // Versions of pattern.
     repeated PatternVersion pattern_versions = 2;
+
+    // Pattern this pattern is an element of (self-referential: the well-known
+    // pattern-pattern). Absent means the well-known default pattern-pattern
+    // (backward compatible with changesets written before this field existed).
+    optional PublicId pattern_for_pattern_public_id = 3;
 }
 
 
