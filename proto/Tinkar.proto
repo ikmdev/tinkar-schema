@@ -10,16 +10,28 @@ package dev.ikm.tinkar.schema;
 
 // Vertex UUID message.
 message VertexUUID {
-    // Unique vertex UUID.
+    // The vertex UUID as text: format version 1 only. Readers still read it; writers of
+    // format version 2 (Ike-Format-Version: 2) leave it empty and write the two longs below.
     string uuid = 1;
+
+    // The vertex UUID's most significant 64 bits (format version 2).
+    fixed64 most_significant_bits = 2;
+
+    // The vertex UUID's least significant 64 bits (format version 2).
+    fixed64 least_significant_bits = 3;
 }
 
 // Public id message.
 // A public id is the base unique id for Tinkar concepts, semantics, and other publicly
 // identifiable Tinkar items.
 message PublicId {
-    // Unique Public id.
+    // The UUIDs as text: format version 1 only. Readers still read them; writers of format
+    // version 2 (Ike-Format-Version: 2) leave this empty and write uuid_bits.
     repeated string uuids = 1 ;
+
+    // The UUIDs as longs, two per UUID: most significant bits, then least significant bits,
+    // in the order of the public id's UUIDs (format version 2).
+    repeated fixed64 uuid_bits = 2;
 }
 
 // Public id list message.
@@ -251,6 +263,11 @@ message StampChronology {
 
     // Second stamp version.
     optional StampVersion second_stamp_version = 3;
+
+    // Pattern this STAMP is an element of. Absent means the well-known default
+    // stamp pattern (backward compatible with changesets written before this field
+    // existed).
+    optional PublicId pattern_for_stamp_public_id = 4;
 }
 
 // Stamp Version message
@@ -280,6 +297,11 @@ message ConceptChronology {
 
     // List of concept versions.
     repeated ConceptVersion concept_versions = 2;
+
+    // Pattern this concept is an element of. Absent means the well-known default
+    // concept pattern (backward compatible with changesets written before this field
+    // existed).
+    optional PublicId pattern_for_concept_public_id = 3;
 }
 
 // Concept Version message.
@@ -314,6 +336,11 @@ message PatternChronology {
 
     // Versions of pattern.
     repeated PatternVersion pattern_versions = 2;
+
+    // Pattern this pattern is an element of (self-referential: the well-known
+    // pattern-pattern). Absent means the well-known default pattern-pattern
+    // (backward compatible with changesets written before this field existed).
+    optional PublicId pattern_for_pattern_public_id = 3;
 }
 
 
@@ -361,6 +388,24 @@ message SemanticVersion {
     repeated Field fields = 2;
 }
 
+
+// One pattern's members, as listed in a changeset's identity index.
+//
+// The identity index is the zip entry META-INF/identities.pb, holding these messages
+// length-delimited. Together they name the pattern of every component the changeset carries, so a
+// store whose nids encode the pattern can assign every nid before reading a single record — and
+// import in one pass, forward references included. Every changeset in format version 2
+// (Ike-Format-Version: 2) carries the index; a format version 1 changeset has none, and the
+// importer then finds the patterns by reading the records twice.
+//
+// Readers skip every zip entry under META-INF/ other than those they understand.
+message PatternMembers {
+    // The pattern the components below are elements of.
+    PublicId pattern_public_id = 1;
+
+    // Components of that pattern. A pattern's members may be split across several messages.
+    repeated PublicId component_public_ids = 2;
+}
 
 // Tinkar Message. This is a wrapper around the Tinkar messages that may be serialized out to a persistent
 // storage. This wrapper allows any of the indicated message types to be stored and when deserialized the type
