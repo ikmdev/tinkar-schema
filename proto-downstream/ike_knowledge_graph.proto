@@ -34,6 +34,12 @@ enum ProtoPremiseType {
 // All fields are optional — unset fields use server defaults.
 message CoordinateOverride {
   /*
+   * Fields 3, 4, 5 and 7 were position_path_id, module_ids, excluded_module_ids and module_priority_ids: UUIDs as text (changeset format version 1). They are public ids now,
+   * under new numbers; the old numbers are reserved so that a client built
+   * before the change cannot misread a public id as text (IKE-Network/ike-issues#1235).
+   */
+  reserved 3, 4, 5, 7;
+  /*
    * Filter by entity status. Default: ACTIVE_AND_INACTIVE.
    */
   AllowedStates allowed_states = 1;
@@ -44,20 +50,20 @@ message CoordinateOverride {
   int64 position_time = 2;
 
   /*
-   * UUID of the path concept (e.g., development path, master path).
-   * Empty string means use default (development path).
+   * Public id of the path concept (e.g., development path, master path).
+   * Absent means use default (development path).
    */
-  string position_path_id = 3;
+  dev.ikm.tinkar.schema.PublicId position_path_id = 9;
 
   /*
-   * UUIDs of module concepts to include. Empty means no module filter (allow all).
+   * Public ids of module concepts to include. Empty means no module filter (allow all).
    */
-  repeated string module_ids = 4;
+  repeated dev.ikm.tinkar.schema.PublicId module_ids = 10;
 
   /*
-   * UUIDs of module concepts to exclude. Empty means no exclusions.
+   * Public ids of module concepts to exclude. Empty means no exclusions.
    */
-  repeated string excluded_module_ids = 5;
+  repeated dev.ikm.tinkar.schema.PublicId excluded_module_ids = 11;
 
   /*
    * Navigation premise type. Default: INFERRED.
@@ -65,10 +71,10 @@ message CoordinateOverride {
   ProtoPremiseType premise_type = 6;
 
   /*
-   * Ordered list of module concept UUIDs for priority when multiple versions compete.
+   * Ordered list of module concept public ids for priority when multiple versions compete.
    * Order matters — earlier entries take precedence. Empty means server default.
    */
-  repeated string module_priority_ids = 7;
+  repeated dev.ikm.tinkar.schema.PublicId module_priority_ids = 12;
 
   /*
    * Language coordinate preset controlling description type and dialect preference.
@@ -92,12 +98,18 @@ message KnowledgeGraphConceptRequest {
 
 // Settings for a saved StampCoordinate. Unset fields use server defaults.
 message StampCoordinateSettings {
+  /*
+   * Fields 3 to 6 were position_path_id, module_ids, excluded_module_ids and module_priority_ids: UUIDs as text (changeset format version 1). They are public ids now,
+   * under new numbers; the old numbers are reserved so that a client built
+   * before the change cannot misread a public id as text (IKE-Network/ike-issues#1235).
+   */
+  reserved 3, 4, 5, 6;
   AllowedStates allowed_states = 1;
   int64 position_time = 2;         // 0 means latest (default)
-  string position_path_id = 3;     // empty means development path (default)
-  repeated string module_ids = 4;
-  repeated string excluded_module_ids = 5;
-  repeated string module_priority_ids = 6;
+  dev.ikm.tinkar.schema.PublicId position_path_id = 7;     // absent means development path (default)
+  repeated dev.ikm.tinkar.schema.PublicId module_ids = 8;
+  repeated dev.ikm.tinkar.schema.PublicId excluded_module_ids = 9;
+  repeated dev.ikm.tinkar.schema.PublicId module_priority_ids = 10;
 }
 
 // Settings for a saved NavigationCoordinate.
@@ -130,7 +142,13 @@ message SaveStampCoordinateRequest {
 
 // A saved StampCoordinate with its content-derived UUID
 message SavedStampCoordinateResponse {
-  string id = 1;                      // Content-derived UUID; pass as stamp_coordinate_id elsewhere
+  /*
+   * Field 1 was id: UUIDs as text (changeset format version 1). They are public ids now,
+   * under new numbers; the old numbers are reserved so that a client built
+   * before the change cannot misread a public id as text (IKE-Network/ike-issues#1235).
+   */
+  reserved 1;
+  dev.ikm.tinkar.schema.PublicId id = 4;                      // Content-derived UUID; pass as stamp_coordinate_id elsewhere
   StampCoordinateSettings settings = 2;
   string created_at = 3;              // ISO-8601 timestamp
 }
@@ -151,7 +169,13 @@ message SaveNavigationCoordinateRequest {
 
 // A saved NavigationCoordinate with its content-derived UUID
 message SavedNavigationCoordinateResponse {
-  string id = 1;                           // Content-derived UUID; pass as navigation_coordinate_id elsewhere
+  /*
+   * Field 1 was id: UUIDs as text (changeset format version 1). They are public ids now,
+   * under new numbers; the old numbers are reserved so that a client built
+   * before the change cannot misread a public id as text (IKE-Network/ike-issues#1235).
+   */
+  reserved 1;
+  dev.ikm.tinkar.schema.PublicId id = 4;                           // Content-derived UUID; pass as navigation_coordinate_id elsewhere
   NavigationCoordinateSettings settings = 2;
   string created_at = 3;                   // ISO-8601 timestamp
 }
@@ -172,7 +196,13 @@ message SaveLanguageCoordinateRequest {
 
 // A saved LanguageCoordinate with its content-derived UUID
 message SavedLanguageCoordinateResponse {
-  string id = 1;                          // Content-derived UUID; pass as language_coordinate_id elsewhere
+  /*
+   * Field 1 was id: UUIDs as text (changeset format version 1). They are public ids now,
+   * under new numbers; the old numbers are reserved so that a client built
+   * before the change cannot misread a public id as text (IKE-Network/ike-issues#1235).
+   */
+  reserved 1;
+  dev.ikm.tinkar.schema.PublicId id = 4;                          // Content-derived UUID; pass as language_coordinate_id elsewhere
   LanguageCoordinateSettings settings = 2;
   string created_at = 3;                  // ISO-8601 timestamp
 }
@@ -190,9 +220,15 @@ message ListLanguageCoordinatesResponse {
 // All IDs are optional — omitted values use server defaults.
 message SemanticsWithCoordinateRequest {
   dev.ikm.tinkar.schema.PublicId concept_public_id = 1;
-  string stamp_coordinate_id = 2;       // UUID returned by SaveStampCoordinate
-  string navigation_coordinate_id = 3;  // UUID returned by SaveNavigationCoordinate
-  string language_coordinate_id = 4;    // UUID returned by SaveLanguageCoordinate
+  /*
+   * Fields 2 to 4 were stamp_coordinate_id, navigation_coordinate_id and language_coordinate_id: UUIDs as text (changeset format version 1). They are public ids now,
+   * under new numbers; the old numbers are reserved so that a client built
+   * before the change cannot misread a public id as text (IKE-Network/ike-issues#1235).
+   */
+  reserved 2, 3, 4;
+  dev.ikm.tinkar.schema.PublicId stamp_coordinate_id = 5;       // id returned by SaveStampCoordinate
+  dev.ikm.tinkar.schema.PublicId navigation_coordinate_id = 6;  // id returned by SaveNavigationCoordinate
+  dev.ikm.tinkar.schema.PublicId language_coordinate_id = 7;    // id returned by SaveLanguageCoordinate
 }
 
 /*

@@ -120,9 +120,15 @@ message TinkarConceptSearchWithSortRequest {
 // Individual semantic search result with score
 message TinkarSemanticSearchResult {
   /*
-   * Public ID (list of UUIDs) of the concept.
+   * Field 1 was public_id: UUIDs as text (changeset format version 1). They are public ids now,
+   * under new numbers; the old numbers are reserved so that a client built
+   * before the change cannot misread a public id as text (IKE-Network/ike-issues#1235).
    */
-  repeated string public_id = 1;
+  reserved 1;
+  /*
+   * Public ID of the concept.
+   */
+  dev.ikm.tinkar.schema.PublicId public_id = 7;
   /*
    * Fully qualified name of the concept.
    */
@@ -148,6 +154,21 @@ message TinkarSemanticSearchResult {
 // A matching semantic within a grouped result
 message TinkarMatchingSemantic {
   /*
+   * Field 5 was semantic_nid, the nid of the matching semantic in the server's
+   * store. A nid is local to one store, so it is not sent: public_id identifies
+   * the semantic (IKE-Network/ike-issues#1182). The number and the name are
+   * reserved so that neither is used again for something else.
+   */
+  reserved 5;
+  reserved "semantic_nid";
+  /*
+   * Field 6 was public_id: UUIDs as text (changeset format version 1). They are public ids now,
+   * under new numbers; the old numbers are reserved so that a client built
+   * before the change cannot misread a public id as text (IKE-Network/ike-issues#1235).
+   */
+  reserved 6;
+
+  /*
    * The matched text with highlighting (HTML bold tags).
    */
   string highlighted_text = 1;
@@ -164,23 +185,34 @@ message TinkarMatchingSemantic {
    */
   int32 field_index = 4;
   /*
-   * The NID of the matching semantic entity.
-   */
-  int32 semantic_nid = 5;
-  /*
    * Public ID (list of UUIDs) of the matching semantic. Carried because nids are
    * local to a data store, so a remote client cannot identify the semantic behind
-   * the matched text without it. Empty when unresolvable.
+   * the matched text without it. Absent when unresolvable.
    */
-  repeated string public_id = 6;
+  dev.ikm.tinkar.schema.PublicId public_id = 7;
 }
 
 // Grouped search result by top-level component
 message TinkarGroupedSearchResult {
   /*
-   * Public ID (list of UUIDs) of the top-level concept.
+   * Field 6 was concept_nid, the nid of the top-level concept in the server's
+   * store. A nid is local to one store, so it is not sent: public_id identifies
+   * the concept (IKE-Network/ike-issues#1182). The number and the name are
+   * reserved so that neither is used again for something else.
    */
-  repeated string public_id = 1;
+  reserved 6;
+  reserved "concept_nid";
+  /*
+   * Field 1 was public_id: UUIDs as text (changeset format version 1). They are public ids now,
+   * under new numbers; the old numbers are reserved so that a client built
+   * before the change cannot misread a public id as text (IKE-Network/ike-issues#1235).
+   */
+  reserved 1;
+
+  /*
+   * Public ID of the top-level concept.
+   */
+  dev.ikm.tinkar.schema.PublicId public_id = 9;
   /*
    * Fully qualified name of the top-level concept.
    */
@@ -197,10 +229,6 @@ message TinkarGroupedSearchResult {
    * List of matching semantics for this concept.
    */
   repeated TinkarMatchingSemantic matching_semantics = 5;
-  /*
-   * The NID of the top-level concept entity.
-   */
-  int32 concept_nid = 6;
   /*
    * The concept's preferred description, per the service's language coordinate.
    * Clients cannot derive this themselves: nids are local to a data store, so a
