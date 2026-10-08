@@ -32,6 +32,12 @@ message PublicId {
     // The UUIDs as longs, two per UUID: most significant bits, then least significant bits,
     // in the order of the public id's UUIDs (format version 2).
     repeated fixed64 uuid_bits = 2;
+    // Format version 3: a reference by sequence into the change set's component table
+    // (META-INF/components.pb, continued by META-INF/references.pb), counted from 1. A public
+    // id that carries a sequence and no UUID words is such a reference; a record's own public
+    // id always carries its UUID words. Readers resolve either form; a writer that never
+    // assigns sequences writes UUID words everywhere, as in format version 2.
+    optional uint32 sequence = 3;
 }
 
 // Public id list message.
@@ -405,6 +411,26 @@ message PatternMembers {
 
     // Components of that pattern. A pattern's members may be split across several messages.
     repeated PublicId component_public_ids = 2;
+}
+
+// Format version 3: the component table, META-INF/components.pb, the first entry of the zip:
+// every component the change set carries, in file order, in messages of up to 100,000. A
+// component's sequence is its position in the table, counted from 1 across the whole table.
+// Components the change set references but does not carry follow in META-INF/references.pb,
+// numbered after the carried ones. Patterns precede their members.
+message ComponentTable {
+    repeated ComponentEntry components = 1;
+}
+
+message ComponentEntry {
+    // The sequence of the component's pattern: a concept's is the concept pattern's, a stamp's
+    // the stamp pattern's, a pattern's the pattern pattern's (which names itself), and a
+    // semantic's is its own pattern's.
+    uint32 pattern_sequence = 1;
+    // The component's UUIDs as longs, two per UUID, as in PublicId.uuid_bits.
+    repeated fixed64 uuid_bits = 2;
+    // True when a record references the component but the change set carries no record for it.
+    bool referenced_only = 3;
 }
 
 // Tinkar Message. This is a wrapper around the Tinkar messages that may be serialized out to a persistent
