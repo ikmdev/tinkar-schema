@@ -16,23 +16,33 @@ option java_outer_classname = "IkeAdminProto";
  * Target audience: platform operators, DevOps, CI/CD pipelines.
  */
 
-// ── Import ──────────────────────────────────────────────────────────
+// ── Import / Export jobs ────────────────────────────────────────────
+//
+// Imports and exports run on the server as jobs, one at a time and in order behind the reasoner
+// and each other. A job belongs to the server, not to the call that asked for it: a call that ends
+// early only stops watching, and WatchJob picks the job up again.
 
-// Import a Tinkar changeset (protobuf ZIP file).
-message ImportChangesetRequest {
-  /*
-   * Raw bytes of the ZIP file containing delimited TinkarMsg protobuf + manifest.
-   */
-  bytes changeset_data = 1;
-
-  /*
-   * If true, use multi-pass import to resolve forward references (default behavior).
-   * If false, use single-pass import (faster, but fails on forward references).
-   */
-  bool use_multi_pass = 2;
+// One message of an ImportChangeset upload: exactly one start, then the file in chunks.
+message ImportChangesetChunk {
+  oneof part {
+    ImportChangesetStart start = 1;
+    // The next bytes of the ZIP file, in order. Keep each under the message size limit;
+    // 1 MiB is a good size.
+    bytes data = 2;
+  }
 }
 
-// Summary of entity counts from an import or export operation.
+message ImportChangesetStart {
+  // What to call the import in job listings, usually the file's name.
+  string file_name = 1;
+  /*
+   * If true, import in a single pass, which fails on forward references in a store whose nids
+   * encode the pattern. False (the default) reads the file as many times as the store needs.
+   */
+  bool single_pass = 2;
+}
+
+// Summary of entity counts from an import or export.
 message EntityCountSummaryProto {
   int64 concepts_count = 1;
   int64 semantics_count = 2;
@@ -41,53 +51,105 @@ message EntityCountSummaryProto {
   int64 total_count = 5;
 }
 
-message ImportChangesetResponse {
-  bool success = 1;
-  string error_message = 2;
-  EntityCountSummaryProto entity_counts = 3;
-  int64 created_at = 4;
-}
-
-// ── Export ───────────────────────────────────────────────────────────
-
 // Export type selection.
 enum ExportType {
   FULL = 0;       // Export all entities (default)
-  TEMPORAL = 1;   // Export entities modified within a time range
+  TEMPORAL = 1;   // Export entities modified within a time range — Komet's "Change set"
   MEMBERSHIP = 2; // Export entities matching membership tags
 }
 
 message ExportEntitiesRequest {
-  /*
-   * Type of export to perform. Default: FULL.
-   */
+  // Type of export to perform. Default: FULL.
   ExportType export_type = 1;
-
-  /*
-   * For TEMPORAL export: start time as epoch milliseconds (inclusive).
-   */
+  // For TEMPORAL export: start time as epoch milliseconds (inclusive).
   int64 from_epoch_millis = 2;
-
-  /*
-   * For TEMPORAL export: end time as epoch milliseconds (inclusive).
-   */
+  // For TEMPORAL export: end time as epoch milliseconds (inclusive).
   int64 to_epoch_millis = 3;
-
-  /*
-   * For MEMBERSHIP export: list of tag PublicIds.
-   */
+  // For MEMBERSHIP export: list of tag PublicIds.
   repeated dev.ikm.tinkar.schema.PublicId membership_tags = 4;
 }
 
-message ExportEntitiesResponse {
-  bool success = 1;
-  string error_message = 2;
-  EntityCountSummaryProto entity_counts = 3;
-  /*
-   * Raw bytes of the exported ZIP file.
-   */
-  bytes export_data = 4;
-  int64 created_at = 5;
+enum JobKind {
+  JOB_KIND_UNSPECIFIED = 0;
+  REASONER = 1;
+  IMPORT = 2;
+  EXPORT = 3;
+}
+
+enum JobState {
+  JOB_STATE_UNSPECIFIED = 0;
+  QUEUED = 1;
+  RUNNING = 2;
+  SUCCEEDED = 3;
+  FAILED = 4;
+  CANCELLED = 5;
+}
+
+message JobInfo {
+  string job_id = 1;
+  JobKind kind = 2;
+  string label = 3;
+  JobState state = 4;
+  // Epoch milliseconds.
+  int64 queued_at = 5;
+  // Epoch milliseconds; 0 until the job starts.
+  int64 started_at = 6;
+}
+
+message JobProgress {
+  int64 done = 1;
+  // 0 or 1 with done negative while the total is not known.
+  int64 total = 2;
+  string message = 3;
+}
+
+message JobResult {
+  string job_id = 1;
+  bool success = 2;
+  // True if the job was cancelled — exports and reasoner runs only; imports cannot be.
+  bool cancelled = 3;
+  string error_message = 4;
+  EntityCountSummaryProto entity_counts = 5;
+  int64 duration_ms = 6;
+  // Export: the file's name and size; its bytes arrive as file_chunk events before this result.
+  string file_name = 7;
+  int64 file_size_bytes = 8;
+}
+
+message JobQueuePosition {
+  // The jobs ahead of this one, the running one first. Empty once it is next.
+  repeated JobInfo ahead = 1;
+}
+
+/*
+ * One message of a job stream, in order: job, then queued while it waits, started, progress as it
+ * runs, then — for an export that succeeded — the file as file_chunk events, then exactly one
+ * result. A failure arrives as a result with success=false, not as a stream error.
+ */
+message JobEvent {
+  oneof event {
+    // First: the job this stream follows.
+    JobInfo job = 1;
+    JobQueuePosition queued = 2;
+    // Epoch milliseconds.
+    int64 started_at = 3;
+    JobProgress progress = 4;
+    JobResult result = 5;
+    // Export only: the next bytes of the exported ZIP, in order.
+    bytes file_chunk = 6;
+  }
+}
+
+message WatchJobRequest {
+  string job_id = 1;
+}
+
+message CancelJobRequest {
+  string job_id = 1;
+}
+
+// Empty: the call succeeding is the answer. See CancelJob.
+message CancelJobResponse {
 }
 
 // ── Reasoner ────────────────────────────────────────────────────────
@@ -231,11 +293,32 @@ message CancelReasonerResponse {
 // ── Service ─────────────────────────────────────────────────────────
 
 service IkeAdmin {
-  // Import a changeset (protobuf ZIP file).
-  rpc ImportChangeset(ImportChangesetRequest) returns (ImportChangesetResponse);
+  /*
+   * Import a changeset (protobuf ZIP file). The client sends one start then the file in chunks,
+   * and half-closes; the server queues the import and streams its job events back. Imports cannot
+   * be cancelled — stopped part way they would leave some entities written — so ending this call
+   * only stops watching.
+   */
+  rpc ImportChangeset(stream ImportChangesetChunk) returns (stream JobEvent);
 
-  // Export entities to a protobuf ZIP file.
-  rpc ExportEntities(ExportEntitiesRequest) returns (ExportEntitiesResponse);
+  /*
+   * Export entities. Queues the export and streams its job events; on success the ZIP follows as
+   * file_chunk events, then the result. Ending the call early only stops watching, and the file is
+   * then not sent: CancelJob stops the export itself.
+   */
+  rpc ExportEntities(ExportEntitiesRequest) returns (stream JobEvent);
+
+  /*
+   * Rejoin any import or export job by id, replaying what it has done so far. Never sends an
+   * export's file. Fails with NOT_FOUND for an unknown or expired job (jobs are kept an hour).
+   */
+  rpc WatchJob(WatchJobRequest) returns (stream JobEvent);
+
+  /*
+   * Ask a queued or running export or reasoner run to stop. Fails with NOT_FOUND for an unknown
+   * job, and FAILED_PRECONDITION if it has finished or is an import.
+   */
+  rpc CancelJob(CancelJobRequest) returns (CancelJobResponse);
 
   /*
    * Run the full reasoner classification pipeline, streaming progress.
