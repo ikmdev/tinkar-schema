@@ -425,7 +425,8 @@ message ComponentTable {
 message ComponentEntry {
     // The sequence of the component's pattern: a concept's is the concept pattern's, a stamp's
     // the stamp pattern's, a pattern's the pattern pattern's (which names itself), and a
-    // semantic's is its own pattern's.
+    // semantic's is its own pattern's. 0 when none is known: a component referenced but never
+    // written, exported from a store whose nids carry no pattern.
     uint32 pattern_sequence = 1;
     // The component's UUIDs as longs, two per UUID, as in PublicId.uuid_bits.
     repeated fixed64 uuid_bits = 2;
