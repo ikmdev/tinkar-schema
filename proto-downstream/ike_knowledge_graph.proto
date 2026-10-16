@@ -276,6 +276,69 @@ message CommitEntitiesResponse {
   int64 created_at = 5;
 }
 
+// Request for every pattern in the store.
+message ListPatternsRequest {}
+
+/*
+ * Every pattern in the store, with what a client needs to show and use them:
+ * the pattern chronologies, their descriptions, and the stamps of both.
+ *
+ * A client whose store is remote holds only the patterns it has happened to
+ * load, so it cannot list them itself. The list is small (tens to hundreds).
+ */
+message ListPatternsResponse {
+  bool success = 1;
+  string error_message = 2;
+  // The patterns, their description semantics, and the stamps they use.
+  repeated dev.ikm.tinkar.schema.TinkarMsg entities = 3;
+  // How many patterns the store holds.
+  int32 pattern_count = 4;
+  // Unix epoch milliseconds when this response was generated.
+  int64 created_at = 5;
+}
+
+/*
+ * One page of a pattern's members (its semantics).
+ *
+ * A pattern can have millions of members, so they are read a page at a time,
+ * in the store's own order, which is stable between calls.
+ */
+message ListPatternMembersRequest {
+  // The pattern whose members to list.
+  dev.ikm.tinkar.schema.PublicId pattern_id = 1;
+  // How many matching members to skip.
+  int32 offset = 2;
+  // How many members to return; 0 or more than the server's cap means the cap (1000).
+  int32 limit = 3;
+  /*
+   * Optional. Only members whose referenced component's preferred description
+   * contains this text, ignoring case. Matching stops once the page is full, so
+   * a filtered page does not report how many match in all.
+   */
+  string referenced_component_text = 4;
+  // Optional. Only members that refer to this component.
+  dev.ikm.tinkar.schema.PublicId referenced_component_id = 5;
+}
+
+message ListPatternMembersResponse {
+  bool success = 1;
+  string error_message = 2;
+  // How many members the pattern has in all, unfiltered.
+  int64 total_count = 3;
+  /*
+   * The page: its semantics, the stamps they use, and each referenced
+   * component with its description semantics, so a client can label every
+   * member without a call per row.
+   */
+  repeated dev.ikm.tinkar.schema.TinkarMsg entities = 4;
+  // The public ids of the page's members, in order.
+  repeated dev.ikm.tinkar.schema.PublicId member_ids = 5;
+  // Whether members beyond this page match.
+  bool has_more = 6;
+  // Unix epoch milliseconds when this response was generated.
+  int64 created_at = 7;
+}
+
 service IkeKnowledgeGraph {
   // Get all semantics attached to a concept (patterns, fields, STAMP info) — human-readable inspection
   rpc InspectConcept(KnowledgeGraphConceptRequest) returns (TinkarConceptSemanticsResponse);
@@ -345,5 +408,17 @@ service IkeKnowledgeGraph {
    * — there is no partial result worth reporting before it completes.
    */
   rpc CommitEntities(CommitEntitiesRequest) returns (CommitEntitiesResponse);
+
+  /*
+   * Lists every pattern in the store, with their descriptions. A client with a
+   * remote store cannot enumerate patterns from what it has loaded.
+   */
+  rpc ListPatterns(ListPatternsRequest) returns (ListPatternsResponse);
+
+  /*
+   * Returns one page of a pattern's members and the pattern's total member
+   * count, optionally filtered by the referenced component.
+   */
+  rpc ListPatternMembers(ListPatternMembersRequest) returns (ListPatternMembersResponse);
 
 }
